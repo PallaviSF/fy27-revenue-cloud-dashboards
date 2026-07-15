@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revenue Cloud FY27 — Chat Cases</title>
+<style>
+:root {
+  --bg:#0e0f14; --bg2:#14161e; --bg3:#1c1f2b;
+  --nav-bg:#0a0b10; --border:rgba(255,255,255,0.07);
+  --text:#f0f0ee; --muted:#6b7280; --dim:#9ca3af;
+}
+[data-theme="light"] {
+  --bg:#f4f5f8; --bg2:#ffffff; --bg3:#eef0f5;
+  --nav-bg:#1a1d2a; --border:rgba(0,0,0,0.08);
+  --text:#0b0d14; --muted:#6b7280; --dim:#374151;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;}
+body{background:var(--bg);color:var(--text);display:flex;}
+
+/* NAV */
+.nav{width:210px;flex-shrink:0;background:var(--nav-bg);display:flex;flex-direction:column;height:100vh;border-right:1px solid var(--border);}
+.nav-logo{padding:18px 16px 14px;border-bottom:1px solid var(--border);}
+.nav-logo-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:8px;padding:5px 10px;margin-bottom:8px;}
+.nav-logo-badge span{font-size:0.7rem;font-weight:700;color:#fff;letter-spacing:0.04em;}
+.nav-logo-title{font-size:0.78rem;font-weight:600;color:#fff;}
+.nav-logo-sub{font-size:0.63rem;color:var(--muted);margin-top:2px;line-height:1.4;}
+.nav-body{flex:1;overflow-y:auto;padding:6px 0;}
+.nav-grp{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:10px 16px 4px;font-weight:600;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;cursor:pointer;font-size:0.78rem;color:var(--muted);border-left:2px solid transparent;transition:all 0.15s;user-select:none;}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:var(--dim);}
+.nav-item.active{color:#fff;border-left-color:#3b82f6;background:rgba(59,130,246,0.08);}
+.nav-item .ni{font-size:0.85rem;width:18px;text-align:center;}
+.nav-item .nbadge{margin-left:auto;font-size:0.62rem;font-variant-numeric:tabular-nums;background:rgba(255,255,255,0.07);color:var(--muted);padding:1px 6px;border-radius:8px;}
+.nav-item.active .nbadge{background:rgba(59,130,246,0.2);color:#60a5fa;}
+.nav-foot{padding:12px 16px;border-top:1px solid var(--border);}
+.theme-btn{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:7px;font-size:0.72rem;color:var(--muted);cursor:pointer;transition:background 0.15s;}
+.theme-btn:hover{background:rgba(255,255,255,0.09);color:#fff;}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+
+/* HERO */
+.hero{flex-shrink:0;text-align:center;padding:14px 24px 12px;background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(139,92,246,0.1) 50%,rgba(236,72,153,0.08));border-bottom:1px solid var(--border);position:relative;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% -10%,rgba(99,102,241,0.18),transparent);pointer-events:none;}
+.hero-eye{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:#60a5fa;font-weight:600;margin-bottom:4px;position:relative;}
+.hero-title{font-size:1.3rem;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;}
+.hero-sub{font-size:0.7rem;color:var(--muted);margin-top:3px;position:relative;}
+.hero-pills{display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap;position:relative;}
+.hpill{padding:3px 10px;border-radius:12px;font-size:0.67rem;font-weight:600;border:1px solid;}
+
+/* PANELS */
+.panels{flex:1;overflow:hidden;position:relative;}
+.panel{position:absolute;inset:0;overflow-y:auto;padding:14px 18px 18px;display:none;}
+.panel.active{display:block;}
+
+/* FLASH CARDS */
+.cards-row{display:grid;gap:10px;margin-bottom:12px;}
+.card{border-radius:12px;padding:14px 16px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+.card-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;font-weight:600;position:relative;}
+.card-value{font-size:1.75rem;font-weight:800;line-height:1;position:relative;font-variant-numeric:tabular-nums;}
+.card-sub{font-size:0.67rem;margin-top:4px;position:relative;opacity:0.8;}
+.c-blue{background:linear-gradient(135deg,rgba(59,130,246,0.18),rgba(37,99,235,0.06));} .c-blue .card-label{color:#60a5fa;} .c-blue .card-value{color:#93c5fd;}
+.c-purple{background:linear-gradient(135deg,rgba(139,92,246,0.18),rgba(109,40,217,0.06));} .c-purple .card-label{color:#a78bfa;} .c-purple .card-value{color:#c4b5fd;}
+.c-pink{background:linear-gradient(135deg,rgba(236,72,153,0.18),rgba(190,24,93,0.06));} .c-pink .card-label{color:#f472b6;} .c-pink .card-value{color:#fbcfe8;}
+.c-amber{background:linear-gradient(135deg,rgba(245,158,11,0.18),rgba(180,83,9,0.06));} .c-amber .card-label{color:#fbbf24;} .c-amber .card-value{color:#fde68a;}
+.c-green{background:linear-gradient(135deg,rgba(16,185,129,0.18),rgba(5,150,105,0.06));} .c-green .card-label{color:#34d399;} .c-green .card-value{color:#6ee7b7;}
+.c-red{background:linear-gradient(135deg,rgba(239,68,68,0.18),rgba(185,28,28,0.06));} .c-red .card-label{color:#f87171;} .c-red .card-value{color:#fca5a5;}
+.c-cyan{background:linear-gradient(135deg,rgba(6,182,212,0.18),rgba(8,145,178,0.06));} .c-cyan .card-label{color:#22d3ee;} .c-cyan .card-value{color:#a5f3fc;}
+.c-orange{background:linear-gradient(135deg,rgba(249,115,22,0.18),rgba(194,65,12,0.06));} .c-orange .card-label{color:#fb923c;} .c-orange .card-value{color:#fed7aa;}
+
+/* CONTENT CARDS */
+.cgrid{display:grid;gap:10px;}
+.g2{grid-template-columns:1fr 1fr;} .g3{grid-template-columns:1fr 1fr 1fr;}
+.g21{grid-template-columns:2fr 1fr;} .g12{grid-template-columns:1fr 2fr;}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.scard-title{font-size:0.8rem;font-weight:600;margin-bottom:2px;}
+.scard-sub{font-size:0.65rem;color:var(--muted);margin-bottom:10px;}
+
+/* HBARS */
+.hbar-list{display:flex;flex-direction:column;gap:6px;}
+.hbar-row{display:flex;align-items:center;gap:8px;}
+.hbar-lbl{font-size:0.68rem;color:var(--dim);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+.hbar-track{flex:1;background:rgba(255,255,255,0.06);border-radius:3px;height:9px;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:3px;}
+.hbar-val{font-size:0.68rem;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;min-width:34px;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:0.73rem;}
+.tbl th{padding:5px 7px;text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;}
+.tbl td{padding:5px 7px;color:var(--dim);border-bottom:1px solid rgba(255,255,255,0.04);}
+.tbl td.num{text-align:right;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tbody tr:hover td{background:rgba(255,255,255,0.03);}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:0.6rem;font-weight:700;}
+.b-up{background:rgba(239,68,68,0.12);color:#f87171;} .b-dn{background:rgba(16,185,129,0.12);color:#34d399;}
+.b-blue{background:rgba(59,130,246,0.12);color:#60a5fa;}
+
+/* DONUT */
+.donut-wrap{display:flex;gap:12px;align-items:center;}
+.legend{display:flex;flex-direction:column;gap:5px;flex:1;}
+.leg-row{display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--dim);}
+.sw{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.lc{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;}
+
+/* SEVERITY STRIP */
+.sev-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.sev-pill{border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,0.06);}
+.sev-lbl{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:3px;}
+.sev-val{font-size:1.15rem;font-weight:800;font-variant-numeric:tabular-nums;}
+.sev-pct{font-size:0.63rem;margin-top:2px;opacity:0.75;}
+
+/* INSIGHTS */
+.ins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.ins{border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,0.06);}
+.ins-num{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.ins-head{font-size:0.78rem;font-weight:700;margin-bottom:5px;}
+.ins-body{font-size:0.7rem;color:var(--muted);line-height:1.55;}
+
+/* TOOLTIP */
+.tt{position:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;font-size:0.74rem;color:var(--text);pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,0.4);z-index:999;opacity:0;transition:opacity 0.1s;white-space:nowrap;}
+.tt.vis{opacity:1;}
+.tt-lbl{font-size:0.63rem;color:var(--muted);}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
+</style>
+</head>
+<body id="root">
+
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-badge"><span>💬 CHAT CASES</span></div>
+    <div class="nav-logo-title">Revenue Cloud FY27</div>
+    <div class="nav-logo-sub">Chat origin only<br>Feb 1 – Jul 15, 2026</div>
+  </div>
+  <div class="nav-body">
+    <div class="nav-grp">Dashboard</div>
+    <div class="nav-item active" data-panel="overview"><span class="ni">◉</span>Overview<span class="nbadge">3,422</span></div>
+    <div class="nav-grp">Deep Dive</div>
+    <div class="nav-item" data-panel="products"><span class="ni">⬡</span>Products<span class="nbadge">19</span></div>
+    <div class="nav-item" data-panel="geo"><span class="ni">◎</span>GEO Split<span class="nbadge">3</span></div>
+    <div class="nav-item" data-panel="accounts"><span class="ni">⬜</span>Top Accounts<span class="nbadge">10</span></div>
+    <div class="nav-item" data-panel="severity"><span class="ni">⚡</span>Severity<span class="nbadge">4</span></div>
+    <div class="nav-grp">Analysis</div>
+    <div class="nav-item" data-panel="insights"><span class="ni">★</span>Insights<span class="nbadge">6</span></div>
+  </div>
+  <div class="nav-foot">
+    <button class="theme-btn" onclick="toggleTheme()">🌓 Toggle theme</button>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="hero">
+    <div class="hero-title">Revenue Cloud FY27 Support Analysis</div>
+    <div class="hero-sub">Cases where Origin = "Chat" &nbsp;·&nbsp; Feb 1 – Jul 15, 2026</div>
+    <div class="hero-pills">
+      <span class="hpill" style="border-color:rgba(96,165,250,0.4);color:#93c5fd;background:rgba(59,130,246,0.1)">3,422 Chat cases</span>
+      <span class="hpill" style="border-color:rgba(52,211,153,0.4);color:#6ee7b7;background:rgba(16,185,129,0.1)">98.7% resolved</span>
+      <span class="hpill" style="border-color:rgba(251,191,36,0.4);color:#fde68a;background:rgba(245,158,11,0.1)">43 still open</span>
+      <span class="hpill" style="border-color:rgba(248,113,113,0.4);color:#fca5a5;background:rgba(239,68,68,0.1)">88 Level-1 critical</span>
+    </div>
+  </div>
+
+  <div class="panels">
+
+    <!-- OVERVIEW -->
+    <div class="panel active" id="panel-overview">
+      <div class="cards-row" style="grid-template-columns:repeat(5,1fr)">
+        <div class="card c-blue"><div class="card-label">Total Chat Cases</div><div class="card-value">3,422</div><div class="card-sub">Feb 1 – Jul 15, 2026</div></div>
+        <div class="card c-green"><div class="card-label">Closed Resolved</div><div class="card-value">3,379</div><div class="card-sub">98.7% closure rate</div></div>
+        <div class="card c-amber"><div class="card-label">Still Open</div><div class="card-value">43</div><div class="card-sub">Working + Waiting</div></div>
+        <div class="card c-red"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% of chat cases</div></div>
+        <div class="card c-purple"><div class="card-label">Top Product</div><div class="card-value" style="font-size:0.95rem;padding-top:6px">SF CPQ</div><div class="card-sub">1,549 cases · 45%</div></div>
+      </div>
+      <div class="cgrid" style="grid-template-columns:1fr;margin-bottom:10px">
+        <div class="scard">
+          <div class="scard-title">Monthly Chat Trend — Revenue Cloud</div>
+          <div class="scard-sub">Jun–Jul surge +65% vs May · 978 cases in partial month</div>
+          <svg style="width:100%;height:140px;overflow:visible" viewBox="0 0 420 140" id="monthBar"></svg>
+        </div>
+      </div>
+      <div class="sev-row">
+        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(239,68,68,0.16),rgba(239,68,68,0.04))"><div class="sev-lbl" style="color:#f87171">Level 1 — Critical</div><div class="sev-val" style="color:#fca5a5">88</div><div class="sev-pct" style="color:#f87171">2.6%</div></div>
+        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(245,158,11,0.16),rgba(245,158,11,0.04))"><div class="sev-lbl" style="color:#fbbf24">Level 2 — Urgent</div><div class="sev-val" style="color:#fde68a">399</div><div class="sev-pct" style="color:#fbbf24">11.7%</div></div>
+        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(249,115,22,0.14),rgba(249,115,22,0.04))"><div class="sev-lbl" style="color:#fb923c">Level 3 — High</div><div class="sev-val" style="color:#fed7aa">86</div><div class="sev-pct" style="color:#fb923c">2.5%</div></div>
+        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(59,130,246,0.16),rgba(59,130,246,0.04))"><div class="sev-lbl" style="color:#60a5fa">Level 4 — Medium</div><div class="sev-val" style="color:#93c5fd">2,849</div><div class="sev-pct" style="color:#60a5fa">83.2%</div></div>
+      </div>
+      <!-- GEO strip at bottom -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px">
+        <div style="background:linear-gradient(135deg,rgba(59,130,246,0.14),rgba(59,130,246,0.04));border:1px solid rgba(59,130,246,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3b82f6;flex-shrink:0"></div>
+          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#60a5fa;font-weight:600">AMER</div><div style="font-size:1.05rem;font-weight:800;color:#93c5fd;font-variant-numeric:tabular-nums">2,358</div><div style="font-size:0.63rem;color:#60a5fa;opacity:0.8">68.9%</div></div>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(16,185,129,0.14),rgba(16,185,129,0.04));border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;border-radius:50%;background:#10b981;flex-shrink:0"></div>
+          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#34d399;font-weight:600">APAC <span style="font-size:0.55rem;opacity:0.7">(incl. JP)</span></div><div style="font-size:1.05rem;font-weight:800;color:#6ee7b7;font-variant-numeric:tabular-nums">683</div><div style="font-size:0.63rem;color:#34d399;opacity:0.8">20.0%</div></div>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(236,72,153,0.14),rgba(236,72,153,0.04));border:1px solid rgba(236,72,153,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;border-radius:50%;background:#ec4899;flex-shrink:0"></div>
+          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#f472b6;font-weight:600">EMEA</div><div style="font-size:1.05rem;font-weight:800;color:#fbcfe8;font-variant-numeric:tabular-nums">329</div><div style="font-size:0.63rem;color:#f472b6;opacity:0.8">9.6%</div></div>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(107,114,128,0.14),rgba(107,114,128,0.04));border:1px solid rgba(107,114,128,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;border-radius:50%;background:#6b7280;flex-shrink:0"></div>
+          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#9ca3af;font-weight:600">Untagged</div><div style="font-size:1.05rem;font-weight:800;color:#d1d5db;font-variant-numeric:tabular-nums">52</div><div style="font-size:0.63rem;color:#9ca3af;opacity:0.8">1.5%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="panel" id="panel-products">
+      <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="card c-blue"><div class="card-label">SF CPQ</div><div class="card-value">1,549</div><div class="card-sub">45.3% of all chat cases</div></div>
+        <div class="card c-purple"><div class="card-label">RCC Configurator</div><div class="card-value">461</div><div class="card-sub">13.5%</div></div>
+        <div class="card c-cyan"><div class="card-label">Transaction Mgmt</div><div class="card-value">260</div><div class="card-sub">7.6%</div></div>
+        <div class="card c-amber"><div class="card-label">Price Management</div><div class="card-value">209</div><div class="card-sub">6.1%</div></div>
+      </div>
+      <div class="cgrid g12">
+        <div class="scard">
+          <div class="scard-title">Volume by Product</div>
+          <div class="scard-sub">Top 10 · all Revenue products with chat origin</div>
+          <div class="hbar-list" id="prodBars"></div>
+        </div>
+        <div class="scard">
+          <div class="scard-title">All 19 Revenue Products</div>
+          <div class="scard-sub">Ranked by chat case count · Feb–Jul 2026</div>
+          <table class="tbl"><thead><tr><th>#</th><th>Product</th><th style="text-align:right">Cases</th><th style="text-align:right">%</th></tr></thead><tbody id="prodTableBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEO -->
+    <div class="panel" id="panel-geo">
+      <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="card c-blue"><div class="card-label">AMER</div><div class="card-value">2,358</div><div class="card-sub">68.9% · +16pp vs all-Rev</div></div>
+        <div class="card c-green"><div class="card-label">APAC (incl. JP)</div><div class="card-value">683</div><div class="card-sub">20.0% · −9pp vs all-Rev</div></div>
+        <div class="card c-pink"><div class="card-label">EMEA</div><div class="card-value">329</div><div class="card-sub">9.6% · −7pp vs all-Rev</div></div>
+        <div class="card" style="background:linear-gradient(135deg,rgba(107,114,128,0.16),rgba(107,114,128,0.04))"><div class="card-label" style="color:#9ca3af">Untagged</div><div class="card-value" style="color:#d1d5db">52</div><div class="card-sub" style="color:#9ca3af">GEO not set</div></div>
+      </div>
+      <div class="cgrid g2">
+        <div class="scard">
+          <div class="scard-title">Chat Cases by GEO</div>
+          <div class="scard-sub">Revenue chat cases · all periods</div>
+          <div class="donut-wrap" style="margin-top:10px;justify-content:center">
+            <svg viewBox="0 0 130 130" width="120" height="120" id="geoDonut2" style="overflow:visible;flex-shrink:0"></svg>
+            <div class="legend" id="geoLegend2"></div>
+          </div>
+        </div>
+        <div class="scard">
+          <div class="scard-title">GEO Comparison — Chat vs All Revenue</div>
+          <div class="scard-sub">AMER over-indexed in chat; APAC/EMEA under-use chat channel</div>
+          <table class="tbl" style="margin-top:6px">
+            <thead><tr><th>GEO</th><th style="text-align:right">Chat</th><th style="text-align:right">Chat %</th><th style="text-align:right">All Rev %</th><th>Delta</th></tr></thead>
+            <tbody>
+              <tr><td><span class="dot" style="background:#3b82f6"></span>AMER</td><td class="num">2,358</td><td class="num">68.9%</td><td class="num">53.1%</td><td><span class="badge b-up">+16pp</span></td></tr>
+              <tr><td><span class="dot" style="background:#10b981"></span>APAC (incl. JP)</td><td class="num">683</td><td class="num">20.0%</td><td class="num">30.1%</td><td><span class="badge b-dn">−10pp</span></td></tr>
+              <tr><td><span class="dot" style="background:#ec4899"></span>EMEA</td><td class="num">329</td><td class="num">9.6%</td><td class="num">16.6%</td><td><span class="badge b-dn">−7pp</span></td></tr>
+              <tr><td><span class="dot" style="background:#6b7280"></span>Untagged</td><td class="num">52</td><td class="num">1.5%</td><td class="num">—</td><td><span class="badge" style="background:rgba(107,114,128,0.12);color:#9ca3af">—</span></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:12px;padding:11px;background:rgba(59,130,246,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
+            <strong style="color:#60a5fa">AMER over-indexed by +16pp:</strong> AMER customers rely heavily on chat — possibly higher chat availability windows, partner ecosystem usage, or lower self-serve adoption. Consider promoting chat in APAC/EMEA to balance load.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNTS -->
+    <div class="panel" id="panel-accounts">
+      <div class="cards-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="card c-blue"><div class="card-label">#1 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Relay Fire &amp; Safety</div><div class="card-sub">64 chat cases</div></div>
+        <div class="card c-purple"><div class="card-label">#2 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Intrado Life &amp; Safety</div><div class="card-sub">42 chat cases</div></div>
+        <div class="card c-cyan"><div class="card-label">#3 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Ravyx – SIR Solutions</div><div class="card-sub">33 chat cases</div></div>
+      </div>
+      <div class="cgrid g2">
+        <div class="scard">
+          <div class="scard-title">Top 10 Accounts — Chat Volume</div>
+          <div class="scard-sub">Revenue chat cases · Feb–Jul 2026</div>
+          <div class="hbar-list" id="acctBars" style="margin-top:6px"></div>
+        </div>
+        <div class="scard">
+          <div class="scard-title">Account Detail Table</div>
+          <div class="scard-sub">No SI partners in chat top 10 — these are all end customers</div>
+          <table class="tbl">
+            <thead><tr><th>#</th><th>Account</th><th style="text-align:right">Cases</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Relay Fire and Safety (Advanced Fire Protection)</td><td class="num">64</td></tr>
+              <tr><td>2</td><td>Intrado Life &amp; Safety, Inc</td><td class="num">42</td></tr>
+              <tr><td>3</td><td>Ravyx - SIR Solutions</td><td class="num">33</td></tr>
+              <tr><td>4</td><td>Kraft Sports and Entertainment LLC</td><td class="num">29</td></tr>
+              <tr><td>5</td><td>Trimble Illuminate</td><td class="num">29</td></tr>
+              <tr><td>6</td><td>Telenet Group</td><td class="num">27</td></tr>
+              <tr><td>7</td><td>Community Brands (Org 1)</td><td class="num">25</td></tr>
+              <tr><td>8</td><td>Dropbox, Inc.</td><td class="num">25</td></tr>
+              <tr><td>9</td><td>Nebius B.V.</td><td class="num">22</td></tr>
+              <tr><td>10</td><td>Trellance Cooperative Holdings, Inc.</td><td class="num">22</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEVERITY -->
+    <div class="panel" id="panel-severity">
+      <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="card c-red"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% — review urgently</div></div>
+        <div class="card c-amber"><div class="card-label">Level 2 Urgent</div><div class="card-value">399</div><div class="card-sub">11.7% — escalation risk</div></div>
+        <div class="card c-orange"><div class="card-label">Level 3 High</div><div class="card-value">86</div><div class="card-sub">2.5%</div></div>
+        <div class="card c-blue"><div class="card-label">Level 4 Medium</div><div class="card-value">2,849</div><div class="card-sub">83.2% — standard</div></div>
+      </div>
+      <div class="cgrid g2">
+        <div class="scard">
+          <div class="scard-title">Severity Distribution</div>
+          <div class="scard-sub">Chat cases by severity level</div>
+          <div class="hbar-list" id="sevBars" style="margin-top:8px"></div>
+          <div style="margin-top:14px;padding:11px;background:rgba(239,68,68,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
+            <strong style="color:#f87171">88 Critical (L1) chat cases</strong> — chat-originated critical cases indicate customers hitting hard blockers mid-session. Review which products they belong to and whether routing to senior engineers is happening fast enough.
+          </div>
+        </div>
+        <div class="scard">
+          <div class="scard-title">Severity Donut</div>
+          <div class="scard-sub">Share by level · 3,422 total</div>
+          <div class="donut-wrap" style="margin-top:10px;justify-content:center">
+            <svg viewBox="0 0 130 130" width="120" height="120" id="sevDonut" style="overflow:visible;flex-shrink:0"></svg>
+            <div class="legend" id="sevLegend"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="panel" id="panel-insights">
+      <div class="ins-grid">
+        <div class="ins" style="background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(59,130,246,0.03));border-color:rgba(59,130,246,0.2)">
+          <div class="ins-num" style="color:#60a5fa">01 — Volume</div>
+          <div class="ins-head">CPQ drives 45% of all Revenue chat</div>
+          <div class="ins-body">1,549 of 3,422 chat cases are Salesforce CPQ. The next product (Configurator) has 461 — a 3.4× gap. CPQ chat agents need specialized training and KB coverage. Consider a CPQ-first routing rule in chat to cut escalation time.</div>
+        </div>
+        <div class="ins" style="background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.03));border-color:rgba(16,185,129,0.2)">
+          <div class="ins-num" style="color:#34d399">02 — Quality</div>
+          <div class="ins-head">98.7% resolution — best-in-class chat performance</div>
+          <div class="ins-body">3,379 of 3,422 chat cases closed resolved. Only 43 remain open: 20 waiting on customer, 15 working, 8 other. Strong FCR. The 43 open cases should be individually reviewed for aging and SLA risk.</div>
+        </div>
+        <div class="ins" style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.03));border-color:rgba(245,158,11,0.2)">
+          <div class="ins-num" style="color:#fbbf24">03 — Trend</div>
+          <div class="ins-head">Jun–Jul surge: +65% vs May</div>
+          <div class="ins-body">Chat cases jumped from 594 (May) to 978 (Jun–Jul). This is the highest chat volume of FY27 in a partial month. Investigate if this reflects a product release, new integration wave, or seasonal pattern — act before Q3 peaks.</div>
+        </div>
+        <div class="ins" style="background:linear-gradient(135deg,rgba(239,68,68,0.12),rgba(239,68,68,0.03));border-color:rgba(239,68,68,0.2)">
+          <div class="ins-num" style="color:#f87171">04 — Critical</div>
+          <div class="ins-head">88 Level-1 chat cases need root-cause review</div>
+          <div class="ins-body">Critical cases from chat are unusual — customers typically file critical issues through ASA Case. These 88 may represent live-session escalations. A root-cause review by product would reveal if routing or triage is working correctly.</div>
+        </div>
+        <div class="ins" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(139,92,246,0.03));border-color:rgba(139,92,246,0.2)">
+          <div class="ins-num" style="color:#a78bfa">05 — GEO</div>
+          <div class="ins-head">AMER over-indexed by +16pp in chat usage</div>
+          <div class="ins-body">AMER represents 68.9% of Revenue chat vs 53.1% of all Revenue cases. APAC (incl. JP, 683 cases) and EMEA under-use chat proportionally. Investigate timezone coverage gaps or promote chat as a channel in these regions.</div>
+        </div>
+        <div class="ins" style="background:linear-gradient(135deg,rgba(6,182,212,0.12),rgba(6,182,212,0.03));border-color:rgba(6,182,212,0.2)">
+          <div class="ins-num" style="color:#22d3ee">06 — Accounts</div>
+          <div class="ins-head">Top chat accounts are end customers, not partners</div>
+          <div class="ins-body">Unlike all-Revenue top accounts (50% SI partners), Revenue chat top 10 are all end customers: Relay Fire &amp; Safety, Intrado, Dropbox, Kraft Sports. Partners use ASA Case and SF Internal channels. Chat is the direct customer line.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="tt" class="tt"><div class="tt-lbl" id="ttL"></div><div id="ttV"></div></div>
+
+<script>
+const ROOT=document.getElementById('root');
+const tt=document.getElementById('tt'),ttL=document.getElementById('ttL'),ttV=document.getElementById('ttV');
+function showTip(e,l,v){ttL.textContent=l;ttV.textContent=v;tt.classList.add('vis');moveTip(e);}
+function moveTip(e){tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-8)+'px';}
+function hideTip(){tt.classList.remove('vis');}
+
+function toggleTheme(){
+  const h=document.documentElement;
+  h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');
+  setTimeout(buildAll,50);
+}
+
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+item.dataset.panel).classList.add('active');
+    buildAll();
+  });
+});
+
+function buildMonthBar(){
+  const svg=document.getElementById('monthBar');if(!svg)return;svg.innerHTML='';
+  const ns='http://www.w3.org/2000/svg';
+  const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
+  const W=420,H=140,pl=32,pr=8,pt=5,pb=25;
+  const iW=W-pl-pr,iH=H-pt-pb;
+  const months=[{l:'Feb',v:642},{l:'Mar',v:614},{l:'Apr',v:594},{l:'May',v:594},{l:'Jun–Jul*',v:978,hi:true}];
+  const maxV=1100;
+  const scY=v=>pt+iH-(v/maxV)*iH;
+  const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);
+  [250,500,750,1000].forEach(v=>{
+    svg.appendChild(mk('line',{x1:pl,x2:W-pr,y1:scY(v),y2:scY(v),stroke:'rgba(255,255,255,0.07)','stroke-width':1}));
+    const t=mk('text',{x:pl-3,y:scY(v)+3,'text-anchor':'end',fill:'#6b7280'});
+    t.style.cssText='font-size:9px;font-family:inherit';t.textContent=v>=1000?'1K':v;svg.appendChild(t);
+  });
+  const bGap=iW/months.length,bW=Math.floor(bGap*0.55);
+  months.forEach((d,i)=>{
+    const id='mg'+i,cx=pl+i*bGap+bGap/2,x=cx-bW/2,y=scY(d.v),h=scY(0)-y;
+    const g=document.createElementNS(ns,'linearGradient');g.id=id;g.setAttribute('x1','0');g.setAttribute('y1','0');g.setAttribute('x2','0');g.setAttribute('y2','1');
+    [[0,d.hi?'#a78bfa':'#60a5fa','1'],[1,d.hi?'#7c3aed':'#2563eb','0.7']].forEach(([off,col,op])=>{const s=document.createElementNS(ns,'stop');s.setAttribute('offset',off*100+'%');s.setAttribute('stop-color',col);s.setAttribute('stop-opacity',op);g.appendChild(s);});
+    defs.appendChild(g);
+    const bar=mk('rect',{x,y,width:bW,height:h,rx:4,fill:`url(#${id})`,cursor:'pointer'});
+    bar.addEventListener('mouseenter',e=>{bar.style.opacity='0.75';showTip(e,d.l+' 2026',d.v.toLocaleString()+' chat cases');});
+    bar.addEventListener('mousemove',moveTip);bar.addEventListener('mouseleave',()=>{bar.style.opacity='1';hideTip();});
+    svg.appendChild(bar);
+    const lv=mk('text',{x:cx,y:y-3,'text-anchor':'middle',fill:d.hi?'#c4b5fd':'#93c5fd'});lv.style.cssText='font-size:9px;font-weight:600;font-family:inherit';lv.textContent=d.v;svg.appendChild(lv);
+    const xl=mk('text',{x:cx,y:scY(0)+14,'text-anchor':'middle',fill:'#6b7280'});xl.style.cssText='font-size:9px;font-family:inherit';xl.textContent=d.l;svg.appendChild(xl);
+  });
+}
+
+function buildDonut(svgId,legId,data){
+  const svg=document.getElementById(svgId);if(!svg)return;
+  const leg=document.getElementById(legId);svg.innerHTML='';if(leg)leg.innerHTML='';
+  const ns='http://www.w3.org/2000/svg';
+  const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
+  const vb=parseInt(svg.getAttribute('viewBox').split(' ')[2]);
+  const cx=vb/2,cy=vb/2,r=vb*0.42,ir=vb*0.27,gap=1.2;
+  const total=data.reduce((s,d)=>s+d.count,0);let sa=-Math.PI/2;
+  data.forEach(d=>{
+    const frac=d.count/total,sw=frac*2*Math.PI-gap/r,ea=sa+sw;
+    const x1=cx+r*Math.cos(sa),y1=cy+r*Math.sin(sa),x2=cx+r*Math.cos(ea),y2=cy+r*Math.sin(ea);
+    const ix1=cx+ir*Math.cos(ea),iy1=cy+ir*Math.sin(ea),ix2=cx+ir*Math.cos(sa),iy2=cy+ir*Math.sin(sa);
+    const p=mk('path',{d:`M${x1} ${y1}A${r} ${r} 0 ${sw>Math.PI?1:0} 1 ${x2} ${y2}L${ix1} ${iy1}A${ir} ${ir} 0 ${sw>Math.PI?1:0} 0 ${ix2} ${iy2}Z`,fill:d.color,cursor:'pointer'});
+    p.style.transition='opacity 0.15s';
+    p.addEventListener('mouseenter',e=>{p.style.opacity='0.7';showTip(e,d.label,d.count.toLocaleString()+' ('+Math.round(frac*100)+'%)');});
+    p.addEventListener('mousemove',moveTip);p.addEventListener('mouseleave',()=>{p.style.opacity='1';hideTip();});
+    svg.appendChild(p);sa=ea+gap/r;
+    if(leg){const row=document.createElement('div');row.className='leg-row';row.innerHTML=`<span class="sw" style="background:${d.color}"></span><span>${d.label}</span><span class="lc">${d.count.toLocaleString()}</span>`;leg.appendChild(row);}
+  });
+  const ct=mk('text',{x:cx,y:cy-2,'text-anchor':'middle',fill:'#f0f0ee'});ct.style.cssText=`font-size:${vb*0.11}px;font-weight:800;font-family:inherit`;ct.textContent=(total/1000).toFixed(1)+'K';svg.appendChild(ct);
+  const cl=mk('text',{x:cx,y:cy+vb*0.1,'text-anchor':'middle',fill:'#6b7280'});cl.style.cssText=`font-size:${vb*0.075}px;font-family:inherit`;cl.textContent='total';svg.appendChild(cl);
+}
+
+function buildHBars(id,items,colors,lw){
+  const c=document.getElementById(id);if(!c)return;c.innerHTML='';
+  const max=items[0].count;
+  items.forEach((item,i)=>{
+    const pct=Math.round(item.count/max*100);
+    const color=Array.isArray(colors)?colors[i%colors.length]:colors;
+    const row=document.createElement('div');row.className='hbar-row';
+    row.innerHTML=`<div class="hbar-lbl" style="width:${lw||'120px'};min-width:${lw||'120px'}" title="${item.label}">${item.label}</div><div class="hbar-track"><div class="hbar-fill" style="width:${pct}%;background:${color}"></div></div><div class="hbar-val">${item.count.toLocaleString()}</div>`;
+    c.appendChild(row);
+  });
+}
+
+function buildProdTable(){
+  const tbody=document.getElementById('prodTableBody');if(!tbody)return;tbody.innerHTML='';
+  const prods=[['Revenue-Salesforce CPQ',1549],['Revenue Cloud (Core)-Configurator',461],['Revenue Cloud (Core)-Transaction Management',260],['Revenue Cloud (Core)-Price Management',209],['Revenue-CPQ Developer Support',207],['Revenue-Document Generation',176],['Revenue-Salesforce Billing',155],['Revenue Cloud (Core)-Product Catalog Mgmt',81],['Revenue Cloud (Core)-Dev Support P2O',79],['Revenue Cloud (Core)-Billing & Invoicing',67],['Revenue Cloud (Core)-CLM with DocGen',54],['Revenue Cloud (Core)-Advanced Approvals',32],['Revenue-Salesforce Contracts',21],['Revenue Cloud (Core)-Dynamic Revenue Orch.',19],['Revenue Cloud (Core)-Usage & Ratings',18],['Revenue Cloud (Core)-OmniStudio',12],['Revenue-Billing Developer Support',11],['Revenue Cloud (Core)-Business Rules Engine',9],['Revenue Cloud (Core)-Revenue Cloud Analytics',2]];
+  prods.forEach(([name,cnt],i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:#6b7280">${i+1}</td><td>${name}</td><td class="num">${cnt.toLocaleString()}</td><td class="num" style="color:#6b7280">${(cnt/3422*100).toFixed(1)}%</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+const GEO=[{label:'AMER',count:2358,color:'#3b82f6'},{label:'APAC (incl. JP)',count:683,color:'#10b981'},{label:'EMEA',count:329,color:'#ec4899'},{label:'Untagged',count:52,color:'#6b7280'}];
+const SEV=[{label:'L4 Medium',count:2849,color:'#3b82f6'},{label:'L2 Urgent',count:399,color:'#f59e0b'},{label:'L1 Critical',count:88,color:'#ef4444'},{label:'L3 High',count:86,color:'#f97316'}];
+const PC=['#3b82f6','#8b5cf6','#06b6d4','#f59e0b','#10b981','#ec4899','#ef4444','#f97316','#a78bfa','#34d399'];
+
+function buildAll(){
+  buildMonthBar();
+  buildDonut('geoDonut2','geoLegend2',GEO);
+  buildDonut('sevDonut','sevLegend',SEV);
+  buildHBars('prodBars',[{label:'Revenue-SF CPQ',count:1549},{label:'RCC-Configurator',count:461},{label:'RCC-Transaction Mgmt',count:260},{label:'RCC-Price Mgmt',count:209},{label:'Revenue-CPQ Dev Supp.',count:207},{label:'Revenue-Doc Generation',count:176},{label:'Revenue-SF Billing',count:155},{label:'RCC-Product Catalog',count:81},{label:'RCC-Dev Support P2O',count:79},{label:'RCC-Billing & Invoicing',count:67}],PC,'118px');
+  buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#3b82f6','#f59e0b','#f97316','#ef4444'],'130px');
+  buildHBars('acctBars',[{label:'Relay Fire & Safety',count:64},{label:'Intrado Life & Safety',count:42},{label:'Ravyx – SIR Solutions',count:33},{label:'Kraft Sports & Entertainment',count:29},{label:'Trimble Illuminate',count:29},{label:'Telenet Group',count:27},{label:'Community Brands',count:25},{label:'Dropbox, Inc.',count:25},{label:'Nebius B.V.',count:22},{label:'Trellance Cooperative',count:22}],PC,'150px');
+  buildProdTable();
+}
+buildAll();
+</script>
+</body>
+</html>
