@@ -12,8 +12,8 @@
 }
 [data-theme="light"] {
   --bg:#f4f5f8; --bg2:#ffffff; --bg3:#eef0f5;
-  --nav-bg:#1a1d2a; --border:rgba(0,0,0,0.08);
-  --text:#0b0d14; --muted:#6b7280; --dim:#374151;
+  --nav-bg:#1a1d2a; --border:rgba(0,0,0,0.10);
+  --text:#0b0d14; --muted:#374151; --dim:#1f2937;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;}
@@ -69,6 +69,14 @@ body{background:var(--bg);color:var(--text);display:flex;}
 .c-red{background:linear-gradient(135deg,rgba(239,68,68,0.18),rgba(185,28,28,0.06));} .c-red .card-label{color:#f87171;} .c-red .card-value{color:#fca5a5;}
 .c-cyan{background:linear-gradient(135deg,rgba(6,182,212,0.18),rgba(8,145,178,0.06));} .c-cyan .card-label{color:#22d3ee;} .c-cyan .card-value{color:#a5f3fc;}
 .c-orange{background:linear-gradient(135deg,rgba(249,115,22,0.18),rgba(194,65,12,0.06));} .c-orange .card-label{color:#fb923c;} .c-orange .card-value{color:#fed7aa;}
+[data-theme="light"] .c-blue{background:linear-gradient(135deg,rgba(59,130,246,0.22),rgba(37,99,235,0.08));} [data-theme="light"] .c-blue .card-label{color:#1d4ed8;} [data-theme="light"] .c-blue .card-value{color:#1e40af;}
+[data-theme="light"] .c-purple{background:linear-gradient(135deg,rgba(139,92,246,0.22),rgba(109,40,217,0.08));} [data-theme="light"] .c-purple .card-label{color:#6d28d9;} [data-theme="light"] .c-purple .card-value{color:#5b21b6;}
+[data-theme="light"] .c-pink{background:linear-gradient(135deg,rgba(236,72,153,0.22),rgba(190,24,93,0.08));} [data-theme="light"] .c-pink .card-label{color:#be185d;} [data-theme="light"] .c-pink .card-value{color:#9d174d;}
+[data-theme="light"] .c-amber{background:linear-gradient(135deg,rgba(245,158,11,0.25),rgba(180,83,9,0.10));} [data-theme="light"] .c-amber .card-label{color:#b45309;} [data-theme="light"] .c-amber .card-value{color:#92400e;}
+[data-theme="light"] .c-green{background:linear-gradient(135deg,rgba(16,185,129,0.22),rgba(5,150,105,0.08));} [data-theme="light"] .c-green .card-label{color:#065f46;} [data-theme="light"] .c-green .card-value{color:#064e3b;}
+[data-theme="light"] .c-red{background:linear-gradient(135deg,rgba(239,68,68,0.22),rgba(185,28,28,0.08));} [data-theme="light"] .c-red .card-label{color:#b91c1c;} [data-theme="light"] .c-red .card-value{color:#991b1b;}
+[data-theme="light"] .c-cyan{background:linear-gradient(135deg,rgba(6,182,212,0.22),rgba(8,145,178,0.08));} [data-theme="light"] .c-cyan .card-label{color:#0e7490;} [data-theme="light"] .c-cyan .card-value{color:#155e75;}
+[data-theme="light"] .c-orange{background:linear-gradient(135deg,rgba(249,115,22,0.22),rgba(194,65,12,0.08));} [data-theme="light"] .c-orange .card-label{color:#c2410c;} [data-theme="light"] .c-orange .card-value{color:#9a3412;}
 
 /* CONTENT CARDS */
 .cgrid{display:grid;gap:10px;}
@@ -154,7 +162,6 @@ body{background:var(--bg);color:var(--text);display:flex;}
 <div class="main">
   <div class="hero">
     <div class="hero-title">Revenue Cloud FY27 Support Analysis</div>
-    <div class="hero-sub">Cases where Origin = "Chat" &nbsp;·&nbsp; Feb 1 – Jul 15, 2026</div>
     <div class="hero-pills">
       <span class="hpill" style="border-color:rgba(96,165,250,0.4);color:#93c5fd;background:rgba(59,130,246,0.1)">3,422 Chat cases</span>
       <span class="hpill" style="border-color:rgba(52,211,153,0.4);color:#6ee7b7;background:rgba(16,185,129,0.1)">98.7% resolved</span>
@@ -212,7 +219,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
     <div class="panel" id="panel-products">
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
         <div class="card c-blue"><div class="card-label">SF CPQ</div><div class="card-value">1,549</div><div class="card-sub">45.3% of all chat cases</div></div>
-        <div class="card c-purple"><div class="card-label">RCC Configurator</div><div class="card-value">461</div><div class="card-sub">13.5%</div></div>
+        <div class="card c-purple"><div class="card-label">RCA Configurator</div><div class="card-value">461</div><div class="card-sub">13.5%</div></div>
         <div class="card c-cyan"><div class="card-label">Transaction Mgmt</div><div class="card-value">260</div><div class="card-sub">7.6%</div></div>
         <div class="card c-amber"><div class="card-label">Price Management</div><div class="card-value">209</div><div class="card-sub">6.1%</div></div>
       </div>
@@ -335,7 +342,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
         <div class="ins" style="background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(59,130,246,0.03));border-color:rgba(59,130,246,0.2)">
           <div class="ins-num" style="color:#60a5fa">01 — Volume</div>
           <div class="ins-head">CPQ drives 45% of all Revenue chat</div>
-          <div class="ins-body">1,549 of 3,422 chat cases are Salesforce CPQ. The next product (Configurator) has 461 — a 3.4× gap. CPQ chat agents need specialized training and KB coverage. Consider a CPQ-first routing rule in chat to cut escalation time.</div>
+          <div class="ins-body">1,549 of 3,422 chat cases are Salesforce CPQ. The next product (RCA Configurator) has 461 — a 3.4× gap. CPQ chat agents need specialized training and KB coverage. Consider a CPQ-first routing rule in chat to cut escalation time.</div>
         </div>
         <div class="ins" style="background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.03));border-color:rgba(16,185,129,0.2)">
           <div class="ins-num" style="color:#34d399">02 — Quality</div>
@@ -460,7 +467,7 @@ function buildHBars(id,items,colors,lw){
 
 function buildProdTable(){
   const tbody=document.getElementById('prodTableBody');if(!tbody)return;tbody.innerHTML='';
-  const prods=[['Revenue-Salesforce CPQ',1549],['Revenue Cloud (Core)-Configurator',461],['Revenue Cloud (Core)-Transaction Management',260],['Revenue Cloud (Core)-Price Management',209],['Revenue-CPQ Developer Support',207],['Revenue-Document Generation',176],['Revenue-Salesforce Billing',155],['Revenue Cloud (Core)-Product Catalog Mgmt',81],['Revenue Cloud (Core)-Dev Support P2O',79],['Revenue Cloud (Core)-Billing & Invoicing',67],['Revenue Cloud (Core)-CLM with DocGen',54],['Revenue Cloud (Core)-Advanced Approvals',32],['Revenue-Salesforce Contracts',21],['Revenue Cloud (Core)-Dynamic Revenue Orch.',19],['Revenue Cloud (Core)-Usage & Ratings',18],['Revenue Cloud (Core)-OmniStudio',12],['Revenue-Billing Developer Support',11],['Revenue Cloud (Core)-Business Rules Engine',9],['Revenue Cloud (Core)-Revenue Cloud Analytics',2]];
+  const prods=[['Revenue-Salesforce CPQ',1549],['RCA-Configurator',461],['RCA-Transaction Management',260],['RCA-Price Management',209],['Revenue-CPQ Developer Support',207],['Revenue-Document Generation',176],['Revenue-Salesforce Billing',155],['RCA-Product Catalog Mgmt',81],['RCA-Dev Support P2O',79],['RCA-Billing & Invoicing',67],['RCA-CLM with DocGen',54],['RCA-Advanced Approvals',32],['Revenue-Salesforce Contracts',21],['RCA-Dynamic Revenue Orch.',19],['RCA-Usage & Ratings',18],['RCA-OmniStudio',12],['Revenue-Billing Developer Support',11],['RCA-Business Rules Engine',9],['RCA-Revenue Cloud Analytics',2]];
   prods.forEach(([name,cnt],i)=>{
     const tr=document.createElement('tr');
     tr.innerHTML=`<td style="color:#6b7280">${i+1}</td><td>${name}</td><td class="num">${cnt.toLocaleString()}</td><td class="num" style="color:#6b7280">${(cnt/3422*100).toFixed(1)}%</td>`;
@@ -476,7 +483,7 @@ function buildAll(){
   buildMonthBar();
   buildDonut('geoDonut2','geoLegend2',GEO);
   buildDonut('sevDonut','sevLegend',SEV);
-  buildHBars('prodBars',[{label:'Revenue-SF CPQ',count:1549},{label:'RCC-Configurator',count:461},{label:'RCC-Transaction Mgmt',count:260},{label:'RCC-Price Mgmt',count:209},{label:'Revenue-CPQ Dev Supp.',count:207},{label:'Revenue-Doc Generation',count:176},{label:'Revenue-SF Billing',count:155},{label:'RCC-Product Catalog',count:81},{label:'RCC-Dev Support P2O',count:79},{label:'RCC-Billing & Invoicing',count:67}],PC,'118px');
+  buildHBars('prodBars',[{label:'Revenue-SF CPQ',count:1549},{label:'RCA-Configurator',count:461},{label:'RCA-Transaction Mgmt',count:260},{label:'RCA-Price Mgmt',count:209},{label:'Revenue-CPQ Dev Supp.',count:207},{label:'Revenue-Doc Generation',count:176},{label:'Revenue-SF Billing',count:155},{label:'RCA-Product Catalog',count:81},{label:'RCA-Dev Support P2O',count:79},{label:'RCA-Billing & Invoicing',count:67}],PC,'118px');
   buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#3b82f6','#f59e0b','#f97316','#ef4444'],'130px');
   buildHBars('acctBars',[{label:'Relay Fire & Safety',count:64},{label:'Intrado Life & Safety',count:42},{label:'Ravyx – SIR Solutions',count:33},{label:'Kraft Sports & Entertainment',count:29},{label:'Trimble Illuminate',count:29},{label:'Telenet Group',count:27},{label:'Community Brands',count:25},{label:'Dropbox, Inc.',count:25},{label:'Nebius B.V.',count:22},{label:'Trellance Cooperative',count:22}],PC,'150px');
   buildProdTable();
