@@ -145,7 +145,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
   </div>
   <div class="nav-body">
     <div class="nav-grp">Dashboard</div>
-    <div class="nav-item active" data-panel="overview"><span class="ni">◉</span>Overview<span class="nbadge">3,422</span></div>
+    <div class="nav-item active" data-panel="overview"><span class="ni">◉</span>Chat Raised vs Converted<span class="nbadge">11,142</span></div>
     <div class="nav-grp">Deep Dive</div>
     <div class="nav-item" data-panel="products"><span class="ni">⬡</span>Products<span class="nbadge">19</span></div>
     <div class="nav-item" data-panel="geo"><span class="ni">◎</span>GEO Split<span class="nbadge">3</span></div>
@@ -173,73 +173,81 @@ body{background:var(--bg);color:var(--text);display:flex;}
 
   <div class="panels">
 
-    <!-- OVERVIEW -->
+    <!-- OVERVIEW: Chat Raised vs Converted -->
     <div class="panel active" id="panel-overview">
-      <div class="cards-row" style="grid-template-columns:repeat(5,1fr)">
-        <div class="card c-blue"><div class="card-label">Total Chat Cases</div><div class="card-value">3,422</div><div class="card-sub">Feb 1 – Jul 15, 2026</div></div>
-        <div class="card c-green"><div class="card-label">Closed Resolved</div><div class="card-value">3,379</div><div class="card-sub">98.7% closure rate</div></div>
-        <div class="card c-amber"><div class="card-label">Still Open</div><div class="card-value">43</div><div class="card-sub">Working + Waiting</div></div>
-        <div class="card c-red"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% of chat cases</div></div>
-        <div class="card c-purple"><div class="card-label">Top Product</div><div class="card-value" style="font-size:0.95rem;padding-top:6px">SF CPQ</div><div class="card-sub">1,549 cases · 45%</div></div>
-      </div>
-      <div class="cgrid" style="grid-template-columns:1fr;margin-bottom:10px">
-        <div class="scard">
-          <div class="scard-title">Monthly Chat Trend — Revenue Cloud</div>
-          <div class="scard-sub">Jun–Jul surge +65% vs May · 978 cases in partial month</div>
-          <svg style="width:100%;height:140px;overflow:visible" viewBox="0 0 420 140" id="monthBar"></svg>
-        </div>
-      </div>
-      <div class="sev-row">
-        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(239,68,68,0.16),rgba(239,68,68,0.04))"><div class="sev-lbl" style="color:#f87171">Level 1 — Critical</div><div class="sev-val" style="color:#fca5a5">88</div><div class="sev-pct" style="color:#f87171">2.6%</div></div>
-        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(245,158,11,0.16),rgba(245,158,11,0.04))"><div class="sev-lbl" style="color:#fbbf24">Level 2 — Urgent</div><div class="sev-val" style="color:#fde68a">399</div><div class="sev-pct" style="color:#fbbf24">11.7%</div></div>
-        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(249,115,22,0.14),rgba(249,115,22,0.04))"><div class="sev-lbl" style="color:#fb923c">Level 3 — High</div><div class="sev-val" style="color:#fed7aa">86</div><div class="sev-pct" style="color:#fb923c">2.5%</div></div>
-        <div class="sev-pill" style="background:linear-gradient(135deg,rgba(59,130,246,0.16),rgba(59,130,246,0.04))"><div class="sev-lbl" style="color:#60a5fa">Level 4 — Medium</div><div class="sev-val" style="color:#93c5fd">2,849</div><div class="sev-pct" style="color:#60a5fa">83.2%</div></div>
-      </div>
-      <!-- GEO strip at bottom -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px">
-        <div style="background:linear-gradient(135deg,rgba(59,130,246,0.14),rgba(59,130,246,0.04));border:1px solid rgba(59,130,246,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
-          <div style="width:10px;height:10px;border-radius:50%;background:#3b82f6;flex-shrink:0"></div>
-          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#60a5fa;font-weight:600">AMER</div><div style="font-size:1.05rem;font-weight:800;color:#93c5fd;font-variant-numeric:tabular-nums">2,358</div><div style="font-size:0.63rem;color:#60a5fa;opacity:0.8">68.9%</div></div>
-        </div>
-        <div style="background:linear-gradient(135deg,rgba(16,185,129,0.14),rgba(16,185,129,0.04));border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
-          <div style="width:10px;height:10px;border-radius:50%;background:#10b981;flex-shrink:0"></div>
-          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#34d399;font-weight:600">APAC <span style="font-size:0.55rem;opacity:0.7">(incl. JP)</span></div><div style="font-size:1.05rem;font-weight:800;color:#6ee7b7;font-variant-numeric:tabular-nums">683</div><div style="font-size:0.63rem;color:#34d399;opacity:0.8">20.0%</div></div>
-        </div>
-        <div style="background:linear-gradient(135deg,rgba(236,72,153,0.14),rgba(236,72,153,0.04));border:1px solid rgba(236,72,153,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
-          <div style="width:10px;height:10px;border-radius:50%;background:#ec4899;flex-shrink:0"></div>
-          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#f472b6;font-weight:600">EMEA</div><div style="font-size:1.05rem;font-weight:800;color:#fbcfe8;font-variant-numeric:tabular-nums">329</div><div style="font-size:0.63rem;color:#f472b6;opacity:0.8">9.6%</div></div>
-        </div>
-        <div style="background:linear-gradient(135deg,rgba(107,114,128,0.14),rgba(107,114,128,0.04));border:1px solid rgba(107,114,128,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
-          <div style="width:10px;height:10px;border-radius:50%;background:#6b7280;flex-shrink:0"></div>
-          <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#9ca3af;font-weight:600">Untagged</div><div style="font-size:1.05rem;font-weight:800;color:#d1d5db;font-variant-numeric:tabular-nums">52</div><div style="font-size:0.63rem;color:#9ca3af;opacity:0.8">1.5%</div></div>
-        </div>
-      </div>
+      <!-- Two-column side-by-side layout -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
 
-      <!-- CHATS RAISED — MESSAGING SESSION SECTION -->
-      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:0.72rem;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">💬 Chats Raised via Messaging (Org-Wide)</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px">
-          <div class="card c-purple"><div class="card-label">Total Chats Raised</div><div class="card-value">7,720</div><div class="card-sub">Via MessagingSession · Ask Astro</div></div>
-          <div class="card c-green"><div class="card-label">Closed</div><div class="card-value">7,500</div><div class="card-sub">97.2% closure rate</div></div>
-          <div class="card c-amber"><div class="card-label">Still Open</div><div class="card-value">220</div><div class="card-sub">New · In Progress · On Hold</div></div>
-          <div class="card c-red"><div class="card-label">Emergency</div><div class="card-value">77</div><div class="card-sub">1.0% of messaging cases</div></div>
-          <div class="card c-cyan"><div class="card-label">Urgent</div><div class="card-value">114</div><div class="card-sub">1.5% of messaging cases</div></div>
-        </div>
-        <div class="cgrid g2">
-          <div class="scard">
-            <div class="scard-title">Monthly Messaging Trend — Org-Wide</div>
-            <div class="scard-sub">Jun peak 4,349 · Jul 2,250 (partial) · May 1,122</div>
-            <svg style="width:100%;height:120px;overflow:visible" viewBox="0 0 420 120" id="msgBar"></svg>
+        <!-- LEFT: CHATS RAISED (Messaging Sessions) -->
+        <div style="border:1px solid rgba(139,92,246,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(139,92,246,0.07),rgba(109,40,217,0.03))">
+          <div style="font-size:0.72rem;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#8b5cf6"></span>Chats Raised
           </div>
-          <div class="scard">
-            <div class="scard-title">Priority Breakdown</div>
-            <div class="scard-sub">7,720 messaging cases by priority level</div>
-            <div class="hbar-list" id="msgPriBars" style="margin-top:8px"></div>
-            <div style="margin-top:12px;padding:10px;background:rgba(139,92,246,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
-              <strong style="color:#a78bfa">97.1% Normal priority</strong> — Messaging channel (Ask Astro) handles primarily standard-tier requests. 77 Emergency + 114 Urgent cases warrant review for triage routing improvements.
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">
+            <div class="card c-purple" style="padding:10px 12px"><div class="card-label">Total Chats Raised</div><div class="card-value">7,720</div><div class="card-sub">Org-wide · Ask Astro</div></div>
+            <div class="card c-green" style="padding:10px 12px"><div class="card-label">Closed</div><div class="card-value">7,500</div><div class="card-sub">97.2% closure rate</div></div>
+            <div class="card c-amber" style="padding:10px 12px"><div class="card-label">Still Open</div><div class="card-value">220</div><div class="card-sub">In progress / new</div></div>
+            <div class="card c-red" style="padding:10px 12px"><div class="card-label">Emergency</div><div class="card-value">77</div><div class="card-sub">1.0% · needs review</div></div>
+          </div>
+          <div class="scard" style="padding:10px">
+            <div class="scard-title">Monthly Trend</div>
+            <div class="scard-sub">May · Jun · Jul 2026</div>
+            <svg style="width:100%;height:100px;overflow:visible" viewBox="0 0 300 100" id="msgBar"></svg>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+            <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);border-radius:7px;padding:8px 10px;text-align:center">
+              <div style="font-size:0.58rem;color:#a78bfa;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Urgent</div>
+              <div style="font-size:1.1rem;font-weight:800;color:#c4b5fd;font-variant-numeric:tabular-nums">114</div>
+              <div style="font-size:0.6rem;color:#a78bfa;opacity:0.8">1.5%</div>
+            </div>
+            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:8px 10px;text-align:center">
+              <div style="font-size:0.58rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Normal</div>
+              <div style="font-size:1.1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">7,523</div>
+              <div style="font-size:0.6rem;color:#fbbf24;opacity:0.8">97.4%</div>
             </div>
           </div>
         </div>
+
+        <!-- RIGHT: CHAT CONVERTED TO CASE (Revenue Cloud Chat Cases) -->
+        <div style="border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(59,130,246,0.07),rgba(37,99,235,0.03))">
+          <div style="font-size:0.72rem;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3b82f6"></span>Chat Converted to Case
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">
+            <div class="card c-blue" style="padding:10px 12px"><div class="card-label">Total Cases</div><div class="card-value">3,422</div><div class="card-sub">Revenue Cloud · Feb–Jul</div></div>
+            <div class="card c-green" style="padding:10px 12px"><div class="card-label">Resolved</div><div class="card-value">3,379</div><div class="card-sub">98.7% closure rate</div></div>
+            <div class="card c-amber" style="padding:10px 12px"><div class="card-label">Still Open</div><div class="card-value">43</div><div class="card-sub">Working + Waiting</div></div>
+            <div class="card c-red" style="padding:10px 12px"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% of cases</div></div>
+          </div>
+          <div class="scard" style="padding:10px">
+            <div class="scard-title">Monthly Trend</div>
+            <div class="scard-sub">Feb · Mar · Apr · May · Jun–Jul 2026</div>
+            <svg style="width:100%;height:100px;overflow:visible" viewBox="0 0 300 100" id="monthBar"></svg>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px">
+            <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);border-radius:7px;padding:7px 6px;text-align:center">
+              <div style="font-size:0.55rem;color:#f87171;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L1 Crit</div>
+              <div style="font-size:1rem;font-weight:800;color:#fca5a5;font-variant-numeric:tabular-nums">88</div>
+              <div style="font-size:0.58rem;color:#f87171;opacity:0.8">2.6%</div>
+            </div>
+            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:7px 6px;text-align:center">
+              <div style="font-size:0.55rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L2 Urg</div>
+              <div style="font-size:1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">399</div>
+              <div style="font-size:0.58rem;color:#fbbf24;opacity:0.8">11.7%</div>
+            </div>
+            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.18);border-radius:7px;padding:7px 6px;text-align:center">
+              <div style="font-size:0.55rem;color:#fb923c;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L3 High</div>
+              <div style="font-size:1rem;font-weight:800;color:#fed7aa;font-variant-numeric:tabular-nums">86</div>
+              <div style="font-size:0.58rem;color:#fb923c;opacity:0.8">2.5%</div>
+            </div>
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18);border-radius:7px;padding:7px 6px;text-align:center">
+              <div style="font-size:0.55rem;color:#60a5fa;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L4 Med</div>
+              <div style="font-size:1rem;font-weight:800;color:#93c5fd;font-variant-numeric:tabular-nums">2,849</div>
+              <div style="font-size:0.58rem;color:#60a5fa;opacity:0.8">83.2%</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -432,10 +440,10 @@ function buildMonthBar(){
   const svg=document.getElementById('monthBar');if(!svg)return;svg.innerHTML='';
   const ns='http://www.w3.org/2000/svg';
   const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
-  const W=420,H=140,pl=32,pr=8,pt=5,pb=25;
+  const W=300,H=100,pl=28,pr=6,pt=5,pb=22;
   const iW=W-pl-pr,iH=H-pt-pb;
   const months=[{l:'Feb',v:642},{l:'Mar',v:614},{l:'Apr',v:594},{l:'May',v:594},{l:'Jun–Jul*',v:978,hi:true}];
-  const maxV=1100;
+  const maxV=1200;
   const scY=v=>pt+iH-(v/maxV)*iH;
   const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);
   [250,500,750,1000].forEach(v=>{
@@ -511,7 +519,7 @@ function buildMsgBar(){
   const svg=document.getElementById('msgBar');if(!svg)return;svg.innerHTML='';
   const ns='http://www.w3.org/2000/svg';
   const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
-  const W=420,H=120,pl=32,pr=8,pt=5,pb=25;
+  const W=300,H=100,pl=28,pr=6,pt=5,pb=22;
   const iW=W-pl-pr,iH=H-pt-pb;
   const months=[{l:'May',v:1122},{l:'Jun',v:4349,hi:true},{l:'Jul*',v:2250}];
   const maxV=5000;
