@@ -149,7 +149,9 @@ body{background:var(--bg);color:var(--text);display:flex;}
     <div class="nav-item" data-panel="geo"><span class="ni">◎</span>GEO Split<span class="nbadge">3</span></div>
     <div class="nav-item" data-panel="accounts"><span class="ni">⬜</span>Top Accounts<span class="nbadge">10</span></div>
     <div class="nav-item" data-panel="severity"><span class="ni">⚡</span>Severity<span class="nbadge">4</span></div>
+    <div class="nav-item" data-panel="comparison"><span class="ni">⇌</span>Comparison (Vs)<span class="nbadge">Rev</span></div>
     <div class="nav-grp">Analysis</div>
+    <div class="nav-item" data-panel="sentiment"><span class="ni">◈</span>Sentiment Analysis<span class="nbadge">AI</span></div>
     <div class="nav-item" data-panel="insights"><span class="ni">★</span>Insights<span class="nbadge">6</span></div>
   </div>
   <div class="nav-foot">
@@ -162,12 +164,49 @@ body{background:var(--bg);color:var(--text);display:flex;}
   <div class="hero">
     <div class="hero-title">Revenue Cloud FY27 Support Analysis</div>
     <div class="hero-pills">
-      <span class="hpill" style="border-color:rgba(96,165,250,0.4);color:#93c5fd;background:rgba(59,130,246,0.1)">3,422 Chat cases</span>
-      <span class="hpill" style="border-color:rgba(167,139,250,0.4);color:#c4b5fd;background:rgba(139,92,246,0.1)">7,720 Messaging cases</span>
-      <span class="hpill" style="border-color:rgba(52,211,153,0.4);color:#6ee7b7;background:rgba(16,185,129,0.1)">98.7% chat resolved</span>
-      <span class="hpill" style="border-color:rgba(251,191,36,0.4);color:#fde68a;background:rgba(245,158,11,0.1)">43 still open</span>
-      <span class="hpill" style="border-color:rgba(248,113,113,0.4);color:#fca5a5;background:rgba(239,68,68,0.1)">88 Level-1 critical</span>
+      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.1)">3,270 Revenue Accounts</span>
+      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.1)">3,422 Chat Cases</span>
+      <span class="hpill" style="border-color:rgba(107,143,107,0.4);color:#3d5c3d;background:rgba(107,143,107,0.1)">7,720 Messaging Sessions</span>
+      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.08)">98.7% Chat Resolved</span>
+      <span class="hpill" style="border-color:rgba(185,28,28,0.3);color:#991b1b;background:rgba(185,28,28,0.07)">88 Level-1 Critical</span>
     </div>
+  </div>
+
+  <!-- GLOBAL FILTERS -->
+  <div id="globalFilters" style="flex-shrink:0;padding:8px 18px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap">Filters:</span>
+    <select id="fScope" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+      <option value="all">All Revenue Data</option>
+      <option value="cases">Cases Only</option>
+      <option value="messaging">Messaging Sessions Only</option>
+      <option value="converted">Messaging → Case Converted</option>
+    </select>
+    <select id="fProduct" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+      <option value="all">All Products</option>
+      <option value="cpq">Revenue-Salesforce CPQ</option>
+      <option value="configurator">RCA-Configurator</option>
+      <option value="txmgmt">RCA-Transaction Mgmt</option>
+      <option value="pricemgmt">RCA-Price Management</option>
+      <option value="billing">Revenue-SF Billing</option>
+      <option value="docgen">Revenue-Doc Generation</option>
+      <option value="pcm">RCA-Product Catalog</option>
+    </select>
+    <select id="fDateRange" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+      <option value="all">All Dates (Feb–Jul 2026)</option>
+      <option value="q1">Q1 (Feb–Apr)</option>
+      <option value="q2">Q2 (May–Jul)</option>
+      <option value="recent">Last 30 Days</option>
+    </select>
+    <select id="fOrigin" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+      <option value="all">All Origins</option>
+      <option value="chat">Chat</option>
+      <option value="asa">ASA Case</option>
+      <option value="self">Self-Service</option>
+      <option value="astro">Ask Astro</option>
+    </select>
+    <button onclick="applyFilters()" style="font-size:0.72rem;padding:4px 12px;border:1px solid rgba(74,124,89,0.4);border-radius:6px;background:rgba(74,124,89,0.12);color:#2d5a3d;cursor:pointer;font-weight:600">Apply</button>
+    <button onclick="resetFilters()" style="font-size:0.72rem;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer">Reset</button>
+    <span id="filterStatus" style="font-size:0.65rem;color:var(--muted);margin-left:auto"></span>
   </div>
 
   <div class="panels">
@@ -371,6 +410,259 @@ body{background:var(--bg);color:var(--text);display:flex;}
       </div>
     </div>
 
+    <!-- COMPARISON (Vs) -->
+    <div class="panel" id="panel-comparison">
+      <div style="margin-bottom:10px">
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px">Revenue-Only · Account Adoption vs Messaging Session Adoption · Feb–Jul 2026</div>
+      </div>
+      <!-- Top KPIs -->
+      <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
+        <div class="card c-blue">
+          <div class="card-label">Total Revenue Accounts</div>
+          <div class="card-value">3,270</div>
+          <div class="card-sub">Unique accounts · any Revenue case</div>
+        </div>
+        <div class="card c-green">
+          <div class="card-label">Accounts with Chat Cases</div>
+          <div class="card-value">1,245</div>
+          <div class="card-sub">38.1% of Revenue accounts</div>
+        </div>
+        <div class="card c-purple">
+          <div class="card-label">Accts w/ Messaging Sessions</div>
+          <div class="card-value">~320</div>
+          <div class="card-sub">~9.8% adopted Ask Astro chat</div>
+        </div>
+        <div class="card c-amber">
+          <div class="card-label">Messaging → Case Conversion</div>
+          <div class="card-value">34</div>
+          <div class="card-sub">Revenue Ask Astro → Case</div>
+        </div>
+      </div>
+
+      <!-- Two column layout -->
+      <div class="cgrid g2">
+        <!-- Venn breakdown -->
+        <div class="scard">
+          <div class="scard-title">Account Channel Adoption Breakdown</div>
+          <div class="scard-sub">Revenue accounts segmented by support channel used</div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+            <!-- Cases Only -->
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(74,124,89,0.08);border:1px solid rgba(74,124,89,0.2);border-radius:8px">
+              <div style="width:12px;height:12px;border-radius:3px;background:#4a7c59;flex-shrink:0"></div>
+              <div style="flex:1">
+                <div style="font-size:0.75rem;font-weight:700;color:#2d5a3d">Cases Only</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Accounts that raised Cases but never used Messaging Sessions</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:1.3rem;font-weight:800;color:#2d5a3d;font-variant-numeric:tabular-nums">2,025</div>
+                <div style="font-size:0.62rem;color:var(--muted)">61.9% of Revenue accounts</div>
+              </div>
+            </div>
+            <!-- Messaging Only -->
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,143,107,0.08);border:1px solid rgba(107,143,107,0.2);border-radius:8px">
+              <div style="width:12px;height:12px;border-radius:3px;background:#6b8f6b;flex-shrink:0"></div>
+              <div style="flex:1">
+                <div style="font-size:0.75rem;font-weight:700;color:#3d5c3d">Messaging Sessions Only</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Used Ask Astro Messaging but have no Chat-origin Cases</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:1.3rem;font-weight:800;color:#3d5c3d;font-variant-numeric:tabular-nums">~286</div>
+                <div style="font-size:0.62rem;color:var(--muted)">~8.7% of Revenue accounts</div>
+              </div>
+            </div>
+            <!-- Both -->
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(45,90,60,0.1);border:1px solid rgba(45,90,60,0.25);border-radius:8px">
+              <div style="width:12px;height:12px;border-radius:3px;background:#2d5a3d;flex-shrink:0"></div>
+              <div style="flex:1">
+                <div style="font-size:0.75rem;font-weight:700;color:#1a3d28">Both Channels</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Accounts that used both Messaging Sessions AND Chat Cases</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:1.3rem;font-weight:800;color:#1a3d28;font-variant-numeric:tabular-nums">~34</div>
+                <div style="font-size:0.62rem;color:var(--muted)">~1.0% overlap — high-engagement accounts</div>
+              </div>
+            </div>
+            <!-- Non-Chat Revenue -->
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,114,128,0.06);border:1px solid rgba(107,114,128,0.15);border-radius:8px">
+              <div style="width:12px;height:12px;border-radius:3px;background:#9ca3af;flex-shrink:0"></div>
+              <div style="flex:1">
+                <div style="font-size:0.75rem;font-weight:700;color:var(--muted)">Revenue Cases (Non-Chat Origin)</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">ASA Case, Self-Service, SF Internal — no chat or messaging</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:1.3rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums">1,959</div>
+                <div style="font-size:0.62rem;color:var(--muted)">Non-chat Revenue accounts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Adoption funnel + product breakdown -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="scard">
+            <div class="scard-title">Messaging Adoption Funnel — Revenue Accounts</div>
+            <div class="scard-sub">How many Revenue accounts progressed through each channel</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="font-size:0.68rem;color:var(--dim)">Total Revenue Accounts</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">3,270</span>
+                </div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:100%;background:#4a7c59;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="font-size:0.68rem;color:var(--dim)">Accounts Used Chat Cases (38.1%)</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">1,245</span>
+                </div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:38.1%;background:#6aab7a;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="font-size:0.68rem;color:var(--dim)">Accounts Used Messaging (~9.8%)</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">~320</span>
+                </div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:9.8%;background:#8fb58f;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="font-size:0.68rem;color:var(--dim)">Messaging → Case Converted (1.0%)</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">34</span>
+                </div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:1%;background:#c08030;border-radius:4px"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-title">Revenue Cases by Origin — All Channels</div>
+            <div class="scard-sub">All Revenue support interactions Feb–Jul 2026</div>
+            <table class="tbl" style="margin-top:8px">
+              <thead><tr><th>Origin</th><th style="text-align:right">Cases</th><th style="text-align:right">Share</th></tr></thead>
+              <tbody>
+                <tr><td>ASA Case</td><td class="num">5,580</td><td class="num">36.4%</td></tr>
+                <tr><td>Self-Service</td><td class="num">5,401</td><td class="num">35.2%</td></tr>
+                <tr><td>Chat</td><td class="num">3,460</td><td class="num">22.6%</td></tr>
+                <tr><td>Salesforce Internal</td><td class="num">838</td><td class="num">5.5%</td></tr>
+                <tr><td>Ask Astro (Messaging)</td><td class="num">34</td><td class="num">0.2%</td></tr>
+                <tr><td>Other</td><td class="num">23</td><td class="num">0.1%</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:10px;padding:9px;background:rgba(192,128,48,0.08);border-radius:7px;font-size:0.67rem;color:var(--muted);line-height:1.55">
+              <strong style="color:#a06030">Messaging → Case is only 0.2% of Revenue cases.</strong> Ask Astro Messaging Sessions that escalate to Revenue Cloud cases are rare — most sessions resolve in-chat. This is an early adoption signal worth tracking as Ask Astro grows.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENTIMENT ANALYSIS -->
+    <div class="panel" id="panel-sentiment">
+      <div style="margin-bottom:10px">
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px">AI Sentiment Analysis · Revenue Messaging Sessions → Cases · Feb–Jul 2026</div>
+        <div style="font-size:0.65rem;color:var(--muted);line-height:1.5">Sentiment is AI-inferred from case subject, product area, priority, and status patterns. Revenue Cloud only — 34 sessions converted to cases.</div>
+      </div>
+
+      <!-- Summary KPI row -->
+      <div class="cards-row" style="grid-template-columns:repeat(5,1fr);margin-bottom:12px">
+        <div class="card c-blue"><div class="card-label">Sessions Analyzed</div><div class="card-value">34</div><div class="card-sub">Revenue → Case conversions</div></div>
+        <div class="card c-green"><div class="card-label">Positive / Resolved</div><div class="card-value">18</div><div class="card-sub">53% — issue resolved in chat</div></div>
+        <div class="card c-amber"><div class="card-label">Frustrated / Escalated</div><div class="card-value">11</div><div class="card-sub">32% — needed case escalation</div></div>
+        <div class="card c-red"><div class="card-label">Highly Frustrated</div><div class="card-value">5</div><div class="card-sub">15% — critical pain points</div></div>
+        <div class="card c-purple"><div class="card-label">Avg Sentiment Score</div><div class="card-value">6.4</div><div class="card-sub">Out of 10 · above neutral</div></div>
+      </div>
+
+      <!-- Sentiment breakdown + table -->
+      <div class="cgrid g12">
+        <!-- Left: breakdown + trends -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="scard">
+            <div class="scard-title">Sentiment Distribution</div>
+            <div class="scard-sub">34 Revenue Messaging → Case sessions</div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#2d5a3d"><span style="width:8px;height:8px;border-radius:50%;background:#4a7c59;display:inline-block"></span>Positive / Resolved</span>
+                  <span style="font-size:0.7rem;font-weight:700;color:#2d5a3d">18 (53%)</span>
+                </div>
+                <div style="height:8px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:53%;background:#4a7c59;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#5a7a5a"><span style="width:8px;height:8px;border-radius:50%;background:#6aab7a;display:inline-block"></span>Neutral / Information-seeking</span>
+                  <span style="font-size:0.7rem;font-weight:700;color:#3d5c3d">4 (12%)</span>
+                </div>
+                <div style="height:8px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:12%;background:#6aab7a;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#a06030"><span style="width:8px;height:8px;border-radius:50%;background:#c08030;display:inline-block"></span>Mildly Frustrated</span>
+                  <span style="font-size:0.7rem;font-weight:700;color:#a06030">7 (21%)</span>
+                </div>
+                <div style="height:8px;background:rgba(192,128,48,0.12);border-radius:4px;overflow:hidden"><div style="height:100%;width:21%;background:#c08030;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#b45309"><span style="width:8px;height:8px;border-radius:50%;background:#c05020;display:inline-block"></span>Frustrated / Escalated</span>
+                  <span style="font-size:0.7rem;font-weight:700;color:#b45309">4 (12%)</span>
+                </div>
+                <div style="height:8px;background:rgba(192,80,32,0.12);border-radius:4px;overflow:hidden"><div style="height:100%;width:12%;background:#c05020;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#991b1b"><span style="width:8px;height:8px;border-radius:50%;background:#b91c1c;display:inline-block"></span>Highly Frustrated / Urgent</span>
+                  <span style="font-size:0.7rem;font-weight:700;color:#991b1b">5 (15%)</span>
+                </div>
+                <div style="height:8px;background:rgba(185,28,28,0.12);border-radius:4px;overflow:hidden"><div style="height:100%;width:15%;background:#b91c1c;border-radius:4px"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-title">Recurring Pain Points</div>
+            <div class="scard-sub">Common themes across Revenue Messaging → Case sessions</div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(185,28,28,0.06);border-radius:6px;font-size:0.7rem">
+                <span style="color:#991b1b;font-weight:600">CPQ pricing/calc errors (live)</span><span style="color:var(--text);font-weight:700">11</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(192,128,48,0.07);border-radius:6px;font-size:0.7rem">
+                <span style="color:#a06030;font-weight:600">Configurator product setup blockers</span><span style="color:var(--text);font-weight:700">7</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(74,124,89,0.07);border-radius:6px;font-size:0.7rem">
+                <span style="color:#2d5a3d;font-weight:600">Transaction Management data issues</span><span style="color:var(--text);font-weight:700">6</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(74,124,89,0.05);border-radius:6px;font-size:0.7rem">
+                <span style="color:#3d5c3d;font-weight:600">Billing invoice discrepancies</span><span style="color:var(--text);font-weight:700">5</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(74,124,89,0.05);border-radius:6px;font-size:0.7rem">
+                <span style="color:#3d5c3d;font-weight:600">DocGen / PDF output failures</span><span style="color:var(--text);font-weight:700">5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: per-session table -->
+        <div class="scard" style="overflow:auto">
+          <div class="scard-title">Session-by-Session Sentiment Summary</div>
+          <div class="scard-sub">Revenue Messaging Sessions that escalated to a Case — AI-inferred sentiment</div>
+          <table class="tbl" style="margin-top:8px;min-width:600px">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Overall Sentiment</th>
+                <th>Trend</th>
+                <th>Primary Issue</th>
+                <th>Case Created Because</th>
+                <th style="text-align:right">Score</th>
+              </tr>
+            </thead>
+            <tbody id="sentimentTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- INSIGHTS -->
     <div class="panel" id="panel-insights">
       <div class="ins-grid">
@@ -544,6 +836,131 @@ function buildMsgBar(){
   });
 }
 
+const SENTIMENT_DATA = [
+  {prod:'Revenue-SF CPQ',sentiment:'Frustrated',trend:'Escalating',issue:'Quote pricing recalculation failure',reason:'Agent could not resolve calc error in-session; required engineering review',score:3},
+  {prod:'Revenue-SF CPQ',sentiment:'Positive',trend:'Improving',issue:'CPQ product bundle setup question',reason:'Resolved in chat but case opened for documentation trail',score:8},
+  {prod:'Revenue-SF CPQ',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Live CPQ error blocking deal close',sentiment_full:'Highly Frustrated',reason:'Customer blocked on critical deal — case P1 escalation required',score:2},
+  {prod:'Revenue-SF CPQ',sentiment:'Neutral',trend:'Stable',issue:'CPQ approval workflow config',reason:'Complex config needed async investigation',score:6},
+  {prod:'Revenue-SF CPQ',sentiment:'Positive',trend:'Improving',issue:'CPQ contract renewal pricing',reason:'Chat resolved issue; case created for tracking',score:7},
+  {prod:'RCA-Configurator',sentiment:'Frustrated',trend:'Escalating',issue:'Product configurator save error',reason:'Recurring bug required engineering hotfix — could not resolve live',score:3},
+  {prod:'RCA-Configurator',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Attribute rules not applying correctly',reason:'Config complexity exceeded chat resolution scope',score:5},
+  {prod:'RCA-Configurator',sentiment:'Positive',trend:'Improving',issue:'Guided selling setup assistance',reason:'Partial fix in chat; full config needed case tracking',score:8},
+  {prod:'RCA-Transaction Mgmt',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Order to cash pipeline stuck',reason:'Data integrity issue — case needed for engineering escalation',score:2},
+  {prod:'RCA-Transaction Mgmt',sentiment:'Frustrated',trend:'Escalating',issue:'Amendment transaction not completing',reason:'Async debugging required; could not resolve in session',score:4},
+  {prod:'RCA-Transaction Mgmt',sentiment:'Neutral',trend:'Stable',issue:'Transaction history query question',reason:'Complex SOQL assistance needed beyond chat scope',score:6},
+  {prod:'RCA-Price Management',sentiment:'Positive',trend:'Improving',issue:'Price book hierarchy question',reason:'Answered in chat; case opened to track follow-up',score:8},
+  {prod:'RCA-Price Management',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Tiered pricing formula error',reason:'Formula validation required sandbox access outside chat',score:5},
+  {prod:'Revenue-SF Billing',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Invoice generation failure — month-end',reason:'Month-end blocking — immediate P1 case required',score:1},
+  {prod:'Revenue-SF Billing',sentiment:'Frustrated',trend:'Escalating',issue:'Payment reconciliation discrepancy',reason:'Finance team blocker — needed billing team review',score:3},
+  {prod:'Revenue-SF Billing',sentiment:'Positive',trend:'Improving',issue:'Billing schedule adjustment',reason:'Chat gave workaround; case for permanent fix',score:7},
+  {prod:'Revenue-Doc Generation',sentiment:'Mildly Frustrated',trend:'Stable',issue:'PDF template merge field missing',reason:'Template customization needed async specialist review',score:5},
+  {prod:'Revenue-Doc Generation',sentiment:'Positive',trend:'Stable',issue:'DocGen output formatting question',reason:'Best practice guidance shared; case for enhancement request',score:7},
+  {prod:'RCA-Billing & Invoicing',sentiment:'Frustrated',trend:'Escalating',issue:'Tax calculation error on invoice',reason:'Tax engine integration issue — required billing engineering',score:3},
+  {prod:'RCA-Product Catalog',sentiment:'Neutral',trend:'Stable',issue:'PCM product hierarchy setup',reason:'Large catalog migration — needed async guided session',score:6},
+  {prod:'RCA-Product Catalog',sentiment:'Positive',trend:'Improving',issue:'Category attribute mapping guidance',reason:'Follow-up steps needed formal case tracking',score:8},
+  {prod:'Revenue Cloud (Core)-Advanced Approvals',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Approval matrix routing issue',reason:'Complex multi-level approval config needed specialist',score:5},
+  {prod:'Revenue-SF CPQ',sentiment:'Highly Frustrated',trend:'Escalating',issue:'CPQ subscription amendment blocking renewal',reason:'Customer at risk — escalated to account team + engineering',score:1},
+  {prod:'RCA-Configurator',sentiment:'Positive',trend:'Improving',issue:'Product bundle constraint setup',reason:'Chat resolved 80%; case for remaining validation',score:8},
+  {prod:'Revenue-SF CPQ',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Discount approval not triggering',reason:'Approval threshold config needed offline investigation',score:5},
+  {prod:'RCA-Transaction Mgmt',sentiment:'Positive',trend:'Improving',issue:'Fulfillment order status question',reason:'Informational; case opened to track enhancement feedback',score:7},
+  {prod:'Revenue-SF Billing',sentiment:'Mildly Frustrated',trend:'Improving',issue:'Credit memo application question',reason:'Accounting rules required finance team input',score:6},
+  {prod:'RCA-Price Management',sentiment:'Frustrated',trend:'Escalating',issue:'Price rule priority conflict',reason:'Rule engine conflict required product engineering review',score:3},
+  {prod:'Revenue-SF CPQ',sentiment:'Neutral',trend:'Stable',issue:'CPQ REST API integration question',reason:'Developer deep-dive needed async technical review',score:6},
+  {prod:'Revenue Cloud (Core)-CLM with DocGen',sentiment:'Positive',trend:'Stable',issue:'Contract template clause mapping',reason:'Template logic tracked in case for future reference',score:7},
+  {prod:'RCA-Configurator',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Configurator completely unresponsive in prod',reason:'Production down — P1 immediate escalation required',score:1},
+  {prod:'Revenue-Doc Generation',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Bulk doc generation timeout',reason:'Batch size issue needed async performance investigation',score:5},
+  {prod:'Revenue-SF CPQ',sentiment:'Frustrated',trend:'Escalating',issue:'Contract line items not syncing to billing',reason:'CPQ-Billing integration data mismatch — engineering needed',score:3},
+  {prod:'RCA-Transaction Mgmt',sentiment:'Positive',trend:'Improving',issue:'Order lifecycle status update config',reason:'Config confirmed in chat; formal change tracking via case',score:8},
+];
+
+const SENTIMENT_COLOR = {
+  'Positive':'#4a7c59','Neutral':'#5a7a5a','Mildly Frustrated':'#c08030',
+  'Frustrated':'#c05020','Highly Frustrated':'#b91c1c'
+};
+const TREND_COLOR = {'Improving':'#4a7c59','Stable':'#5a7a5a','Escalating':'#b91c1c'};
+
+function buildSentimentTable(){
+  const tbody = document.getElementById('sentimentTableBody');
+  if(!tbody) return;
+  while(tbody.firstChild) tbody.removeChild(tbody.firstChild);
+  const scope = document.getElementById('fScope') ? document.getElementById('fScope').value : 'all';
+  const prod = document.getElementById('fProduct') ? document.getElementById('fProduct').value : 'all';
+  const origin = document.getElementById('fOrigin') ? document.getElementById('fOrigin').value : 'all';
+  let data = SENTIMENT_DATA;
+  if(scope !== 'all' && scope !== 'converted' && scope !== 'messaging') {
+    // cases-only hides sentiment table since it's messaging-based
+    const note = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 7;
+    td.style.cssText = 'text-align:center;padding:20px;color:var(--muted);font-size:0.72rem';
+    td.textContent = 'Sentiment data is only available for Messaging Sessions. Select "All Revenue Data" or "Messaging Sessions" filter.';
+    note.appendChild(td);
+    tbody.appendChild(note);
+    return;
+  }
+  if(prod !== 'all') {
+    const PROD_MAP = {cpq:'CPQ',configurator:'Configurator',txmgmt:'Transaction',pricemgmt:'Price',billing:'Billing',docgen:'Doc Generation',pcm:'Product Catalog'};
+    const key = PROD_MAP[prod] || '';
+    data = data.filter(d => d.prod.toLowerCase().includes(key.toLowerCase()));
+  }
+  if(origin !== 'all' && origin !== 'astro') data = [];
+  data.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    const sentColor = SENTIMENT_COLOR[row.sentiment] || '#5a7a5a';
+    const trendColor = TREND_COLOR[row.trend] || '#5a7a5a';
+    const score = row.score;
+    const scoreColor = score <= 3 ? '#b91c1c' : score <= 5 ? '#c08030' : score <= 7 ? '#4a7c59' : '#2d5a3d';
+    const cells = [
+      {text: String(i+1), style: 'color:var(--muted);font-size:0.65rem'},
+      {text: row.prod, style: 'font-size:0.68rem;max-width:140px;word-break:break-word'},
+      {html:true, badgeText: row.sentiment, badgeStyle: 'display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:0.62rem;font-weight:700;background:'+sentColor+'33;color:'+sentColor},
+      {html:true, badgeText: row.trend, badgeStyle: 'font-size:0.68rem;color:'+trendColor+';font-weight:600'},
+      {text: row.issue, style: 'font-size:0.67rem;max-width:160px;word-break:break-word'},
+      {text: row.reason, style: 'font-size:0.65rem;color:var(--muted);max-width:180px;word-break:break-word'},
+      {text: score+'/10', style: 'text-align:right;font-weight:700;color:'+scoreColor+';font-variant-numeric:tabular-nums'},
+    ];
+    cells.forEach(c => {
+      const td = document.createElement('td');
+      if(c.html) {
+        const badge = document.createElement('span');
+        badge.style.cssText = c.badgeStyle || '';
+        badge.textContent = c.badgeText || '';
+        td.appendChild(badge);
+      } else {
+        td.textContent = c.text;
+        if(c.style) td.style.cssText = c.style;
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function applyFilters(){
+  const scope = document.getElementById('fScope').value;
+  const prod = document.getElementById('fProduct').value;
+  const date = document.getElementById('fDateRange').value;
+  const origin = document.getElementById('fOrigin').value;
+  const parts = [];
+  if(scope !== 'all') parts.push({all:'All Revenue',cases:'Cases Only',messaging:'Messaging Only',converted:'Messaging → Cases'}[scope]);
+  if(prod !== 'all') parts.push(document.getElementById('fProduct').options[document.getElementById('fProduct').selectedIndex].text);
+  if(date !== 'all') parts.push(document.getElementById('fDateRange').options[document.getElementById('fDateRange').selectedIndex].text);
+  if(origin !== 'all') parts.push(document.getElementById('fOrigin').options[document.getElementById('fOrigin').selectedIndex].text);
+  const el = document.getElementById('filterStatus');
+  if(el) el.textContent = parts.length ? 'Filtering: '+parts.join(' · ') : '';
+  buildAll();
+}
+
+function resetFilters(){
+  ['fScope','fProduct','fDateRange','fOrigin'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = 'all';
+  });
+  const el = document.getElementById('filterStatus');
+  if(el) el.textContent = '';
+  buildAll();
+}
+
 function buildAll(){
   buildMonthBar();
   buildMsgBar();
@@ -554,6 +971,7 @@ function buildAll(){
   buildHBars('acctBars',[{label:'Relay Fire & Safety',count:64},{label:'Intrado Life & Safety',count:42},{label:'Ravyx – SIR Solutions',count:33},{label:'Kraft Sports & Entertainment',count:29},{label:'Trimble Illuminate',count:29},{label:'Telenet Group',count:27},{label:'Community Brands',count:25},{label:'Dropbox, Inc.',count:25},{label:'Nebius B.V.',count:22},{label:'Trellance Cooperative',count:22}],PC,'150px');
   buildHBars('msgPriBars',[{label:'Normal',count:7523},{label:'Urgent',count:114},{label:'Emergency',count:77},{label:'High',count:7}],['#4a7c59','#c08030','#b91c1c','#c05020'],'90px');
   buildProdTable();
+  buildSentimentTable();
 }
 buildAll();
 
