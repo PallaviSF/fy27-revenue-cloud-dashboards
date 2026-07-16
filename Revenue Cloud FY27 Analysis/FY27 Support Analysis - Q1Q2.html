@@ -141,7 +141,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
   <div class="nav-logo">
     <div class="nav-logo-badge"><span>💬 CHAT CASES</span></div>
     <div class="nav-logo-title">Revenue Cloud FY27</div>
-    <div class="nav-logo-sub">Chat origin only<br>Feb 1 – Jul 15, 2026</div>
+    <div class="nav-logo-sub">Chat + Messaging · Org-wide<br>Feb 1 – Jul 15, 2026</div>
   </div>
   <div class="nav-body">
     <div class="nav-grp">Dashboard</div>
@@ -164,7 +164,8 @@ body{background:var(--bg);color:var(--text);display:flex;}
     <div class="hero-title">Revenue Cloud FY27 Support Analysis</div>
     <div class="hero-pills">
       <span class="hpill" style="border-color:rgba(96,165,250,0.4);color:#93c5fd;background:rgba(59,130,246,0.1)">3,422 Chat cases</span>
-      <span class="hpill" style="border-color:rgba(52,211,153,0.4);color:#6ee7b7;background:rgba(16,185,129,0.1)">98.7% resolved</span>
+      <span class="hpill" style="border-color:rgba(167,139,250,0.4);color:#c4b5fd;background:rgba(139,92,246,0.1)">7,720 Messaging cases</span>
+      <span class="hpill" style="border-color:rgba(52,211,153,0.4);color:#6ee7b7;background:rgba(16,185,129,0.1)">98.7% chat resolved</span>
       <span class="hpill" style="border-color:rgba(251,191,36,0.4);color:#fde68a;background:rgba(245,158,11,0.1)">43 still open</span>
       <span class="hpill" style="border-color:rgba(248,113,113,0.4);color:#fca5a5;background:rgba(239,68,68,0.1)">88 Level-1 critical</span>
     </div>
@@ -211,6 +212,33 @@ body{background:var(--bg);color:var(--text);display:flex;}
         <div style="background:linear-gradient(135deg,rgba(107,114,128,0.14),rgba(107,114,128,0.04));border:1px solid rgba(107,114,128,0.18);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px">
           <div style="width:10px;height:10px;border-radius:50%;background:#6b7280;flex-shrink:0"></div>
           <div><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:#9ca3af;font-weight:600">Untagged</div><div style="font-size:1.05rem;font-weight:800;color:#d1d5db;font-variant-numeric:tabular-nums">52</div><div style="font-size:0.63rem;color:#9ca3af;opacity:0.8">1.5%</div></div>
+        </div>
+      </div>
+
+      <!-- CHATS RAISED — MESSAGING SESSION SECTION -->
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:0.72rem;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">💬 Chats Raised via Messaging (Org-Wide)</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px">
+          <div class="card c-purple"><div class="card-label">Total Chats Raised</div><div class="card-value">7,720</div><div class="card-sub">Via MessagingSession · Ask Astro</div></div>
+          <div class="card c-green"><div class="card-label">Closed</div><div class="card-value">7,500</div><div class="card-sub">97.2% closure rate</div></div>
+          <div class="card c-amber"><div class="card-label">Still Open</div><div class="card-value">220</div><div class="card-sub">New · In Progress · On Hold</div></div>
+          <div class="card c-red"><div class="card-label">Emergency</div><div class="card-value">77</div><div class="card-sub">1.0% of messaging cases</div></div>
+          <div class="card c-cyan"><div class="card-label">Urgent</div><div class="card-value">114</div><div class="card-sub">1.5% of messaging cases</div></div>
+        </div>
+        <div class="cgrid g2">
+          <div class="scard">
+            <div class="scard-title">Monthly Messaging Trend — Org-Wide</div>
+            <div class="scard-sub">Jun peak 4,349 · Jul 2,250 (partial) · May 1,122</div>
+            <svg style="width:100%;height:120px;overflow:visible" viewBox="0 0 420 120" id="msgBar"></svg>
+          </div>
+          <div class="scard">
+            <div class="scard-title">Priority Breakdown</div>
+            <div class="scard-sub">7,720 messaging cases by priority level</div>
+            <div class="hbar-list" id="msgPriBars" style="margin-top:8px"></div>
+            <div style="margin-top:12px;padding:10px;background:rgba(139,92,246,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
+              <strong style="color:#a78bfa">97.1% Normal priority</strong> — Messaging channel (Ask Astro) handles primarily standard-tier requests. 77 Emergency + 114 Urgent cases warrant review for triage routing improvements.
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -479,13 +507,45 @@ const GEO=[{label:'AMER',count:2358,color:'#3b82f6'},{label:'APAC (incl. JP)',co
 const SEV=[{label:'L4 Medium',count:2849,color:'#3b82f6'},{label:'L2 Urgent',count:399,color:'#f59e0b'},{label:'L1 Critical',count:88,color:'#ef4444'},{label:'L3 High',count:86,color:'#f97316'}];
 const PC=['#3b82f6','#8b5cf6','#06b6d4','#f59e0b','#10b981','#ec4899','#ef4444','#f97316','#a78bfa','#34d399'];
 
+function buildMsgBar(){
+  const svg=document.getElementById('msgBar');if(!svg)return;svg.innerHTML='';
+  const ns='http://www.w3.org/2000/svg';
+  const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
+  const W=420,H=120,pl=32,pr=8,pt=5,pb=25;
+  const iW=W-pl-pr,iH=H-pt-pb;
+  const months=[{l:'May',v:1122},{l:'Jun',v:4349,hi:true},{l:'Jul*',v:2250}];
+  const maxV=5000;
+  const scY=v=>pt+iH-(v/maxV)*iH;
+  const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);
+  [1000,2000,3000,4000].forEach(v=>{
+    svg.appendChild(mk('line',{x1:pl,x2:W-pr,y1:scY(v),y2:scY(v),stroke:'rgba(255,255,255,0.07)','stroke-width':1}));
+    const t=mk('text',{x:pl-3,y:scY(v)+3,'text-anchor':'end',fill:'#6b7280'});
+    t.style.cssText='font-size:9px;font-family:inherit';t.textContent=v>=1000?(v/1000)+'K':v;svg.appendChild(t);
+  });
+  const bGap=iW/months.length,bW=Math.floor(bGap*0.55);
+  months.forEach((d,i)=>{
+    const id='mmg'+i,cx=pl+i*bGap+bGap/2,x=cx-bW/2,y=scY(d.v),h=scY(0)-y;
+    const g=document.createElementNS(ns,'linearGradient');g.id=id;g.setAttribute('x1','0');g.setAttribute('y1','0');g.setAttribute('x2','0');g.setAttribute('y2','1');
+    [[0,d.hi?'#a78bfa':'#8b5cf6','1'],[1,d.hi?'#7c3aed':'#6d28d9','0.7']].forEach(([off,col,op])=>{const s=document.createElementNS(ns,'stop');s.setAttribute('offset',off*100+'%');s.setAttribute('stop-color',col);s.setAttribute('stop-opacity',op);g.appendChild(s);});
+    defs.appendChild(g);
+    const bar=mk('rect',{x,y,width:bW,height:h,rx:4,fill:`url(#${id})`,cursor:'pointer'});
+    bar.addEventListener('mouseenter',e=>{bar.style.opacity='0.75';showTip(e,d.l+' 2026',d.v.toLocaleString()+' messaging cases');});
+    bar.addEventListener('mousemove',moveTip);bar.addEventListener('mouseleave',()=>{bar.style.opacity='1';hideTip();});
+    svg.appendChild(bar);
+    const lv=mk('text',{x:cx,y:y-3,'text-anchor':'middle',fill:d.hi?'#c4b5fd':'#a78bfa'});lv.style.cssText='font-size:9px;font-weight:600;font-family:inherit';lv.textContent=d.v.toLocaleString();svg.appendChild(lv);
+    const xl=mk('text',{x:cx,y:scY(0)+14,'text-anchor':'middle',fill:'#6b7280'});xl.style.cssText='font-size:9px;font-family:inherit';xl.textContent=d.l;svg.appendChild(xl);
+  });
+}
+
 function buildAll(){
   buildMonthBar();
+  buildMsgBar();
   buildDonut('geoDonut2','geoLegend2',GEO);
   buildDonut('sevDonut','sevLegend',SEV);
   buildHBars('prodBars',[{label:'Revenue-SF CPQ',count:1549},{label:'RCA-Configurator',count:461},{label:'RCA-Transaction Mgmt',count:260},{label:'RCA-Price Mgmt',count:209},{label:'Revenue-CPQ Dev Supp.',count:207},{label:'Revenue-Doc Generation',count:176},{label:'Revenue-SF Billing',count:155},{label:'RCA-Product Catalog',count:81},{label:'RCA-Dev Support P2O',count:79},{label:'RCA-Billing & Invoicing',count:67}],PC,'118px');
   buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#3b82f6','#f59e0b','#f97316','#ef4444'],'130px');
   buildHBars('acctBars',[{label:'Relay Fire & Safety',count:64},{label:'Intrado Life & Safety',count:42},{label:'Ravyx – SIR Solutions',count:33},{label:'Kraft Sports & Entertainment',count:29},{label:'Trimble Illuminate',count:29},{label:'Telenet Group',count:27},{label:'Community Brands',count:25},{label:'Dropbox, Inc.',count:25},{label:'Nebius B.V.',count:22},{label:'Trellance Cooperative',count:22}],PC,'150px');
+  buildHBars('msgPriBars',[{label:'Normal',count:7523},{label:'Urgent',count:114},{label:'Emergency',count:77},{label:'High',count:7}],['#8b5cf6','#f59e0b','#ef4444','#f97316'],'90px');
   buildProdTable();
 }
 buildAll();
