@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Revenue Cloud FY27 — Chat Cases</title>
 <style>
 :root {
@@ -157,6 +160,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
   </div>
   <div class="nav-foot">
     <button class="theme-btn" onclick="toggleTheme()">🌓 Toggle theme</button>
+    <div id="lastUpdated" style="margin-top:7px;font-size:0.58rem;color:var(--muted);text-align:center;line-height:1.5"></div>
   </div>
 </nav>
 
@@ -558,6 +562,37 @@ function buildAll(){
   buildProdTable();
 }
 buildAll();
+
+const BUILD_TS = '2026-07-17T00:00:00Z';
+(function(){
+  const el = document.getElementById('lastUpdated');
+  if(!el) return;
+  const d = new Date(BUILD_TS);
+  const line1 = document.createTextNode('\u{1F550} Updated');
+  const br1 = document.createElement('br');
+  const line2 = document.createTextNode(d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
+  const br2 = document.createElement('br');
+  const line3 = document.createTextNode(d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}));
+  el.append(line1,br1,line2,br2,line3);
+})();
+
+(function(){
+  const REPO='PallaviSF/fy27-revenue-cloud-dashboards';
+  const FILE='Revenue%20Cloud%20FY27%20Analysis/FY27%20Support%20Analysis%20-%20Q1Q2.html';
+  let knownSha=null;
+  function check(){
+    fetch('https://api.github.com/repos/'+REPO+'/commits?path='+FILE+'&per_page=1')
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if(!data||!data[0]) return;
+        var sha=data[0].sha;
+        if(!knownSha){knownSha=sha;return;}
+        if(sha!==knownSha){window.location.reload(true);}
+      }).catch(function(){});
+  }
+  check();
+  setInterval(check,60000);
+})();
 </script>
 </body>
 </html>
