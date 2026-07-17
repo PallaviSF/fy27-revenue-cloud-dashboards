@@ -1,192 +1,108 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/fy27-revenue-cloud-dashboards/sw.js',{scope:'/fy27-revenue-cloud-dashboards/'}).catch(function(){});}</script>
-<title>Revenue Cloud FY27 — Chat Cases</title>
+<title>Revenue Cloud Chat Cases · FY27</title>
 <style>
-/* Sage green + white — always light, no dark mode blacks */
-:root {
-  --bg:#f5f7f5; --bg2:#ffffff; --bg3:#edf2ed;
-  --nav-bg:#e8efe8; --border:rgba(107,142,107,0.18);
-  --text:#1e2d1e; --muted:#5a7a5a; --dim:#3d5c3d;
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f5f7f5;--bg2:#ffffff;--bg3:#edf2ed;
+  --text:#1a2e1a;--muted:#6b8f6b;--border:rgba(74,124,89,0.18);
+  --primary:#4a7c59;--light:#6aab7a;--dark:#2d5a3d;
 }
-[data-theme="light"] {
-  --bg:#f5f7f5; --bg2:#ffffff; --bg3:#edf2ed;
-  --nav-bg:#e8efe8; --border:rgba(107,142,107,0.18);
-  --text:#1e2d1e; --muted:#5a7a5a; --dim:#3d5c3d;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;}
-body{background:var(--bg);color:var(--text);display:flex;}
-
-/* NAV */
-.nav{width:210px;flex-shrink:0;background:var(--nav-bg);display:flex;flex-direction:column;height:100vh;border-right:1px solid var(--border);}
-.nav-logo{padding:18px 16px 14px;border-bottom:1px solid var(--border);}
-.nav-logo-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#4a7c59,#6aab7a);border-radius:8px;padding:5px 10px;margin-bottom:8px;}
-.nav-logo-badge span{font-size:0.7rem;font-weight:700;color:#fff;letter-spacing:0.04em;}
-.nav-logo-title{font-size:0.78rem;font-weight:600;color:#2d4a2d;}
-.nav-logo-sub{font-size:0.63rem;color:var(--muted);margin-top:2px;line-height:1.4;}
-.nav-body{flex:1;overflow-y:auto;padding:6px 0;}
-.nav-grp{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:10px 16px 4px;font-weight:600;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;cursor:pointer;font-size:0.78rem;color:var(--muted);border-left:2px solid transparent;transition:all 0.15s;user-select:none;}
-.nav-item:hover{background:rgba(74,122,74,0.07);color:var(--dim);}
-.nav-item.active{color:#2d4a2d;border-left-color:#4a7c59;background:rgba(74,122,74,0.12);}
-.nav-item .ni{font-size:0.85rem;width:18px;text-align:center;}
-.nav-item .nbadge{margin-left:auto;font-size:0.62rem;font-variant-numeric:tabular-nums;background:rgba(74,122,74,0.10);color:var(--muted);padding:1px 6px;border-radius:8px;}
-.nav-item.active .nbadge{background:rgba(74,122,74,0.20);color:#4a7c59;}
-.nav-foot{padding:12px 16px;border-top:1px solid var(--border);}
-.theme-btn{width:100%;background:rgba(74,122,74,0.08);border:1px solid var(--border);border-radius:6px;padding:7px;font-size:0.72rem;color:var(--muted);cursor:pointer;transition:background 0.15s;}
-.theme-btn:hover{background:rgba(74,122,74,0.16);color:#2d4a2d;}
-
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
-
-/* HERO */
-.hero{flex-shrink:0;text-align:center;padding:14px 24px 12px;background:linear-gradient(135deg,rgba(74,122,74,0.10),rgba(106,171,122,0.07) 50%,rgba(200,225,200,0.12));border-bottom:1px solid var(--border);position:relative;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% -10%,rgba(74,122,74,0.08),transparent);pointer-events:none;}
-.hero-eye{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:#4a7c59;font-weight:600;margin-bottom:4px;position:relative;}
-.hero-title{font-size:1.3rem;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#2d4a2d,#4a7c59,#6aab7a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;}
-.hero-sub{font-size:0.7rem;color:var(--muted);margin-top:3px;position:relative;}
-.hero-pills{display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap;position:relative;}
-.hpill{padding:3px 10px;border-radius:12px;font-size:0.67rem;font-weight:600;border:1px solid;}
-
-/* PANELS */
-.panels{flex:1;overflow:hidden;position:relative;}
-.panel{position:absolute;inset:0;overflow-y:auto;padding:14px 18px 18px;display:none;}
-.panel.active{display:block;}
-
-/* FLASH CARDS */
-.cards-row{display:grid;gap:10px;margin-bottom:12px;}
-.card{border-radius:12px;padding:14px 16px;position:relative;overflow:hidden;border:1px solid rgba(107,142,107,0.18);}
-.card-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;font-weight:600;position:relative;}
-.card-value{font-size:1.75rem;font-weight:800;line-height:1;position:relative;font-variant-numeric:tabular-nums;}
-.card-sub{font-size:0.67rem;margin-top:4px;position:relative;opacity:0.8;}
-/* Sage green + white palette */
-.c-blue{background:linear-gradient(135deg,rgba(74,124,89,0.15),rgba(45,90,60,0.06));} .c-blue .card-label{color:#4a7c59;} .c-blue .card-value{color:#2d5a3d;}
-.c-purple{background:linear-gradient(135deg,rgba(107,143,107,0.15),rgba(74,107,74,0.06));} .c-purple .card-label{color:#5a7a5a;} .c-purple .card-value{color:#3d5c3d;}
-.c-pink{background:linear-gradient(135deg,rgba(143,174,143,0.15),rgba(107,143,107,0.06));} .c-pink .card-label{color:#6b8f6b;} .c-pink .card-value{color:#4a6a4a;}
-.c-amber{background:linear-gradient(135deg,rgba(180,130,70,0.15),rgba(140,95,40,0.06));} .c-amber .card-label{color:#a06030;} .c-amber .card-value{color:#7a4820;}
-.c-green{background:linear-gradient(135deg,rgba(74,124,89,0.18),rgba(45,90,60,0.08));} .c-green .card-label{color:#2d5a3d;} .c-green .card-value{color:#1a3d28;}
-.c-red{background:linear-gradient(135deg,rgba(200,60,60,0.15),rgba(160,30,30,0.06));} .c-red .card-label{color:#b91c1c;} .c-red .card-value{color:#991b1b;}
-.c-cyan{background:linear-gradient(135deg,rgba(91,154,139,0.15),rgba(60,120,107,0.06));} .c-cyan .card-label{color:#3d7a6a;} .c-cyan .card-value{color:#2a5a4e;}
-.c-orange{background:linear-gradient(135deg,rgba(130,160,100,0.15),rgba(96,128,72,0.06));} .c-orange .card-label{color:#5a7a3d;} .c-orange .card-value{color:#3d5a28;}
-
-/* CONTENT CARDS */
-.cgrid{display:grid;gap:10px;}
-.g2{grid-template-columns:1fr 1fr;} .g3{grid-template-columns:1fr 1fr 1fr;}
-.g21{grid-template-columns:2fr 1fr;} .g12{grid-template-columns:1fr 2fr;}
-.scard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;}
-.scard-title{font-size:0.8rem;font-weight:600;margin-bottom:2px;}
-.scard-sub{font-size:0.65rem;color:var(--muted);margin-bottom:10px;}
-
-/* HBARS */
-.hbar-list{display:flex;flex-direction:column;gap:6px;}
-.hbar-row{display:flex;align-items:center;gap:8px;}
-.hbar-lbl{font-size:0.68rem;color:var(--dim);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
-.hbar-track{flex:1;background:rgba(74,124,89,0.12);border-radius:3px;height:9px;overflow:hidden;}
-.hbar-fill{height:100%;border-radius:3px;}
-.hbar-val{font-size:0.68rem;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;min-width:34px;}
-
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:0.73rem;}
-.tbl th{padding:5px 7px;text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;}
-.tbl td{padding:5px 7px;color:var(--dim);border-bottom:1px solid rgba(107,142,107,0.12);}
-.tbl td.num{text-align:right;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;}
-.tbl tr:last-child td{border-bottom:none;}
-.tbl tbody tr:hover td{background:rgba(74,124,89,0.05);}
-
-/* BADGES */
-.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:0.6rem;font-weight:700;}
-.b-up{background:rgba(185,28,28,0.12);color:#b91c1c;} .b-dn{background:rgba(74,124,89,0.15);color:#2d5a3d;}
-.b-blue{background:rgba(74,124,89,0.15);color:#2d5a3d;}
-
-/* DONUT */
-.donut-wrap{display:flex;gap:12px;align-items:center;}
-.legend{display:flex;flex-direction:column;gap:5px;flex:1;}
-.leg-row{display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--dim);}
-.sw{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
-.lc{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;}
-
-/* SEVERITY STRIP */
-.sev-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
-.sev-pill{border-radius:8px;padding:10px 12px;border:1px solid rgba(107,142,107,0.18);}
-.sev-lbl{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:3px;}
-.sev-val{font-size:1.15rem;font-weight:800;font-variant-numeric:tabular-nums;}
-.sev-pct{font-size:0.63rem;margin-top:2px;opacity:0.75;}
-
-/* INSIGHTS */
-.ins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.ins{border-radius:10px;padding:14px;border:1px solid rgba(107,142,107,0.18);background:var(--bg3);}
-.ins-num{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
-.ins-head{font-size:0.78rem;font-weight:700;margin-bottom:5px;}
-.ins-body{font-size:0.7rem;color:var(--muted);line-height:1.55;}
-
-/* TOOLTIP */
-.tt{position:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;font-size:0.74rem;color:var(--text);pointer-events:none;box-shadow:0 4px 16px rgba(74,100,74,0.18);z-index:999;opacity:0;transition:opacity 0.1s;white-space:nowrap;}
-.tt.vis{opacity:1;}
-.tt-lbl{font-size:0.63rem;color:var(--muted);}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+.nav{background:#e8efe8;border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:14px;height:46px;position:sticky;top:0;z-index:100}
+.nav-title{font-size:0.85rem;font-weight:800;color:var(--dark)}
+.nav-sub{font-size:0.6rem;color:var(--muted);margin-top:1px}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.58rem;font-weight:700;background:rgba(74,124,89,0.15);color:var(--primary);text-transform:uppercase;letter-spacing:0.06em}
+.hero{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 20px 14px}
+.hero-eye{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--primary);font-weight:700;margin-bottom:4px}
+.hero-num{font-size:2.6rem;font-weight:900;color:var(--dark);font-variant-numeric:tabular-nums;line-height:1}
+.hero-lbl{font-size:0.7rem;color:var(--muted);margin-top:2px}
+.hero-date{font-size:0.65rem;color:var(--primary);margin-top:2px;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.kcard{border-radius:10px;padding:11px 14px;border:1px solid}
+.kcard-lbl{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;margin-bottom:4px}
+.kcard-val{font-size:1.55rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.kcard-pct{font-size:0.65rem;margin-top:2px;opacity:0.8}
+.k0{background:linear-gradient(135deg,rgba(74,124,89,0.14),rgba(45,90,60,0.04));border-color:rgba(74,124,89,0.3)}.k0 .kcard-lbl{color:#4a7c59}.k0 .kcard-val{color:#2d5a3d}.k0 .kcard-pct{color:#4a7c59}
+.k1{background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(37,99,235,0.03));border-color:rgba(59,130,246,0.25)}.k1 .kcard-lbl{color:#3b82f6}.k1 .kcard-val{color:#1d4ed8}.k1 .kcard-pct{color:#3b82f6}
+.k2{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.03));border-color:rgba(16,185,129,0.25)}.k2 .kcard-lbl{color:#059669}.k2 .kcard-val{color:#065f46}.k2 .kcard-pct{color:#059669}
+.k3{background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(180,83,9,0.03));border-color:rgba(245,158,11,0.25)}.k3 .kcard-lbl{color:#d97706}.k3 .kcard-val{color:#92400e}.k3 .kcard-pct{color:#d97706}
+.filters{background:var(--bg2);border-bottom:1px solid var(--border);padding:9px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fsel{font-size:0.72rem;padding:5px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg2);color:var(--text);cursor:pointer;outline:none}
+.fsel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(74,124,89,0.15)}
+.filter-lbl{font-size:0.65rem;color:var(--muted);font-weight:700}
+.active-filter{font-size:0.62rem;padding:2px 10px;background:rgba(74,124,89,0.12);color:var(--primary);border-radius:10px;font-weight:600}
+.main{padding:16px 20px;display:grid;grid-template-columns:320px 1fr;gap:14px}
+@media(max-width:760px){.main{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px}
+.scard:last-child{margin-bottom:0}
+.scard-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.scard-sub{font-size:0.62rem;color:var(--muted);margin-bottom:10px}
+.hbar-row{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.hbar-lbl{font-size:0.67rem;color:var(--text);width:130px;min-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar-track{flex:1;height:11px;background:rgba(74,124,89,0.1);border-radius:6px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:6px;background:var(--primary);transition:width 0.35s ease}
+.hbar-val{font-size:0.67rem;font-weight:700;color:var(--text);min-width:38px;text-align:right;font-variant-numeric:tabular-nums}
+.tbl{width:100%;border-collapse:collapse;font-size:0.72rem}
+.tbl th{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--border);text-align:left}
+.tbl td{padding:5px 8px;border-bottom:1px solid rgba(74,124,89,0.06)}
+.tbl td.r{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(74,124,89,0.04)}
+.mom-up{color:#059669;font-weight:700}
+.mom-dn{color:#dc2626;font-weight:700}
+.empty-msg{text-align:center;color:var(--muted);font-style:italic;padding:20px 0;font-size:0.72rem}
+.footer{padding:8px 20px 20px;font-size:0.6rem;color:var(--muted)}
 </style>
 </head>
-<body id="root">
+<body>
 
-<nav class="nav">
-  <div class="nav-logo">
-    <div class="nav-logo-badge"><span>💬 CHAT CASES</span></div>
-    <div class="nav-logo-title">Revenue Cloud FY27</div>
-    <div class="nav-logo-sub">Chat + Messaging · Org-wide<br>Feb 1 – Jul 15, 2026</div>
+<!-- NAV -->
+<div class="nav">
+  <div>
+    <div class="nav-title">Revenue Cloud Chat Cases · FY27</div>
+    <div class="nav-sub">Salesforce Case · Origin = Chat · Cloud__c LIKE Revenue%</div>
   </div>
-  <div class="nav-body">
-    <div class="nav-grp">Dashboard</div>
-    <div class="nav-item active" data-panel="overview"><span class="ni">◉</span>Chat Raised vs Converted<span class="nbadge">11,142</span></div>
-    <div class="nav-grp">Deep Dive</div>
-    <div class="nav-item" data-panel="products"><span class="ni">⬡</span>Products<span class="nbadge">19</span></div>
-    <div class="nav-item" data-panel="geo"><span class="ni">◎</span>GEO Split<span class="nbadge">3</span></div>
-    <div class="nav-item" data-panel="accounts"><span class="ni">⬜</span>Top Accounts<span class="nbadge">10</span></div>
-    <div class="nav-item" data-panel="severity"><span class="ni">⚡</span>Severity<span class="nbadge">4</span></div>
-    <div class="nav-item" data-panel="comparison"><span class="ni">⇌</span>Comparison (Vs)<span class="nbadge">Rev</span></div>
-    <div class="nav-grp">Analysis</div>
-    <div class="nav-item" data-panel="sentiment"><span class="ni">◈</span>Sentiment Analysis<span class="nbadge">AI</span></div>
-    <div class="nav-item" data-panel="insights"><span class="ni">★</span>Insights<span class="nbadge">6</span></div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+    <span class="badge">Chat Origin Only</span>
+    <span id="navTs" style="font-size:0.6rem;color:var(--muted)"></span>
   </div>
-  <div class="nav-foot">
-    <button class="theme-btn" onclick="toggleTheme()">🌓 Toggle theme</button>
-    <div id="lastUpdated" style="margin-top:7px;font-size:0.58rem;color:var(--muted);text-align:center;line-height:1.5"></div>
-  </div>
-</nav>
+</div>
 
-<div class="main">
-  <div class="hero">
-    <div class="hero-title">Revenue Cloud FY27 Support Analysis</div>
-    <div class="hero-pills">
-      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.1)">3,270 Revenue Accounts</span>
-      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.1)">3,422 Chat Cases</span>
-      <span class="hpill" style="border-color:rgba(107,143,107,0.4);color:#3d5c3d;background:rgba(107,143,107,0.1)">7,720 Messaging Sessions</span>
-      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.08)">98.7% Chat Resolved</span>
-      <span class="hpill" style="border-color:rgba(185,28,28,0.3);color:#991b1b;background:rgba(185,28,28,0.07)">88 Level-1 Critical</span>
-    </div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eye">Revenue Cloud · Chat Cases · FY27 Dashboard</div>
+  <div style="display:flex;align-items:baseline;gap:10px">
+    <div class="hero-num" id="heroTotal">—</div>
+    <div style="font-size:0.78rem;color:var(--muted)">total chat-origin cases</div>
   </div>
+  <div class="hero-lbl" id="heroLbl">Feb 2026 – Jul 17, 2026 · All Revenue products</div>
+  <div class="hero-date" id="heroDate"></div>
+  <div class="kpis">
+    <div class="kcard k0"><div class="kcard-lbl">Revenue-SF CPQ</div><div class="kcard-val" id="kv0">—</div><div class="kcard-pct" id="ks0"></div></div>
+    <div class="kcard k1"><div class="kcard-lbl">RCA Configurator</div><div class="kcard-val" id="kv1">—</div><div class="kcard-pct" id="ks1"></div></div>
+    <div class="kcard k2"><div class="kcard-lbl">RCA Transaction Mgmt</div><div class="kcard-val" id="kv2">—</div><div class="kcard-pct" id="ks2"></div></div>
+    <div class="kcard k3"><div class="kcard-lbl">RCA Price Management</div><div class="kcard-val" id="kv3">—</div><div class="kcard-pct" id="ks3"></div></div>
+  </div>
+</div>
 
-  <!-- GLOBAL FILTERS -->
-  <div id="globalFilters" style="flex-shrink:0;padding:8px 18px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap">Filters:</span>
-    <select id="fScope" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Revenue Data</option>
-      <option value="cases">Cases Only</option>
-      <option value="messaging">Messaging Sessions Only</option>
-      <option value="converted">Messaging → Case Converted</option>
-    </select>
-    <select id="fProduct" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Products</option>
+<!-- FILTERS -->
+<div class="filters">
+  <span class="filter-lbl">Product:</span>
+  <select id="fProd" class="fsel" onchange="rebuild()">
+    <option value="all">All Products</option>
+    <optgroup label="Revenue- (legacy)">
       <option value="cpq">Revenue-SF CPQ</option>
       <option value="billing">Revenue-SF Billing</option>
       <option value="docgen">Revenue-Doc Generation</option>
       <option value="cpqdev">Revenue-CPQ Dev Support</option>
+      <option value="contracts">Revenue-SF Contracts</option>
+      <option value="billingdev">Revenue-Billing Dev Support</option>
+    </optgroup>
+    <optgroup label="RCA (Revenue Cloud Core)">
       <option value="configurator">RCA-Configurator</option>
       <option value="txmgmt">RCA-Transaction Management</option>
       <option value="pricemgmt">RCA-Price Management</option>
@@ -197,1024 +113,496 @@ body{background:var(--bg);color:var(--text);display:flex;}
       <option value="dro">RCA-Dynamic Rev Orch</option>
       <option value="usage">RCA-Usage &amp; Ratings</option>
       <option value="p2o">RCA-Dev Support P2O</option>
-    </select>
-    <select id="fDateRange" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Dates (Feb–Jul 2026)</option>
-      <option value="q1">Q1 (Feb–Apr)</option>
-      <option value="q2">Q2 (May–Jul)</option>
-      <option value="recent">Last 30 Days (Jun 17–Jul 17)</option>
-    </select>
-    <select id="fOrigin" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Origins</option>
-      <option value="chat">Chat</option>
-      <option value="asa">ASA Case</option>
-      <option value="self">Self-Service</option>
-      <option value="internal">Salesforce Internal</option>
-      <option value="astro">Ask Astro</option>
-    </select>
-    <button onclick="applyFilters()" style="font-size:0.72rem;padding:4px 12px;border:1px solid rgba(74,124,89,0.4);border-radius:6px;background:rgba(74,124,89,0.12);color:#2d5a3d;cursor:pointer;font-weight:600">Apply</button>
-    <button onclick="resetFilters()" style="font-size:0.72rem;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer">Reset</button>
-    <span id="filterStatus" style="font-size:0.65rem;color:var(--muted);margin-left:auto"></span>
-  </div>
-
-  <div class="panels">
-
-    <!-- OVERVIEW: Chat Raised vs Converted -->
-    <div class="panel active" id="panel-overview">
-      <!-- Two-column side-by-side layout -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-
-        <!-- LEFT: CHATS RAISED (Messaging Sessions) -->
-        <div style="border:1px solid rgba(139,92,246,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(139,92,246,0.07),rgba(109,40,217,0.03))">
-          <div style="font-size:0.72rem;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#8b5cf6"></span>Chats Raised
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">
-            <div class="card c-purple" style="padding:10px 12px"><div class="card-label">Total Chats Raised</div><div class="card-value">7,720</div><div class="card-sub">Org-wide · Ask Astro</div></div>
-            <div class="card c-green" style="padding:10px 12px"><div class="card-label">Closed</div><div class="card-value">7,500</div><div class="card-sub">97.2% closure rate</div></div>
-            <div class="card c-amber" style="padding:10px 12px"><div class="card-label">Still Open</div><div class="card-value">220</div><div class="card-sub">In progress / new</div></div>
-            <div class="card c-red" style="padding:10px 12px"><div class="card-label">Emergency</div><div class="card-value">77</div><div class="card-sub">1.0% · needs review</div></div>
-          </div>
-          <div class="scard" style="padding:10px">
-            <div class="scard-title">Monthly Trend</div>
-            <div class="scard-sub">May · Jun · Jul 2026</div>
-            <svg style="width:100%;height:100px;overflow:visible" viewBox="0 0 300 100" id="msgBar"></svg>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
-            <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);border-radius:7px;padding:8px 10px;text-align:center">
-              <div style="font-size:0.58rem;color:#a78bfa;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Urgent</div>
-              <div style="font-size:1.1rem;font-weight:800;color:#c4b5fd;font-variant-numeric:tabular-nums">114</div>
-              <div style="font-size:0.6rem;color:#a78bfa;opacity:0.8">1.5%</div>
-            </div>
-            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:8px 10px;text-align:center">
-              <div style="font-size:0.58rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Normal</div>
-              <div style="font-size:1.1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">7,523</div>
-              <div style="font-size:0.6rem;color:#fbbf24;opacity:0.8">97.4%</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: CHAT CONVERTED TO CASE (Revenue Cloud Chat Cases) -->
-        <div style="border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(59,130,246,0.07),rgba(37,99,235,0.03))">
-          <div style="font-size:0.72rem;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3b82f6"></span>Chat Converted to Case
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">
-            <div class="card c-blue" style="padding:10px 12px"><div class="card-label">Total Cases</div><div class="card-value">3,422</div><div class="card-sub">Revenue Cloud · Feb–Jul</div></div>
-            <div class="card c-green" style="padding:10px 12px"><div class="card-label">Resolved</div><div class="card-value">3,379</div><div class="card-sub">98.7% closure rate</div></div>
-            <div class="card c-amber" style="padding:10px 12px"><div class="card-label">Still Open</div><div class="card-value">43</div><div class="card-sub">Working + Waiting</div></div>
-            <div class="card c-red" style="padding:10px 12px"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% of cases</div></div>
-          </div>
-          <div class="scard" style="padding:10px">
-            <div class="scard-title">Monthly Trend</div>
-            <div class="scard-sub">Feb · Mar · Apr · May · Jun–Jul 2026</div>
-            <svg style="width:100%;height:100px;overflow:visible" viewBox="0 0 300 100" id="monthBar"></svg>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px">
-            <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#f87171;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L1 Crit</div>
-              <div style="font-size:1rem;font-weight:800;color:#fca5a5;font-variant-numeric:tabular-nums">88</div>
-              <div style="font-size:0.58rem;color:#f87171;opacity:0.8">2.6%</div>
-            </div>
-            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L2 Urg</div>
-              <div style="font-size:1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">399</div>
-              <div style="font-size:0.58rem;color:#fbbf24;opacity:0.8">11.7%</div>
-            </div>
-            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#fb923c;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L3 High</div>
-              <div style="font-size:1rem;font-weight:800;color:#fed7aa;font-variant-numeric:tabular-nums">86</div>
-              <div style="font-size:0.58rem;color:#fb923c;opacity:0.8">2.5%</div>
-            </div>
-            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#60a5fa;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L4 Med</div>
-              <div style="font-size:1rem;font-weight:800;color:#93c5fd;font-variant-numeric:tabular-nums">2,849</div>
-              <div style="font-size:0.58rem;color:#60a5fa;opacity:0.8">83.2%</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div class="panel" id="panel-products">
-      <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
-        <div class="card c-blue"><div class="card-label">SF CPQ</div><div id="kv0" class="card-value">1,566</div><div id="ks0" class="card-sub">45.2% of chat cases</div></div>
-        <div class="card c-purple"><div class="card-label">RCA Configurator</div><div id="kv1" class="card-value">468</div><div id="ks1" class="card-sub">13.5%</div></div>
-        <div class="card c-cyan"><div class="card-label">Transaction Mgmt</div><div id="kv2" class="card-value">262</div><div id="ks2" class="card-sub">7.6%</div></div>
-        <div class="card c-amber"><div class="card-label">Price Management</div><div id="kv3" class="card-value">213</div><div id="ks3" class="card-sub">6.2%</div></div>
-      </div>
-      <div class="cgrid g12">
-        <div class="scard">
-          <div class="scard-title">Volume by Product</div>
-          <div class="scard-sub">Top 10 · all Revenue products with chat origin</div>
-          <div class="hbar-list" id="prodBars"></div>
-        </div>
-        <div class="scard">
-          <div class="scard-title">All 19 Revenue Products</div>
-          <div class="scard-sub">Ranked by chat case count · Feb–Jul 2026</div>
-          <table class="tbl"><thead><tr><th>#</th><th>Product</th><th style="text-align:right">Cases</th><th style="text-align:right">%</th></tr></thead><tbody id="prodTableBody"></tbody></table>
-        </div>
-      </div>
-    </div>
-
-    <!-- GEO -->
-    <div class="panel" id="panel-geo">
-      <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
-        <div class="card c-blue"><div class="card-label">AMER</div><div class="card-value">2,358</div><div class="card-sub">68.9% · +16pp vs all-Rev</div></div>
-        <div class="card c-green"><div class="card-label">APAC (incl. JP)</div><div class="card-value">683</div><div class="card-sub">20.0% · −9pp vs all-Rev</div></div>
-        <div class="card c-pink"><div class="card-label">EMEA</div><div class="card-value">329</div><div class="card-sub">9.6% · −7pp vs all-Rev</div></div>
-        <div class="card" style="background:linear-gradient(135deg,rgba(107,114,128,0.16),rgba(107,114,128,0.04))"><div class="card-label" style="color:#9ca3af">Untagged</div><div class="card-value" style="color:#d1d5db">52</div><div class="card-sub" style="color:#9ca3af">GEO not set</div></div>
-      </div>
-      <div class="cgrid g2">
-        <div class="scard">
-          <div class="scard-title">Chat Cases by GEO</div>
-          <div class="scard-sub">Revenue chat cases · all periods</div>
-          <div class="donut-wrap" style="margin-top:10px;justify-content:center">
-            <svg viewBox="0 0 130 130" width="120" height="120" id="geoDonut2" style="overflow:visible;flex-shrink:0"></svg>
-            <div class="legend" id="geoLegend2"></div>
-          </div>
-        </div>
-        <div class="scard">
-          <div class="scard-title">GEO Comparison — Chat vs All Revenue</div>
-          <div class="scard-sub">AMER over-indexed in chat; APAC/EMEA under-use chat channel</div>
-          <table class="tbl" style="margin-top:6px">
-            <thead><tr><th>GEO</th><th style="text-align:right">Chat</th><th style="text-align:right">Chat %</th><th style="text-align:right">All Rev %</th><th>Delta</th></tr></thead>
-            <tbody>
-              <tr><td><span class="dot" style="background:#3b82f6"></span>AMER</td><td class="num">2,358</td><td class="num">68.9%</td><td class="num">53.1%</td><td><span class="badge b-up">+16pp</span></td></tr>
-              <tr><td><span class="dot" style="background:#10b981"></span>APAC (incl. JP)</td><td class="num">683</td><td class="num">20.0%</td><td class="num">30.1%</td><td><span class="badge b-dn">−10pp</span></td></tr>
-              <tr><td><span class="dot" style="background:#ec4899"></span>EMEA</td><td class="num">329</td><td class="num">9.6%</td><td class="num">16.6%</td><td><span class="badge b-dn">−7pp</span></td></tr>
-              <tr><td><span class="dot" style="background:#6b7280"></span>Untagged</td><td class="num">52</td><td class="num">1.5%</td><td class="num">—</td><td><span class="badge" style="background:rgba(107,114,128,0.12);color:#9ca3af">—</span></td></tr>
-            </tbody>
-          </table>
-          <div style="margin-top:12px;padding:11px;background:rgba(59,130,246,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
-            <strong style="color:#60a5fa">AMER over-indexed by +16pp:</strong> AMER customers rely heavily on chat — possibly higher chat availability windows, partner ecosystem usage, or lower self-serve adoption. Consider promoting chat in APAC/EMEA to balance load.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ACCOUNTS -->
-    <div class="panel" id="panel-accounts">
-      <div class="cards-row" style="grid-template-columns:repeat(3,1fr)">
-        <div class="card c-blue"><div class="card-label">#1 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Relay Fire &amp; Safety</div><div class="card-sub">64 chat cases</div></div>
-        <div class="card c-purple"><div class="card-label">#2 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Intrado Life &amp; Safety</div><div class="card-sub">42 chat cases</div></div>
-        <div class="card c-cyan"><div class="card-label">#3 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Ravyx – SIR Solutions</div><div class="card-sub">33 chat cases</div></div>
-      </div>
-      <div class="cgrid g2">
-        <div class="scard">
-          <div class="scard-title">Top 10 Accounts — Chat Volume</div>
-          <div class="scard-sub">Revenue chat cases · Feb–Jul 2026</div>
-          <div class="hbar-list" id="acctBars" style="margin-top:6px"></div>
-        </div>
-        <div class="scard">
-          <div class="scard-title">Account Detail Table</div>
-          <div class="scard-sub">No SI partners in chat top 10 — these are all end customers</div>
-          <table class="tbl">
-            <thead><tr><th>#</th><th>Account</th><th style="text-align:right">Cases</th></tr></thead>
-            <tbody>
-              <tr><td>1</td><td>Relay Fire and Safety (Advanced Fire Protection)</td><td class="num">64</td></tr>
-              <tr><td>2</td><td>Intrado Life &amp; Safety, Inc</td><td class="num">42</td></tr>
-              <tr><td>3</td><td>Ravyx - SIR Solutions</td><td class="num">33</td></tr>
-              <tr><td>4</td><td>Kraft Sports and Entertainment LLC</td><td class="num">29</td></tr>
-              <tr><td>5</td><td>Trimble Illuminate</td><td class="num">29</td></tr>
-              <tr><td>6</td><td>Telenet Group</td><td class="num">27</td></tr>
-              <tr><td>7</td><td>Community Brands (Org 1)</td><td class="num">25</td></tr>
-              <tr><td>8</td><td>Dropbox, Inc.</td><td class="num">25</td></tr>
-              <tr><td>9</td><td>Nebius B.V.</td><td class="num">22</td></tr>
-              <tr><td>10</td><td>Trellance Cooperative Holdings, Inc.</td><td class="num">22</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- SEVERITY -->
-    <div class="panel" id="panel-severity">
-      <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
-        <div class="card c-red"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% — review urgently</div></div>
-        <div class="card c-amber"><div class="card-label">Level 2 Urgent</div><div class="card-value">399</div><div class="card-sub">11.7% — escalation risk</div></div>
-        <div class="card c-orange"><div class="card-label">Level 3 High</div><div class="card-value">86</div><div class="card-sub">2.5%</div></div>
-        <div class="card c-blue"><div class="card-label">Level 4 Medium</div><div class="card-value">2,849</div><div class="card-sub">83.2% — standard</div></div>
-      </div>
-      <div class="cgrid g2">
-        <div class="scard">
-          <div class="scard-title">Severity Distribution</div>
-          <div class="scard-sub">Chat cases by severity level</div>
-          <div class="hbar-list" id="sevBars" style="margin-top:8px"></div>
-          <div style="margin-top:14px;padding:11px;background:rgba(239,68,68,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
-            <strong style="color:#f87171">88 Critical (L1) chat cases</strong> — chat-originated critical cases indicate customers hitting hard blockers mid-session. Review which products they belong to and whether routing to senior engineers is happening fast enough.
-          </div>
-        </div>
-        <div class="scard">
-          <div class="scard-title">Severity Donut</div>
-          <div class="scard-sub">Share by level · 3,422 total</div>
-          <div class="donut-wrap" style="margin-top:10px;justify-content:center">
-            <svg viewBox="0 0 130 130" width="120" height="120" id="sevDonut" style="overflow:visible;flex-shrink:0"></svg>
-            <div class="legend" id="sevLegend"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- COMPARISON (Vs) -->
-    <div class="panel" id="panel-comparison">
-      <div style="margin-bottom:10px">
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px">Revenue-Only · Account Adoption vs Messaging Session Adoption · Feb–Jul 2026</div>
-      </div>
-      <!-- Top KPIs -->
-      <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
-        <div class="card c-blue">
-          <div class="card-label">Total Revenue Accounts</div>
-          <div class="card-value">3,270</div>
-          <div class="card-sub">Unique accounts · any Revenue case</div>
-        </div>
-        <div class="card c-green">
-          <div class="card-label">Accounts with Chat Cases</div>
-          <div class="card-value">1,245</div>
-          <div class="card-sub">38.1% of Revenue accounts</div>
-        </div>
-        <div class="card c-purple">
-          <div class="card-label">Accts w/ Messaging Sessions</div>
-          <div class="card-value">~320</div>
-          <div class="card-sub">~9.8% adopted Ask Astro chat</div>
-        </div>
-        <div class="card c-amber">
-          <div class="card-label">Messaging → Case Conversion</div>
-          <div class="card-value">34</div>
-          <div class="card-sub">Revenue Ask Astro → Case</div>
-        </div>
-      </div>
-
-      <!-- Two column layout -->
-      <div class="cgrid g2">
-        <!-- Venn breakdown -->
-        <div class="scard">
-          <div class="scard-title">Account Channel Adoption Breakdown</div>
-          <div class="scard-sub">Revenue accounts segmented by support channel used</div>
-          <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
-            <!-- Cases Only -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(74,124,89,0.08);border:1px solid rgba(74,124,89,0.2);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#4a7c59;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#2d5a3d">Cases Only</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Accounts that raised Cases but never used Messaging Sessions</div>
-              </div>
-              <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#2d5a3d;font-variant-numeric:tabular-nums">2,025</div>
-                <div style="font-size:0.62rem;color:var(--muted)">61.9% of Revenue accounts</div>
-              </div>
-            </div>
-            <!-- Messaging Only -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,143,107,0.08);border:1px solid rgba(107,143,107,0.2);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#6b8f6b;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#3d5c3d">Messaging Sessions Only</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Used Ask Astro Messaging but have no Chat-origin Cases</div>
-              </div>
-              <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#3d5c3d;font-variant-numeric:tabular-nums">~286</div>
-                <div style="font-size:0.62rem;color:var(--muted)">~8.7% of Revenue accounts</div>
-              </div>
-            </div>
-            <!-- Both -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(45,90,60,0.1);border:1px solid rgba(45,90,60,0.25);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#2d5a3d;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#1a3d28">Both Channels</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Accounts that used both Messaging Sessions AND Chat Cases</div>
-              </div>
-              <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#1a3d28;font-variant-numeric:tabular-nums">~34</div>
-                <div style="font-size:0.62rem;color:var(--muted)">~1.0% overlap — high-engagement accounts</div>
-              </div>
-            </div>
-            <!-- Non-Chat Revenue -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,114,128,0.06);border:1px solid rgba(107,114,128,0.15);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#9ca3af;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:var(--muted)">Revenue Cases (Non-Chat Origin)</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">ASA Case, Self-Service, SF Internal — no chat or messaging</div>
-              </div>
-              <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums">1,959</div>
-                <div style="font-size:0.62rem;color:var(--muted)">Non-chat Revenue accounts</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Adoption funnel + product breakdown -->
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div class="scard">
-            <div class="scard-title">Messaging Adoption Funnel — Revenue Accounts</div>
-            <div class="scard-sub">How many Revenue accounts progressed through each channel</div>
-            <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Total Revenue Accounts</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">3,270</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:100%;background:#4a7c59;border-radius:4px"></div></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Accounts Used Chat Cases (38.1%)</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">1,245</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:38.1%;background:#6aab7a;border-radius:4px"></div></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Accounts Used Messaging (~9.8%)</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">~320</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:9.8%;background:#8fb58f;border-radius:4px"></div></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Messaging → Case Converted (1.0%)</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">34</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:1%;background:#c08030;border-radius:4px"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="scard">
-            <div class="scard-title">Revenue Cases by Origin — All Channels</div>
-            <div class="scard-sub">All Revenue support interactions Feb–Jul 2026</div>
-            <table class="tbl" style="margin-top:8px">
-              <thead><tr><th>Origin</th><th style="text-align:right">Cases</th><th style="text-align:right">Share</th></tr></thead>
-              <tbody>
-                <tr><td>ASA Case</td><td class="num">5,580</td><td class="num">36.4%</td></tr>
-                <tr><td>Self-Service</td><td class="num">5,401</td><td class="num">35.2%</td></tr>
-                <tr><td>Chat</td><td class="num">3,460</td><td class="num">22.6%</td></tr>
-                <tr><td>Salesforce Internal</td><td class="num">838</td><td class="num">5.5%</td></tr>
-                <tr><td>Ask Astro (Messaging)</td><td class="num">34</td><td class="num">0.2%</td></tr>
-                <tr><td>Other</td><td class="num">23</td><td class="num">0.1%</td></tr>
-              </tbody>
-            </table>
-            <div style="margin-top:10px;padding:9px;background:rgba(192,128,48,0.08);border-radius:7px;font-size:0.67rem;color:var(--muted);line-height:1.55">
-              <strong style="color:#a06030">Messaging → Case is only 0.2% of Revenue cases.</strong> Ask Astro Messaging Sessions that escalate to Revenue Cloud cases are rare — most sessions resolve in-chat. This is an early adoption signal worth tracking as Ask Astro grows.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SENTIMENT ANALYSIS -->
-    <div class="panel" id="panel-sentiment">
-      <div style="margin-bottom:10px">
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px">AI Sentiment Analysis · Revenue Messaging Sessions → Cases · Feb–Jul 2026</div>
-        <div style="font-size:0.65rem;color:var(--muted);line-height:1.5">Sentiment is AI-inferred from case subject, product area, priority, and status patterns. Revenue Cloud only — 34 sessions converted to cases.</div>
-      </div>
-
-      <!-- Summary KPI row -->
-      <div class="cards-row" style="grid-template-columns:repeat(5,1fr);margin-bottom:12px">
-        <div class="card c-blue"><div class="card-label">Sessions Analyzed</div><div class="card-value">34</div><div class="card-sub">Revenue → Case conversions</div></div>
-        <div class="card c-green"><div class="card-label">Positive / Resolved</div><div class="card-value">18</div><div class="card-sub">53% — issue resolved in chat</div></div>
-        <div class="card c-amber"><div class="card-label">Frustrated / Escalated</div><div class="card-value">11</div><div class="card-sub">32% — needed case escalation</div></div>
-        <div class="card c-red"><div class="card-label">Highly Frustrated</div><div class="card-value">5</div><div class="card-sub">15% — critical pain points</div></div>
-        <div class="card c-purple"><div class="card-label">Avg Sentiment Score</div><div class="card-value">6.4</div><div class="card-sub">Out of 10 · above neutral</div></div>
-      </div>
-
-      <!-- Sentiment breakdown + table -->
-      <div class="cgrid g12">
-        <!-- Left: breakdown + trends -->
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div class="scard">
-            <div class="scard-title">Sentiment Distribution</div>
-            <div class="scard-sub">34 Revenue Messaging → Case sessions</div>
-            <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#2d5a3d"><span style="width:8px;height:8px;border-radius:50%;background:#4a7c59;display:inline-block"></span>Positive / Resolved</span>
-                  <span style="font-size:0.7rem;font-weight:700;color:#2d5a3d">18 (53%)</span>
-                </div>
-                <div style="height:8px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:53%;background:#4a7c59;border-radius:4px"></div></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#5a7a5a"><span style="width:8px;height:8px;border-radius:50%;background:#6aab7a;display:inline-block"></span>Neutral / Information-seeking</span>
-                  <span style="font-size:0.7rem;font-weight:700;color:#3d5c3d">4 (12%)</span>
-                </div>
-                <div style="height:8px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:12%;background:#6aab7a;border-radius:4px"></div></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#a06030"><span style="width:8px;height:8px;border-radius:50%;background:#c08030;display:inline-block"></span>Mildly Frustrated</span>
-                  <span style="font-size:0.7rem;font-weight:700;color:#a06030">7 (21%)</span>
-                </div>
-                <div style="height:8px;background:rgba(192,128,48,0.12);border-radius:4px;overflow:hidden"><div style="height:100%;width:21%;background:#c08030;border-radius:4px"></div></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#b45309"><span style="width:8px;height:8px;border-radius:50%;background:#c05020;display:inline-block"></span>Frustrated / Escalated</span>
-                  <span style="font-size:0.7rem;font-weight:700;color:#b45309">4 (12%)</span>
-                </div>
-                <div style="height:8px;background:rgba(192,80,32,0.12);border-radius:4px;overflow:hidden"><div style="height:100%;width:12%;background:#c05020;border-radius:4px"></div></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#991b1b"><span style="width:8px;height:8px;border-radius:50%;background:#b91c1c;display:inline-block"></span>Highly Frustrated / Urgent</span>
-                  <span style="font-size:0.7rem;font-weight:700;color:#991b1b">5 (15%)</span>
-                </div>
-                <div style="height:8px;background:rgba(185,28,28,0.12);border-radius:4px;overflow:hidden"><div style="height:100%;width:15%;background:#b91c1c;border-radius:4px"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="scard">
-            <div class="scard-title">Recurring Pain Points</div>
-            <div class="scard-sub">Common themes across Revenue Messaging → Case sessions</div>
-            <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
-              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(185,28,28,0.06);border-radius:6px;font-size:0.7rem">
-                <span style="color:#991b1b;font-weight:600">CPQ pricing/calc errors (live)</span><span style="color:var(--text);font-weight:700">11</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(192,128,48,0.07);border-radius:6px;font-size:0.7rem">
-                <span style="color:#a06030;font-weight:600">Configurator product setup blockers</span><span style="color:var(--text);font-weight:700">7</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(74,124,89,0.07);border-radius:6px;font-size:0.7rem">
-                <span style="color:#2d5a3d;font-weight:600">Transaction Management data issues</span><span style="color:var(--text);font-weight:700">6</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(74,124,89,0.05);border-radius:6px;font-size:0.7rem">
-                <span style="color:#3d5c3d;font-weight:600">Billing invoice discrepancies</span><span style="color:var(--text);font-weight:700">5</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;padding:7px 10px;background:rgba(74,124,89,0.05);border-radius:6px;font-size:0.7rem">
-                <span style="color:#3d5c3d;font-weight:600">DocGen / PDF output failures</span><span style="color:var(--text);font-weight:700">5</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: per-session table -->
-        <div class="scard" style="overflow:auto">
-          <div class="scard-title">Session-by-Session Sentiment Summary</div>
-          <div class="scard-sub">Revenue Messaging Sessions that escalated to a Case — AI-inferred sentiment</div>
-          <table class="tbl" style="margin-top:8px;min-width:600px">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Product</th>
-                <th>Overall Sentiment</th>
-                <th>Trend</th>
-                <th>Primary Issue</th>
-                <th>Case Created Because</th>
-                <th style="text-align:right">Score</th>
-              </tr>
-            </thead>
-            <tbody id="sentimentTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- INSIGHTS -->
-    <div class="panel" id="panel-insights">
-      <div class="ins-grid">
-        <div class="ins" style="background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(59,130,246,0.03));border-color:rgba(59,130,246,0.2)">
-          <div class="ins-num" style="color:#60a5fa">01 — Volume</div>
-          <div class="ins-head">CPQ drives 45% of all Revenue chat</div>
-          <div class="ins-body">1,549 of 3,422 chat cases are Salesforce CPQ. The next product (RCA Configurator) has 461 — a 3.4× gap. CPQ chat agents need specialized training and KB coverage. Consider a CPQ-first routing rule in chat to cut escalation time.</div>
-        </div>
-        <div class="ins" style="background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.03));border-color:rgba(16,185,129,0.2)">
-          <div class="ins-num" style="color:#34d399">02 — Quality</div>
-          <div class="ins-head">98.7% resolution — best-in-class chat performance</div>
-          <div class="ins-body">3,379 of 3,422 chat cases closed resolved. Only 43 remain open: 20 waiting on customer, 15 working, 8 other. Strong FCR. The 43 open cases should be individually reviewed for aging and SLA risk.</div>
-        </div>
-        <div class="ins" style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.03));border-color:rgba(245,158,11,0.2)">
-          <div class="ins-num" style="color:#fbbf24">03 — Trend</div>
-          <div class="ins-head">Jun–Jul surge: +65% vs May</div>
-          <div class="ins-body">Chat cases jumped from 594 (May) to 978 (Jun–Jul). This is the highest chat volume of FY27 in a partial month. Investigate if this reflects a product release, new integration wave, or seasonal pattern — act before Q3 peaks.</div>
-        </div>
-        <div class="ins" style="background:linear-gradient(135deg,rgba(239,68,68,0.12),rgba(239,68,68,0.03));border-color:rgba(239,68,68,0.2)">
-          <div class="ins-num" style="color:#f87171">04 — Critical</div>
-          <div class="ins-head">88 Level-1 chat cases need root-cause review</div>
-          <div class="ins-body">Critical cases from chat are unusual — customers typically file critical issues through ASA Case. These 88 may represent live-session escalations. A root-cause review by product would reveal if routing or triage is working correctly.</div>
-        </div>
-        <div class="ins" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(139,92,246,0.03));border-color:rgba(139,92,246,0.2)">
-          <div class="ins-num" style="color:#a78bfa">05 — GEO</div>
-          <div class="ins-head">AMER over-indexed by +16pp in chat usage</div>
-          <div class="ins-body">AMER represents 68.9% of Revenue chat vs 53.1% of all Revenue cases. APAC (incl. JP, 683 cases) and EMEA under-use chat proportionally. Investigate timezone coverage gaps or promote chat as a channel in these regions.</div>
-        </div>
-        <div class="ins" style="background:linear-gradient(135deg,rgba(6,182,212,0.12),rgba(6,182,212,0.03));border-color:rgba(6,182,212,0.2)">
-          <div class="ins-num" style="color:#22d3ee">06 — Accounts</div>
-          <div class="ins-head">Top chat accounts are end customers, not partners</div>
-          <div class="ins-body">Unlike all-Revenue top accounts (50% SI partners), Revenue chat top 10 are all end customers: Relay Fire &amp; Safety, Intrado, Dropbox, Kraft Sports. Partners use ASA Case and SF Internal channels. Chat is the direct customer line.</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
+      <option value="omnistudio">RCA-OmniStudio</option>
+      <option value="biz">RCA-Business Rules Engine</option>
+      <option value="analytics">RCA-Rev Cloud Analytics</option>
+    </optgroup>
+  </select>
+  <span class="filter-lbl" style="margin-left:6px">Date Range:</span>
+  <select id="fDate" class="fsel" onchange="rebuild()">
+    <option value="all">All Dates (Feb – Jul 17, 2026)</option>
+    <option value="q1">Q1: Feb, Mar, Apr 2026</option>
+    <option value="q2">Q2: May, Jun, Jul 2026</option>
+    <option value="l30">Last 30 Days (Jun 17 – Jul 17)</option>
+  </select>
+  <span id="activeFilter" class="active-filter" style="display:none"></span>
 </div>
 
-<div id="tt" class="tt"><div class="tt-lbl" id="ttL"></div><div id="ttV"></div></div>
+<!-- MAIN GRID -->
+<div class="main">
+
+  <!-- LEFT COLUMN -->
+  <div>
+    <div class="scard">
+      <div class="scard-title">Monthly Trend</div>
+      <div class="scard-sub" id="monthBarSub">Chat cases per month</div>
+      <svg id="monthBar" viewBox="0 0 300 110" style="width:100%;height:110px;overflow:visible;display:block"></svg>
+    </div>
+
+    <div class="scard">
+      <div class="scard-title">Month-by-Month Breakdown</div>
+      <div class="scard-sub">Case count with month-on-month change</div>
+      <table class="tbl">
+        <thead><tr><th>Month</th><th class="r">Cases</th><th class="r">vs Prev</th></tr></thead>
+        <tbody id="monthTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div>
+    <div class="scard">
+      <div class="scard-title">Chat Cases by Product</div>
+      <div class="scard-sub" id="prodBarSub">Top products by volume</div>
+      <div id="prodBars" style="margin-top:6px"></div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-title">Full Product Ranking</div>
+      <div class="scard-sub">All Revenue products · sorted by chat case volume</div>
+      <table class="tbl">
+        <thead><tr><th>#</th><th>Product</th><th class="r">Cases</th><th class="r">Share</th></tr></thead>
+        <tbody id="prodTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer" id="footerTs"></div>
 
 <script>
-const ROOT=document.getElementById('root');
-const tt=document.getElementById('tt'),ttL=document.getElementById('ttL'),ttV=document.getElementById('ttV');
-function showTip(e,l,v){ttL.textContent=l;ttV.textContent=v;tt.classList.add('vis');moveTip(e);}
-function moveTip(e){tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-8)+'px';}
-function hideTip(){tt.classList.remove('vis');}
+// ════════════════════════════════════════════════════════════════
+// DATA — Source: Salesforce Case WHERE Cloud__c LIKE 'Revenue%'
+//         AND Origin = 'Chat'
+//         AND CreatedDate >= 2026-02-01 AND <= 2026-07-17
+// Queried: 2026-07-17 06:17 IST  |  107 aggregate records
+// ════════════════════════════════════════════════════════════════
+const CHAT_DATA=[
+{cloud:"Revenue-Billing Developer Support",mo:2,cnt:4},
+{cloud:"Revenue-Billing Developer Support",mo:3,cnt:1},
+{cloud:"Revenue-Billing Developer Support",mo:4,cnt:1},
+{cloud:"Revenue-Billing Developer Support",mo:5,cnt:4},
+{cloud:"Revenue-Billing Developer Support",mo:6,cnt:1},
+{cloud:"Revenue Cloud (Core)-Advanced Approvals",mo:2,cnt:7},
+{cloud:"Revenue Cloud (Core)-Advanced Approvals",mo:3,cnt:4},
+{cloud:"Revenue Cloud (Core)-Advanced Approvals",mo:4,cnt:4},
+{cloud:"Revenue Cloud (Core)-Advanced Approvals",mo:5,cnt:7},
+{cloud:"Revenue Cloud (Core)-Advanced Approvals",mo:6,cnt:6},
+{cloud:"Revenue Cloud (Core)-Advanced Approvals",mo:7,cnt:4},
+{cloud:"Revenue Cloud (Core)-Billing & Invoicing",mo:2,cnt:10},
+{cloud:"Revenue Cloud (Core)-Billing & Invoicing",mo:3,cnt:8},
+{cloud:"Revenue Cloud (Core)-Billing & Invoicing",mo:4,cnt:19},
+{cloud:"Revenue Cloud (Core)-Billing & Invoicing",mo:5,cnt:7},
+{cloud:"Revenue Cloud (Core)-Billing & Invoicing",mo:6,cnt:18},
+{cloud:"Revenue Cloud (Core)-Billing & Invoicing",mo:7,cnt:5},
+{cloud:"Revenue Cloud (Core)-Business Rules Engine",mo:2,cnt:1},
+{cloud:"Revenue Cloud (Core)-Business Rules Engine",mo:3,cnt:3},
+{cloud:"Revenue Cloud (Core)-Business Rules Engine",mo:4,cnt:1},
+{cloud:"Revenue Cloud (Core)-Business Rules Engine",mo:5,cnt:1},
+{cloud:"Revenue Cloud (Core)-Business Rules Engine",mo:6,cnt:1},
+{cloud:"Revenue Cloud (Core)-Business Rules Engine",mo:7,cnt:2},
+{cloud:"Revenue Cloud (Core)-Configurator",mo:2,cnt:95},
+{cloud:"Revenue Cloud (Core)-Configurator",mo:3,cnt:49},
+{cloud:"Revenue Cloud (Core)-Configurator",mo:4,cnt:68},
+{cloud:"Revenue Cloud (Core)-Configurator",mo:5,cnt:89},
+{cloud:"Revenue Cloud (Core)-Configurator",mo:6,cnt:106},
+{cloud:"Revenue Cloud (Core)-Configurator",mo:7,cnt:62},
+{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",mo:2,cnt:6},
+{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",mo:3,cnt:10},
+{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",mo:4,cnt:11},
+{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",mo:5,cnt:4},
+{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",mo:6,cnt:14},
+{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",mo:7,cnt:9},
+{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",mo:2,cnt:18},
+{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",mo:3,cnt:8},
+{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",mo:4,cnt:12},
+{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",mo:5,cnt:22},
+{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",mo:6,cnt:16},
+{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",mo:7,cnt:3},
+{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",mo:2,cnt:2},
+{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",mo:3,cnt:3},
+{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",mo:4,cnt:1},
+{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",mo:5,cnt:3},
+{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",mo:6,cnt:5},
+{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",mo:7,cnt:5},
+{cloud:"Revenue Cloud (Core)-OmniStudio",mo:2,cnt:2},
+{cloud:"Revenue Cloud (Core)-OmniStudio",mo:3,cnt:3},
+{cloud:"Revenue Cloud (Core)-OmniStudio",mo:4,cnt:5},
+{cloud:"Revenue Cloud (Core)-OmniStudio",mo:5,cnt:2},
+{cloud:"Revenue Cloud (Core)-Price Management",mo:2,cnt:22},
+{cloud:"Revenue Cloud (Core)-Price Management",mo:3,cnt:35},
+{cloud:"Revenue Cloud (Core)-Price Management",mo:4,cnt:34},
+{cloud:"Revenue Cloud (Core)-Price Management",mo:5,cnt:38},
+{cloud:"Revenue Cloud (Core)-Price Management",mo:6,cnt:48},
+{cloud:"Revenue Cloud (Core)-Price Management",mo:7,cnt:36},
+{cloud:"Revenue Cloud (Core)-Product Catalog Management",mo:2,cnt:8},
+{cloud:"Revenue Cloud (Core)-Product Catalog Management",mo:3,cnt:19},
+{cloud:"Revenue Cloud (Core)-Product Catalog Management",mo:4,cnt:9},
+{cloud:"Revenue Cloud (Core)-Product Catalog Management",mo:5,cnt:16},
+{cloud:"Revenue Cloud (Core)-Product Catalog Management",mo:6,cnt:22},
+{cloud:"Revenue Cloud (Core)-Product Catalog Management",mo:7,cnt:10},
+{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",mo:2,cnt:1},
+{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",mo:5,cnt:1},
+{cloud:"Revenue Cloud (Core)-Transaction Management",mo:2,cnt:32},
+{cloud:"Revenue Cloud (Core)-Transaction Management",mo:3,cnt:51},
+{cloud:"Revenue Cloud (Core)-Transaction Management",mo:4,cnt:47},
+{cloud:"Revenue Cloud (Core)-Transaction Management",mo:5,cnt:49},
+{cloud:"Revenue Cloud (Core)-Transaction Management",mo:6,cnt:54},
+{cloud:"Revenue Cloud (Core)-Transaction Management",mo:7,cnt:29},
+{cloud:"Revenue Cloud (Core)-Usage & Ratings",mo:2,cnt:2},
+{cloud:"Revenue Cloud (Core)-Usage & Ratings",mo:3,cnt:2},
+{cloud:"Revenue Cloud (Core)-Usage & Ratings",mo:4,cnt:3},
+{cloud:"Revenue Cloud (Core)-Usage & Ratings",mo:5,cnt:5},
+{cloud:"Revenue Cloud (Core)-Usage & Ratings",mo:6,cnt:3},
+{cloud:"Revenue Cloud (Core)-Usage & Ratings",mo:7,cnt:3},
+{cloud:"Revenue-CPQ Developer Support",mo:2,cnt:47},
+{cloud:"Revenue-CPQ Developer Support",mo:3,cnt:36},
+{cloud:"Revenue-CPQ Developer Support",mo:4,cnt:34},
+{cloud:"Revenue-CPQ Developer Support",mo:5,cnt:35},
+{cloud:"Revenue-CPQ Developer Support",mo:6,cnt:36},
+{cloud:"Revenue-CPQ Developer Support",mo:7,cnt:20},
+{cloud:"Revenue-Document Generation",mo:2,cnt:39},
+{cloud:"Revenue-Document Generation",mo:3,cnt:28},
+{cloud:"Revenue-Document Generation",mo:4,cnt:30},
+{cloud:"Revenue-Document Generation",mo:5,cnt:26},
+{cloud:"Revenue-Document Generation",mo:6,cnt:40},
+{cloud:"Revenue-Document Generation",mo:7,cnt:16},
+{cloud:"Revenue-Salesforce Billing",mo:2,cnt:34},
+{cloud:"Revenue-Salesforce Billing",mo:3,cnt:37},
+{cloud:"Revenue-Salesforce Billing",mo:4,cnt:32},
+{cloud:"Revenue-Salesforce Billing",mo:5,cnt:20},
+{cloud:"Revenue-Salesforce Billing",mo:6,cnt:24},
+{cloud:"Revenue-Salesforce Billing",mo:7,cnt:9},
+{cloud:"Revenue-Salesforce Contracts",mo:2,cnt:3},
+{cloud:"Revenue-Salesforce Contracts",mo:3,cnt:5},
+{cloud:"Revenue-Salesforce Contracts",mo:4,cnt:5},
+{cloud:"Revenue-Salesforce Contracts",mo:5,cnt:3},
+{cloud:"Revenue-Salesforce Contracts",mo:6,cnt:5},
+{cloud:"Revenue-Salesforce Contracts",mo:7,cnt:1},
+{cloud:"Revenue-Salesforce CPQ",mo:2,cnt:309},
+{cloud:"Revenue-Salesforce CPQ",mo:3,cnt:312},
+{cloud:"Revenue-Salesforce CPQ",mo:4,cnt:278},
+{cloud:"Revenue-Salesforce CPQ",mo:5,cnt:262},
+{cloud:"Revenue-Salesforce CPQ",mo:6,cnt:257},
+{cloud:"Revenue-Salesforce CPQ",mo:7,cnt:148}
+];
 
-function toggleTheme(){
-  const h=document.documentElement;
-  h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');
-  setTimeout(buildAll,50);
-}
+// Last 30 days (Jun 17 – Jul 17 2026), Chat only — no mo field
+const LAST30=[
+{cloud:"Revenue Cloud (Core)-Advanced Approvals",cnt:6},
+{cloud:"Revenue Cloud (Core)-Billing & Invoicing",cnt:14},
+{cloud:"Revenue Cloud (Core)-Business Rules Engine",cnt:3},
+{cloud:"Revenue Cloud (Core)-Configurator",cnt:108},
+{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",cnt:15},
+{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",cnt:11},
+{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",cnt:6},
+{cloud:"Revenue Cloud (Core)-Price Management",cnt:51},
+{cloud:"Revenue Cloud (Core)-Product Catalog Management",cnt:19},
+{cloud:"Revenue Cloud (Core)-Transaction Management",cnt:53},
+{cloud:"Revenue Cloud (Core)-Usage & Ratings",cnt:5},
+{cloud:"Revenue-CPQ Developer Support",cnt:43},
+{cloud:"Revenue-Document Generation",cnt:28},
+{cloud:"Revenue-Salesforce Billing",cnt:22},
+{cloud:"Revenue-Salesforce Contracts",cnt:1},
+{cloud:"Revenue-Salesforce CPQ",cnt:261}
+];
 
-document.querySelectorAll('.nav-item').forEach(item=>{
-  item.addEventListener('click',()=>{
-    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-    item.classList.add('active');
-    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-    document.getElementById('panel-'+item.dataset.panel).classList.add('active');
-    buildAll();
-  });
-});
+// Dropdown value → exact Cloud__c
+const PROD_CLOUD={
+  cpq:'Revenue-Salesforce CPQ',
+  billing:'Revenue-Salesforce Billing',
+  docgen:'Revenue-Document Generation',
+  cpqdev:'Revenue-CPQ Developer Support',
+  contracts:'Revenue-Salesforce Contracts',
+  billingdev:'Revenue-Billing Developer Support',
+  configurator:'Revenue Cloud (Core)-Configurator',
+  txmgmt:'Revenue Cloud (Core)-Transaction Management',
+  pricemgmt:'Revenue Cloud (Core)-Price Management',
+  billinv:'Revenue Cloud (Core)-Billing & Invoicing',
+  pcm:'Revenue Cloud (Core)-Product Catalog Management',
+  clm:'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen',
+  adv:'Revenue Cloud (Core)-Advanced Approvals',
+  dro:'Revenue Cloud (Core)-Dynamic Revenue Orchestration',
+  usage:'Revenue Cloud (Core)-Usage & Ratings',
+  p2o:'Revenue Cloud (Core)-Developer Support - Product to Order',
+  omnistudio:'Revenue Cloud (Core)-OmniStudio',
+  biz:'Revenue Cloud (Core)-Business Rules Engine',
+  analytics:'Revenue Cloud (Core)-Revenue Cloud Analytics'
+};
 
-/* ====================================================
-   MASTER DATA STORE — derived from July 17 Salesforce queries
-   Fields: cloud (full name), origin, mo (2-7), cnt
-   ==================================================== */
-const MONTHLY_DATA=[{cloud:"Revenue-Billing Developer Support",origin:"ASA Case",mo:2,cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"ASA Case",mo:3,cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"ASA Case",mo:5,cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"ASA Case",mo:6,cnt:1},{cloud:"Revenue-Billing Developer Support",origin:"ASA Case",mo:7,cnt:1},{cloud:"Revenue-Billing Developer Support",origin:"Chat",mo:2,cnt:4},{cloud:"Revenue-Billing Developer Support",origin:"Chat",mo:3,cnt:1},{cloud:"Revenue-Billing Developer Support",origin:"Chat",mo:4,cnt:1},{cloud:"Revenue-Billing Developer Support",origin:"Chat",mo:5,cnt:4},{cloud:"Revenue-Billing Developer Support",origin:"Chat",mo:6,cnt:1},{cloud:"Revenue-Billing Developer Support",origin:"Salesforce Internal",mo:2,cnt:3},{cloud:"Revenue-Billing Developer Support",origin:"Salesforce Internal",mo:3,cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"Salesforce Internal",mo:5,cnt:1},{cloud:"Revenue-Billing Developer Support",origin:"Salesforce Internal",mo:6,cnt:1},{cloud:"Revenue-Billing Developer Support",origin:"Self-Service",mo:2,cnt:5},{cloud:"Revenue-Billing Developer Support",origin:"Self-Service",mo:3,cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"Self-Service",mo:4,cnt:3},{cloud:"Revenue-Billing Developer Support",origin:"Self-Service",mo:5,cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"Self-Service",mo:6,cnt:3},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",mo:2,cnt:8},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",mo:3,cnt:13},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",mo:4,cnt:11},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",mo:5,cnt:6},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",mo:6,cnt:9},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",mo:7,cnt:5},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Ask Astro",mo:7,cnt:1},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",mo:2,cnt:7},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",mo:3,cnt:4},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",mo:4,cnt:4},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",mo:5,cnt:7},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",mo:6,cnt:6},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",mo:7,cnt:4},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",mo:2,cnt:4},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",mo:3,cnt:10},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",mo:4,cnt:2},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",mo:5,cnt:3},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",mo:6,cnt:3},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",mo:7,cnt:1},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",mo:2,cnt:25},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",mo:3,cnt:22},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",mo:4,cnt:24},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",mo:5,cnt:15},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",mo:6,cnt:16},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",mo:7,cnt:8},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",mo:2,cnt:25},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",mo:3,cnt:38},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",mo:4,cnt:39},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",mo:5,cnt:45},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",mo:6,cnt:32},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",mo:7,cnt:29},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Ask Astro",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",mo:2,cnt:10},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",mo:3,cnt:8},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",mo:4,cnt:19},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",mo:5,cnt:7},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",mo:6,cnt:18},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",mo:7,cnt:5},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Other Internal",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Partner Community Support Alias",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",mo:2,cnt:6},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",mo:3,cnt:7},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",mo:4,cnt:3},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",mo:5,cnt:7},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",mo:6,cnt:12},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",mo:7,cnt:3},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",mo:2,cnt:63},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",mo:3,cnt:69},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",mo:4,cnt:69},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",mo:5,cnt:52},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",mo:6,cnt:70},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",mo:7,cnt:14},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"ASA Case",mo:2,cnt:3},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",mo:3,cnt:3},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",mo:6,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",mo:7,cnt:2},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Salesforce Internal",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Salesforce Internal",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",mo:3,cnt:3},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",mo:5,cnt:5},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",mo:6,cnt:2},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",mo:7,cnt:2},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",mo:2,cnt:246},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",mo:3,cnt:166},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",mo:4,cnt:209},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",mo:5,cnt:168},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",mo:6,cnt:193},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",mo:7,cnt:82},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Ask Astro",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Ask Astro",mo:5,cnt:2},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Ask Astro",mo:6,cnt:4},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",mo:2,cnt:95},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",mo:3,cnt:49},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",mo:4,cnt:68},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",mo:5,cnt:89},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",mo:6,cnt:106},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",mo:7,cnt:62},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Partner Community Support Alias",mo:6,cnt:3},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",mo:2,cnt:37},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",mo:3,cnt:23},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",mo:4,cnt:32},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",mo:5,cnt:25},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",mo:6,cnt:26},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",mo:7,cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",mo:2,cnt:223},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",mo:3,cnt:168},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",mo:4,cnt:153},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",mo:5,cnt:161},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",mo:6,cnt:213},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",mo:7,cnt:112},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",mo:2,cnt:16},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",mo:3,cnt:16},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",mo:4,cnt:20},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",mo:5,cnt:30},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",mo:6,cnt:27},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",mo:7,cnt:8},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Ask Astro",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",mo:2,cnt:6},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",mo:3,cnt:10},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",mo:4,cnt:11},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",mo:5,cnt:4},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",mo:6,cnt:14},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",mo:7,cnt:9},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Salesforce Internal",mo:2,cnt:2},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Salesforce Internal",mo:3,cnt:3},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Salesforce Internal",mo:4,cnt:7},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Salesforce Internal",mo:5,cnt:3},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Salesforce Internal",mo:6,cnt:3},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",mo:2,cnt:18},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",mo:3,cnt:35},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",mo:4,cnt:55},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",mo:5,cnt:30},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",mo:6,cnt:38},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",mo:7,cnt:16},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"ASA Case",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",mo:3,cnt:3},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",mo:4,cnt:2},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",mo:6,cnt:3},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",mo:7,cnt:1},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",mo:2,cnt:33},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",mo:3,cnt:29},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",mo:4,cnt:21},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",mo:5,cnt:32},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",mo:6,cnt:16},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",mo:7,cnt:8},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Ask Astro",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",mo:2,cnt:18},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",mo:3,cnt:8},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",mo:4,cnt:12},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",mo:5,cnt:22},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",mo:6,cnt:16},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",mo:7,cnt:3},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",mo:2,cnt:8},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",mo:3,cnt:7},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",mo:4,cnt:4},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",mo:5,cnt:3},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",mo:6,cnt:3},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",mo:7,cnt:2},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",mo:2,cnt:81},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",mo:3,cnt:63},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",mo:4,cnt:44},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",mo:5,cnt:41},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",mo:6,cnt:36},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",mo:7,cnt:11},{cloud:"Revenue Cloud (Core)-Disability and Product Accessibility",origin:"Ask Astro",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",mo:2,cnt:5},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",mo:3,cnt:17},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",mo:4,cnt:8},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",mo:5,cnt:12},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",mo:6,cnt:8},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",mo:7,cnt:4},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",mo:2,cnt:2},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",mo:3,cnt:3},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",mo:5,cnt:3},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",mo:6,cnt:5},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",mo:7,cnt:5},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",mo:2,cnt:2},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",mo:3,cnt:7},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",mo:4,cnt:3},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",mo:5,cnt:6},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",mo:6,cnt:5},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",mo:7,cnt:4},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",mo:2,cnt:22},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",mo:3,cnt:23},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",mo:4,cnt:16},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",mo:5,cnt:20},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",mo:6,cnt:22},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",mo:7,cnt:10},{cloud:"Revenue Cloud (Core)-Non Security - DORA",origin:"ASA Case",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Non Security - DORA",origin:"ASA Case",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-Non Security - DORA",origin:"Self-Service",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"ASA Case",mo:2,cnt:4},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"ASA Case",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"ASA Case",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"ASA Case",mo:5,cnt:2},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"ASA Case",mo:6,cnt:1},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Chat",mo:2,cnt:2},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Chat",mo:3,cnt:3},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Chat",mo:4,cnt:5},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Chat",mo:5,cnt:2},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Salesforce Internal",mo:2,cnt:3},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Salesforce Internal",mo:3,cnt:7},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Salesforce Internal",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Salesforce Internal",mo:6,cnt:4},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",mo:2,cnt:11},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",mo:3,cnt:6},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",mo:4,cnt:5},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",mo:5,cnt:6},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",mo:6,cnt:13},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",mo:7,cnt:2},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",mo:2,cnt:64},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",mo:3,cnt:95},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",mo:4,cnt:90},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",mo:5,cnt:42},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",mo:6,cnt:65},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",mo:7,cnt:34},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",mo:2,cnt:22},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",mo:3,cnt:35},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",mo:4,cnt:34},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",mo:5,cnt:38},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",mo:6,cnt:48},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",mo:7,cnt:36},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",mo:2,cnt:13},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",mo:3,cnt:19},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",mo:4,cnt:27},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",mo:5,cnt:7},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",mo:6,cnt:16},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",mo:7,cnt:3},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",mo:2,cnt:121},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",mo:3,cnt:138},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",mo:4,cnt:113},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",mo:5,cnt:99},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",mo:6,cnt:95},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",mo:7,cnt:38},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",mo:2,cnt:15},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",mo:3,cnt:57},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",mo:4,cnt:20},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",mo:5,cnt:11},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",mo:6,cnt:17},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",mo:7,cnt:6},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Ask Astro",mo:3,cnt:2},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Ask Astro",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Ask Astro",mo:6,cnt:1},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",mo:2,cnt:8},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",mo:3,cnt:19},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",mo:4,cnt:9},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",mo:5,cnt:16},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",mo:6,cnt:22},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",mo:7,cnt:10},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",mo:2,cnt:14},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",mo:3,cnt:15},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",mo:4,cnt:9},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",mo:5,cnt:7},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",mo:6,cnt:18},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",mo:7,cnt:2},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",mo:2,cnt:44},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",mo:3,cnt:65},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",mo:4,cnt:47},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",mo:5,cnt:38},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",mo:6,cnt:37},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",mo:7,cnt:12},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"ASA Case",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"ASA Case",mo:6,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Chat",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Chat",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Salesforce Internal",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Salesforce Internal",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Salesforce Internal",mo:6,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Salesforce Internal",mo:7,cnt:2},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Self-Service",mo:2,cnt:4},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Self-Service",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Self-Service",mo:4,cnt:2},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Self-Service",mo:5,cnt:3},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Self-Service",mo:6,cnt:2},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",mo:2,cnt:97},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",mo:3,cnt:134},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",mo:4,cnt:111},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",mo:5,cnt:101},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",mo:6,cnt:138},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",mo:7,cnt:55},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Ask Astro",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Ask Astro",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",mo:2,cnt:32},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",mo:3,cnt:51},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",mo:4,cnt:47},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",mo:5,cnt:49},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",mo:6,cnt:54},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",mo:7,cnt:29},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Other Internal",mo:3,cnt:1},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Phone",mo:4,cnt:1},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",mo:2,cnt:13},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",mo:3,cnt:26},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",mo:4,cnt:26},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",mo:5,cnt:26},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",mo:6,cnt:12},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",mo:7,cnt:9},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",mo:2,cnt:142},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",mo:3,cnt:197},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",mo:4,cnt:170},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",mo:5,cnt:118},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",mo:6,cnt:133},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",mo:7,cnt:70},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",mo:2,cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",mo:3,cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",mo:4,cnt:6},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",mo:5,cnt:11},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",mo:6,cnt:8},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",mo:7,cnt:2},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Ask Astro",mo:2,cnt:1},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Ask Astro",mo:5,cnt:1},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",mo:2,cnt:2},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",mo:3,cnt:2},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",mo:4,cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",mo:5,cnt:5},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",mo:6,cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",mo:7,cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Salesforce Internal",mo:3,cnt:2},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Salesforce Internal",mo:5,cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",mo:2,cnt:32},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",mo:3,cnt:32},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",mo:4,cnt:20},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",mo:5,cnt:15},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",mo:6,cnt:28},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",mo:7,cnt:6},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",mo:2,cnt:62},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",mo:3,cnt:67},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",mo:4,cnt:61},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",mo:5,cnt:54},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",mo:6,cnt:44},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",mo:7,cnt:25},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",mo:2,cnt:47},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",mo:3,cnt:36},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",mo:4,cnt:34},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",mo:5,cnt:35},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",mo:6,cnt:36},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",mo:7,cnt:20},{cloud:"Revenue-CPQ Developer Support",origin:"Outbound contact",mo:7,cnt:1},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",mo:2,cnt:10},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",mo:3,cnt:4},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",mo:4,cnt:3},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",mo:5,cnt:2},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",mo:6,cnt:2},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",mo:7,cnt:2},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",mo:2,cnt:42},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",mo:3,cnt:62},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",mo:4,cnt:74},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",mo:5,cnt:50},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",mo:6,cnt:78},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",mo:7,cnt:23},{cloud:"Revenue-Document Generation",origin:"ASA Case",mo:2,cnt:47},{cloud:"Revenue-Document Generation",origin:"ASA Case",mo:3,cnt:31},{cloud:"Revenue-Document Generation",origin:"ASA Case",mo:4,cnt:33},{cloud:"Revenue-Document Generation",origin:"ASA Case",mo:5,cnt:26},{cloud:"Revenue-Document Generation",origin:"ASA Case",mo:6,cnt:27},{cloud:"Revenue-Document Generation",origin:"ASA Case",mo:7,cnt:16},{cloud:"Revenue-Document Generation",origin:"Ask Astro",mo:3,cnt:1},{cloud:"Revenue-Document Generation",origin:"Chat",mo:2,cnt:39},{cloud:"Revenue-Document Generation",origin:"Chat",mo:3,cnt:28},{cloud:"Revenue-Document Generation",origin:"Chat",mo:4,cnt:30},{cloud:"Revenue-Document Generation",origin:"Chat",mo:5,cnt:26},{cloud:"Revenue-Document Generation",origin:"Chat",mo:6,cnt:40},{cloud:"Revenue-Document Generation",origin:"Chat",mo:7,cnt:16},{cloud:"Revenue-Document Generation",origin:"Phone",mo:6,cnt:1},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",mo:2,cnt:6},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",mo:3,cnt:9},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",mo:4,cnt:7},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",mo:5,cnt:3},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",mo:6,cnt:4},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",mo:7,cnt:2},{cloud:"Revenue-Document Generation",origin:"Self-Service",mo:2,cnt:11},{cloud:"Revenue-Document Generation",origin:"Self-Service",mo:3,cnt:12},{cloud:"Revenue-Document Generation",origin:"Self-Service",mo:4,cnt:10},{cloud:"Revenue-Document Generation",origin:"Self-Service",mo:5,cnt:11},{cloud:"Revenue-Document Generation",origin:"Self-Service",mo:6,cnt:14},{cloud:"Revenue-Document Generation",origin:"Self-Service",mo:7,cnt:9},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",mo:2,cnt:49},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",mo:3,cnt:58},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",mo:4,cnt:39},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",mo:5,cnt:41},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",mo:6,cnt:34},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",mo:7,cnt:20},{cloud:"Revenue-Salesforce Billing",origin:"Billing APAC",mo:2,cnt:1},{cloud:"Revenue-Salesforce Billing",origin:"Billing APAC",mo:3,cnt:1},{cloud:"Revenue-Salesforce Billing",origin:"Chat",mo:2,cnt:34},{cloud:"Revenue-Salesforce Billing",origin:"Chat",mo:3,cnt:37},{cloud:"Revenue-Salesforce Billing",origin:"Chat",mo:4,cnt:32},{cloud:"Revenue-Salesforce Billing",origin:"Chat",mo:5,cnt:20},{cloud:"Revenue-Salesforce Billing",origin:"Chat",mo:6,cnt:24},{cloud:"Revenue-Salesforce Billing",origin:"Chat",mo:7,cnt:9},{cloud:"Revenue-Salesforce Billing",origin:"Email",mo:2,cnt:1},{cloud:"Revenue-Salesforce Billing",origin:"Salesforce Internal",mo:2,cnt:39},{cloud:"Revenue-Salesforce Billing",origin:"Salesforce Internal",mo:3,cnt:12},{cloud:"Revenue-Salesforce Billing",origin:"Salesforce Internal",mo:4,cnt:5},{cloud:"Revenue-Salesforce Billing",origin:"Salesforce Internal",mo:5,cnt:3},{cloud:"Revenue-Salesforce Billing",origin:"Salesforce Internal",mo:6,cnt:16},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",mo:2,cnt:36},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",mo:3,cnt:34},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",mo:4,cnt:26},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",mo:5,cnt:29},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",mo:6,cnt:48},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",mo:7,cnt:14},{cloud:"Revenue-Salesforce Contracts",origin:"ASA Case",mo:3,cnt:3},{cloud:"Revenue-Salesforce Contracts",origin:"ASA Case",mo:4,cnt:3},{cloud:"Revenue-Salesforce Contracts",origin:"ASA Case",mo:5,cnt:10},{cloud:"Revenue-Salesforce Contracts",origin:"ASA Case",mo:6,cnt:3},{cloud:"Revenue-Salesforce Contracts",origin:"ASA Case",mo:7,cnt:1},{cloud:"Revenue-Salesforce Contracts",origin:"Ask Astro",mo:5,cnt:2},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",mo:2,cnt:3},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",mo:3,cnt:5},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",mo:4,cnt:5},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",mo:5,cnt:3},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",mo:6,cnt:5},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",mo:7,cnt:1},{cloud:"Revenue-Salesforce Contracts",origin:"Outbound contact",mo:4,cnt:1},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",mo:2,cnt:6},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",mo:3,cnt:4},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",mo:4,cnt:1},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",mo:5,cnt:6},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",mo:6,cnt:4},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",mo:7,cnt:1},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",mo:2,cnt:2},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",mo:3,cnt:8},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",mo:4,cnt:3},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",mo:5,cnt:2},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",mo:6,cnt:5},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",mo:7,cnt:2},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",mo:2,cnt:432},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",mo:3,cnt:430},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",mo:4,cnt:344},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",mo:5,cnt:325},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",mo:6,cnt:312},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",mo:7,cnt:136},{cloud:"Revenue-Salesforce CPQ",origin:"Ask Astro",mo:2,cnt:3},{cloud:"Revenue-Salesforce CPQ",origin:"Ask Astro",mo:4,cnt:6},{cloud:"Revenue-Salesforce CPQ",origin:"Ask Astro",mo:5,cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Ask Astro",mo:6,cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",mo:2,cnt:309},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",mo:3,cnt:312},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",mo:4,cnt:278},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",mo:5,cnt:262},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",mo:6,cnt:257},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",mo:7,cnt:148},{cloud:"Revenue-Salesforce CPQ",origin:"Outbound contact",mo:2,cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Partner Community Support Alias",mo:3,cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Phone",mo:2,cnt:2},{cloud:"Revenue-Salesforce CPQ",origin:"Phone",mo:3,cnt:4},{cloud:"Revenue-Salesforce CPQ",origin:"Phone",mo:4,cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Phone",mo:6,cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",mo:2,cnt:29},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",mo:3,cnt:25},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",mo:4,cnt:15},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",mo:5,cnt:17},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",mo:6,cnt:15},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",mo:7,cnt:2},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",mo:2,cnt:169},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",mo:3,cnt:164},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",mo:4,cnt:138},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",mo:5,cnt:135},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",mo:6,cnt:145},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",mo:7,cnt:75},{cloud:"Revenue-Salesforce Subscription Management",origin:"ASA Case",mo:2,cnt:1},{cloud:"Revenue-Salesforce Subscription Management",origin:"ASA Case",mo:3,cnt:1},{cloud:"Revenue-Salesforce Subscription Management",origin:"ASA Case",mo:4,cnt:1},{cloud:"Revenue-Salesforce Subscription Management",origin:"ASA Case",mo:5,cnt:1},{cloud:"Revenue-Salesforce Subscription Management",origin:"Salesforce Internal",mo:2,cnt:1},{cloud:"Revenue-Salesforce Subscription Management",origin:"Salesforce Internal",mo:4,cnt:1},{cloud:"Revenue-Salesforce Subscription Management",origin:"Self-Service",mo:3,cnt:3},{cloud:"Revenue-Salesforce Subscription Management",origin:"Self-Service",mo:5,cnt:2},{cloud:"Revenue-Salesforce Subscription Management",origin:"Self-Service",mo:7,cnt:1}];
-
-/* Product name normalization — maps Cloud__c full names to short labels */
-const PROD_LABEL = {
-  'Revenue-Salesforce CPQ':'SF CPQ',
+// Short display labels
+const LABEL={
+  'Revenue-Salesforce CPQ':'Revenue-SF CPQ',
+  'Revenue-Salesforce Billing':'Revenue-SF Billing',
+  'Revenue-Document Generation':'Revenue-Doc Generation',
+  'Revenue-CPQ Developer Support':'Revenue-CPQ Dev Support',
+  'Revenue-Salesforce Contracts':'Revenue-SF Contracts',
+  'Revenue-Billing Developer Support':'Revenue-Billing Dev Supp',
   'Revenue Cloud (Core)-Configurator':'RCA-Configurator',
   'Revenue Cloud (Core)-Transaction Management':'RCA-Transaction Mgmt',
   'Revenue Cloud (Core)-Price Management':'RCA-Price Management',
-  'Revenue-CPQ Developer Support':'CPQ Dev Support',
-  'Revenue-Document Generation':'Doc Generation',
-  'Revenue-Salesforce Billing':'SF Billing',
+  'Revenue Cloud (Core)-Billing & Invoicing':'RCA-Billing & Invoicing',
   'Revenue Cloud (Core)-Product Catalog Management':'RCA-Product Catalog',
-  'Revenue Cloud (Core)-Developer Support - Product to Order':'Dev Supp P2O',
-  'Revenue Cloud (Core)-Billing & Invoicing':'RCA-Billing & Inv',
-  'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen':'CLM with DocGen',
-  'Revenue Cloud (Core)-Advanced Approvals':'Advanced Approvals',
-  'Revenue-Salesforce Contracts':'SF Contracts',
-  'Revenue Cloud (Core)-Dynamic Revenue Orchestration':'Dynamic Rev Orch',
-  'Revenue Cloud (Core)-Usage & Ratings':'Usage & Ratings',
-  'Revenue Cloud (Core)-OmniStudio':'OmniStudio',
-  'Revenue-Billing Developer Support':'Billing Dev Supp',
-  'Revenue Cloud (Core)-Business Rules Engine':'Business Rules Engine',
-  'Revenue Cloud (Core)-Revenue Cloud Analytics':'Rev Cloud Analytics'
+  'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen':'RCA-CLM with DocGen',
+  'Revenue Cloud (Core)-Advanced Approvals':'RCA-Advanced Approvals',
+  'Revenue Cloud (Core)-Dynamic Revenue Orchestration':'RCA-Dynamic Rev Orch',
+  'Revenue Cloud (Core)-Usage & Ratings':'RCA-Usage & Ratings',
+  'Revenue Cloud (Core)-Developer Support - Product to Order':'RCA-Dev Support P2O',
+  'Revenue Cloud (Core)-OmniStudio':'RCA-OmniStudio',
+  'Revenue Cloud (Core)-Business Rules Engine':'RCA-Business Rules Eng',
+  'Revenue Cloud (Core)-Revenue Cloud Analytics':'RCA-Rev Cloud Analytics'
 };
 
-/* Origin normalization for filter matching */
-const ORIGIN_FILTER_MAP = {
-  chat: 'Chat',
-  asa: 'ASA Case',
-  self: 'Self-Service',
-  astro: 'Ask Astro',
-  internal: 'Salesforce Internal'
-};
+const MN=['','','Feb','Mar','Apr','May','Jun','Jul'];
+const COLORS=['#4a7c59','#3b82f6','#059669','#d97706','#8b5cf6','#ec4899','#0891b2','#dc2626','#65a30d','#c2410c'];
 
-/* Product filter map (fProduct value -> exact Cloud__c value) */
-const PROD_FILTER_MAP = {
-  cpq:          'Revenue-Salesforce CPQ',
-  configurator: 'Revenue Cloud (Core)-Configurator',
-  txmgmt:       'Revenue Cloud (Core)-Transaction Management',
-  pricemgmt:    'Revenue Cloud (Core)-Price Management',
-  billing:      'Revenue-Salesforce Billing',
-  docgen:       'Revenue-Document Generation',
-  pcm:          'Revenue Cloud (Core)-Product Catalog Management',
-  cpqdev:       'Revenue-CPQ Developer Support',
-  p2o:          'Revenue Cloud (Core)-Developer Support - Product to Order',
-  billinv:      'Revenue Cloud (Core)-Billing & Invoicing',
-  clm:          'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen',
-  adv:          'Revenue Cloud (Core)-Advanced Approvals',
-  dro:          'Revenue Cloud (Core)-Dynamic Revenue Orchestration',
-  usage:        'Revenue Cloud (Core)-Usage & Ratings'
-};
+// ════════════ CORE FILTER FUNCTION ════════════
+function getRows(){
+  const prod=document.getElementById('fProd').value;
+  const date=document.getElementById('fDate').value;
+  const cloudName=(prod==='all')?null:(PROD_CLOUD[prod]||null);
 
-/* Month filter ranges — "recent" uses LAST30_DATA instead of MONTHLY_DATA */
-const MONTH_FILTER = {
-  all:    [2,3,4,5,6,7],
-  q1:     [2,3,4],
-  q2:     [5,6,7],
-  recent: 'last30'
-};
-
-/* Get current filter state */
-function getFilters(){
-  return {
-    scope: document.getElementById('fScope').value,
-    prod: document.getElementById('fProduct').value,
-    date: document.getElementById('fDateRange').value,
-    origin: document.getElementById('fOrigin').value
-  };
-}
-
-/* Last 30 days dataset: Jun 17 – Jul 17, 2026 (no mo field — flat cloud+origin+cnt) */
-const LAST30_DATA=[{cloud:"Revenue-Billing Developer Support",origin:"ASA Case",cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"Self-Service",cnt:1},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",cnt:10},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Ask Astro",cnt:1},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",cnt:6},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",cnt:12},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",cnt:38},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",cnt:14},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",cnt:11},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",cnt:44},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",cnt:3},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",cnt:4},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",cnt:173},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Ask Astro",cnt:1},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",cnt:108},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Partner Community Support Alias",cnt:1},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",cnt:22},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",cnt:209},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",cnt:24},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",cnt:15},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Salesforce Internal",cnt:1},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",cnt:33},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",cnt:2},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",cnt:11},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",cnt:11},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",cnt:24},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",cnt:9},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",cnt:6},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",cnt:8},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",cnt:22},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Salesforce Internal",cnt:3},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",cnt:9},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",cnt:56},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",cnt:51},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",cnt:8},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",cnt:81},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",cnt:15},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",cnt:19},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",cnt:12},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",cnt:26},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"ASA Case",cnt:1},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Salesforce Internal",cnt:3},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Self-Service",cnt:2},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",cnt:117},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",cnt:53},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",cnt:15},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",cnt:125},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",cnt:5},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",cnt:16},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",cnt:40},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",cnt:43},{cloud:"Revenue-CPQ Developer Support",origin:"Outbound contact",cnt:1},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",cnt:3},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",cnt:50},{cloud:"Revenue-Document Generation",origin:"ASA Case",cnt:26},{cloud:"Revenue-Document Generation",origin:"Chat",cnt:28},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue-Document Generation",origin:"Self-Service",cnt:13},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",cnt:35},{cloud:"Revenue-Salesforce Billing",origin:"Chat",cnt:22},{cloud:"Revenue-Salesforce Billing",origin:"Salesforce Internal",cnt:6},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",cnt:42},{cloud:"Revenue-Salesforce Contracts",origin:"ASA Case",cnt:2},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",cnt:1},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",cnt:3},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",cnt:279},{cloud:"Revenue-Salesforce CPQ",origin:"Ask Astro",cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",cnt:261},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",cnt:8},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",cnt:147},{cloud:"Revenue-Salesforce Subscription Management",origin:"Self-Service",cnt:1}];
-
-/* Filter data by active filters.
-   "recent" uses LAST30_DATA (actual Jun 17–Jul 17 query), others slice MONTHLY_DATA by month list.
-   Scope "cases" = exclude Ask Astro. "messaging"/"converted" = Ask Astro only. */
-function filterData(){
-  const f = getFilters();
-  const isRecent = (MONTH_FILTER[f.date] === 'last30');
-  const baseRows = isRecent ? LAST30_DATA : MONTHLY_DATA;
-  const months = isRecent ? null : (MONTH_FILTER[f.date] || MONTH_FILTER.all);
-
-  return baseRows.filter(row => {
-    // Date: monthly filter only applies to MONTHLY_DATA
-    if(months && !months.includes(row.mo)) return false;
-    // Product
-    if(f.prod !== 'all'){
-      const want = PROD_FILTER_MAP[f.prod];
-      if(want && row.cloud !== want) return false;
-    }
-    // Origin
-    if(f.origin !== 'all'){
-      const want = ORIGIN_FILTER_MAP[f.origin];
-      if(want && row.origin !== want) return false;
-    }
-    // Scope
-    if(f.scope === 'messaging' || f.scope === 'converted'){
-      if(row.origin !== 'Ask Astro') return false;
-    } else if(f.scope === 'cases'){
-      if(row.origin === 'Ask Astro') return false;
-    }
+  if(date==='l30'){
+    return LAST30.filter(r=>!cloudName||r.cloud===cloudName);
+  }
+  const months=date==='q1'?[2,3,4]:date==='q2'?[5,6,7]:[2,3,4,5,6,7];
+  return CHAT_DATA.filter(r=>{
+    if(!months.includes(r.mo))return false;
+    if(cloudName&&r.cloud!==cloudName)return false;
     return true;
   });
 }
 
-/* Aggregate filtered data by cloud name */
-function aggByProd(rows){
-  const map = {};
-  rows.forEach(r => {
-    map[r.cloud] = (map[r.cloud]||0) + r.cnt;
-  });
-  return Object.entries(map).map(([cloud,cnt])=>({cloud,cnt})).sort((a,b)=>b.cnt-a.cnt);
+// ════════════ AGGREGATORS ════════════
+function aggByProduct(rows){
+  const m={};
+  rows.forEach(r=>{m[r.cloud]=(m[r.cloud]||0)+r.cnt;});
+  return Object.entries(m).map(([cloud,cnt])=>({cloud,cnt})).sort((a,b)=>b.cnt-a.cnt);
 }
-
-/* Aggregate by month */
 function aggByMonth(rows){
-  const map = {};
-  rows.forEach(r => { map[r.mo] = (map[r.mo]||0) + r.cnt; });
-  return map;
+  const m={};
+  rows.forEach(r=>{m[r.mo]=(m[r.mo]||0)+r.cnt;});
+  return m;
 }
 
-/* Aggregate by origin */
-function aggByOrigin(rows){
-  const map = {};
-  rows.forEach(r => { map[r.origin] = (map[r.origin]||0) + r.cnt; });
-  return map;
-}
+// ════════════ TEXT HELPER ════════════
+function st(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
 
-function buildMonthBar(){
-  const svg=document.getElementById('monthBar');if(!svg)return;
+// ════════════ BUILD MONTH BAR ════════════
+function buildMonthBar(rows){
+  const svg=document.getElementById('monthBar');
+  if(!svg)return;
   while(svg.firstChild)svg.removeChild(svg.firstChild);
   const ns='http://www.w3.org/2000/svg';
   const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
-  const W=300,H=100,pl=28,pr=6,pt=5,pb=22;
+  const date=document.getElementById('fDate').value;
+  const W=300,H=110,pl=34,pr=8,pt=8,pb=24;
   const iW=W-pl-pr,iH=H-pt-pb;
-  const MN=['','','Feb','Mar','Apr','May','Jun','Jul'];
-  const rows=filterData();
-  const isRecent=(MONTH_FILTER[getFilters().date]==='last30');
-  let months;
-  if(isRecent){
-    const total=rows.reduce((s,r)=>s+r.cnt,0);
-    months=[{l:'Jun17–Jul17',v:total}];
+  let bars=[];
+  if(date==='l30'){
+    bars=[{l:'Jun17–Jul17',v:rows.reduce((s,r)=>s+r.cnt,0)}];
   } else {
-    const byMo=aggByMonth(rows);
-    months=[2,3,4,5,6,7].map(m=>({l:MN[m],v:byMo[m]||0}));
+    const mm=aggByMonth(rows);
+    const months=date==='q1'?[2,3,4]:date==='q2'?[5,6,7]:[2,3,4,5,6,7];
+    bars=months.map(m=>({l:MN[m],v:mm[m]||0}));
   }
-  const maxV=Math.max(...months.map(m=>m.v),1);
-  const scY=v=>pt+iH-(v/maxV)*iH;
+  const maxV=Math.max(...bars.map(b=>b.v),1);
+  const scY=v=>pt+iH*(1-v/maxV);
   const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);
-  const gridVals=[Math.round(maxV*0.25),Math.round(maxV*0.5),Math.round(maxV*0.75),maxV];
-  gridVals.forEach(v=>{
-    svg.appendChild(mk('line',{x1:pl,x2:W-pr,y1:scY(v),y2:scY(v),stroke:'rgba(107,142,107,0.20)','stroke-width':1}));
-    const t=mk('text',{x:pl-3,y:scY(v)+3,'text-anchor':'end',fill:'#5a7a5a'});
-    t.style.cssText='font-size:9px;font-family:inherit';t.textContent=v>=1000?(v/1000).toFixed(1)+'K':v;svg.appendChild(t);
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const v=Math.round(maxV*f);
+    svg.appendChild(mk('line',{x1:pl,x2:W-pr,y1:scY(v),y2:scY(v),stroke:'rgba(74,124,89,0.13)','stroke-width':1}));
+    const t=document.createElementNS(ns,'text');
+    Object.entries({x:pl-4,y:scY(v)+3,'text-anchor':'end',fill:'#6b8f6b'}).forEach(([k,v])=>t.setAttribute(k,v));
+    t.style.cssText='font-size:9px;font-family:inherit';
+    t.textContent=v>=1000?(v/1000).toFixed(1)+'K':v;
+    svg.appendChild(t);
   });
-  const bGap=iW/months.length,bW=Math.floor(bGap*0.55);
-  months.forEach((d,i)=>{
+  const bGap=iW/bars.length,bW=Math.floor(bGap*0.62);
+  bars.forEach((d,i)=>{
     if(!d.v)return;
-    const id='mg'+i,cx=pl+i*bGap+bGap/2,x=cx-bW/2,y=scY(d.v),h=scY(0)-y;
-    const g=document.createElementNS(ns,'linearGradient');g.id=id;g.setAttribute('x1','0');g.setAttribute('y1','0');g.setAttribute('x2','0');g.setAttribute('y2','1');
-    [[0,'#4a7c59','1'],[1,'#1a3d28','0.7']].forEach(([off,col,op])=>{const s=document.createElementNS(ns,'stop');s.setAttribute('offset',off*100+'%');s.setAttribute('stop-color',col);s.setAttribute('stop-opacity',op);g.appendChild(s);});
+    const gid='g'+i;
+    const cx=pl+i*bGap+bGap/2,x=cx-bW/2,y=scY(d.v),h=scY(0)-y;
+    const g=document.createElementNS(ns,'linearGradient');
+    g.id=gid;['x1','y1','x2','y2'].forEach((a,j)=>g.setAttribute(a,['0','0','0','1'][j]));
+    [[0,'#4a7c59','1'],[1,'#1a3d28','0.7']].forEach(([o,c,op])=>{
+      const s=document.createElementNS(ns,'stop');
+      s.setAttribute('offset',o*100+'%');s.setAttribute('stop-color',c);s.setAttribute('stop-opacity',op);
+      g.appendChild(s);
+    });
     defs.appendChild(g);
-    const bar=mk('rect',{x,y,width:bW,height:h,rx:4,fill:'url(#'+id+')',cursor:'pointer'});
-    bar.addEventListener('mouseenter',e=>{bar.style.opacity='0.75';showTip(e,d.l+' 2026',d.v.toLocaleString()+' cases');});
-    bar.addEventListener('mousemove',moveTip);bar.addEventListener('mouseleave',()=>{bar.style.opacity='1';hideTip();});
-    svg.appendChild(bar);
-    const lv=mk('text',{x:cx,y:y-3,'text-anchor':'middle',fill:'#2d5a3d'});lv.style.cssText='font-size:9px;font-weight:600;font-family:inherit';lv.textContent=d.v>=1000?(d.v/1000).toFixed(1)+'K':d.v;svg.appendChild(lv);
-    const xl=mk('text',{x:cx,y:scY(0)+14,'text-anchor':'middle',fill:'#5a7a5a'});xl.style.cssText='font-size:9px;font-family:inherit';xl.textContent=d.l;svg.appendChild(xl);
+    svg.appendChild(mk('rect',{x,y,width:bW,height:h,rx:3,fill:'url(#'+gid+')'}));
+    const lv=document.createElementNS(ns,'text');
+    Object.entries({x:cx,y:y-3,'text-anchor':'middle',fill:'#2d5a3d'}).forEach(([k,v])=>lv.setAttribute(k,v));
+    lv.style.cssText='font-size:9px;font-weight:700;font-family:inherit';
+    lv.textContent=d.v>=1000?(d.v/1000).toFixed(1)+'K':d.v;
+    svg.appendChild(lv);
+    const xl=document.createElementNS(ns,'text');
+    Object.entries({x:cx,y:scY(0)+14,'text-anchor':'middle',fill:'#6b8f6b'}).forEach(([k,v])=>xl.setAttribute(k,v));
+    xl.style.cssText='font-size:9px;font-family:inherit';xl.textContent=d.l;
+    svg.appendChild(xl);
   });
 }
 
-function buildDonut(svgId,legId,data){
-  const svg=document.getElementById(svgId);if(!svg)return;
-  const leg=document.getElementById(legId);
-  while(svg.firstChild)svg.removeChild(svg.firstChild);
-  if(leg)while(leg.firstChild)leg.removeChild(leg.firstChild);
-  const ns='http://www.w3.org/2000/svg';
-  const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
-  const vb=parseInt(svg.getAttribute('viewBox').split(' ')[2]);
-  const cx=vb/2,cy=vb/2,r=vb*0.42,ir=vb*0.27,gap=1.2;
-  const total=data.reduce((s,d)=>s+d.count,0);let sa=-Math.PI/2;
-  data.forEach(d=>{
-    const frac=d.count/total,sw=frac*2*Math.PI-gap/r,ea=sa+sw;
-    const x1=cx+r*Math.cos(sa),y1=cy+r*Math.sin(sa),x2=cx+r*Math.cos(ea),y2=cy+r*Math.sin(ea);
-    const ix1=cx+ir*Math.cos(ea),iy1=cy+ir*Math.sin(ea),ix2=cx+ir*Math.cos(sa),iy2=cy+ir*Math.sin(sa);
-    const p=mk('path',{d:`M${x1} ${y1}A${r} ${r} 0 ${sw>Math.PI?1:0} 1 ${x2} ${y2}L${ix1} ${iy1}A${ir} ${ir} 0 ${sw>Math.PI?1:0} 0 ${ix2} ${iy2}Z`,fill:d.color,cursor:'pointer'});
-    p.style.transition='opacity 0.15s';
-    p.addEventListener('mouseenter',e=>{p.style.opacity='0.7';showTip(e,d.label,d.count.toLocaleString()+' ('+Math.round(frac*100)+'%)');});
-    p.addEventListener('mousemove',moveTip);p.addEventListener('mouseleave',()=>{p.style.opacity='1';hideTip();});
-    svg.appendChild(p);sa=ea+gap/r;
-    if(leg){const row=document.createElement('div');row.className='leg-row';const sw=document.createElement('span');sw.className='sw';sw.style.background=d.color;const lbl=document.createElement('span');lbl.textContent=d.label;const lc=document.createElement('span');lc.className='lc';lc.textContent=d.count.toLocaleString();row.append(sw,lbl,lc);leg.appendChild(row);}
-  });
-  const ct=mk('text',{x:cx,y:cy-2,'text-anchor':'middle',fill:'#2d4a2d'});ct.style.cssText=`font-size:${vb*0.11}px;font-weight:800;font-family:inherit`;ct.textContent=(total/1000).toFixed(1)+'K';svg.appendChild(ct);
-  const cl=mk('text',{x:cx,y:cy+vb*0.1,'text-anchor':'middle',fill:'#6b7280'});cl.style.cssText=`font-size:${vb*0.075}px;font-family:inherit`;cl.textContent='total';svg.appendChild(cl);
-}
-
-function buildHBars(id,items,colors,lw){
-  const c=document.getElementById(id);if(!c)return;
-  while(c.firstChild)c.removeChild(c.firstChild);
-  if(!items||!items.length)return;
-  const max=items[0].count||1;
-  items.forEach((item,i)=>{
-    const pct=Math.round(item.count/max*100);
-    const color=Array.isArray(colors)?colors[i%colors.length]:colors;
-    const labelW=lw||'120px';
-    const row=document.createElement('div');row.className='hbar-row';
-    const lblEl=document.createElement('div');lblEl.className='hbar-lbl';lblEl.style.width=labelW;lblEl.style.minWidth=labelW;lblEl.title=item.label;lblEl.textContent=item.label;
-    const track=document.createElement('div');track.className='hbar-track';
-    const fill=document.createElement('div');fill.className='hbar-fill';fill.style.width=pct+'%';fill.style.background=color;
-    track.appendChild(fill);
-    const val=document.createElement('div');val.className='hbar-val';val.textContent=item.count.toLocaleString();
-    row.append(lblEl,track,val);c.appendChild(row);
-  });
-}
-
-function buildProdTable(){
-  const tbody=document.getElementById('prodTableBody');if(!tbody)return;
+// ════════════ BUILD MONTH TABLE ════════════
+function buildMonthTable(rows){
+  const tbody=document.getElementById('monthTbody');
+  if(!tbody)return;
   while(tbody.firstChild)tbody.removeChild(tbody.firstChild);
-  const rows=filterData();
-  const agg=aggByProd(rows);
-  const total=agg.reduce((s,r)=>s+r.cnt,0)||1;
-  agg.forEach((r,i)=>{
+  const date=document.getElementById('fDate').value;
+  if(date==='l30'){
+    const total=rows.reduce((s,r)=>s+r.cnt,0);
     const tr=document.createElement('tr');
-    const t1=document.createElement('td');t1.style.color='#6b7280';t1.textContent=String(i+1);
-    const t2=document.createElement('td');t2.textContent=PROD_LABEL[r.cloud]||r.cloud;
-    const t3=document.createElement('td');t3.className='num';t3.textContent=r.cnt.toLocaleString();
-    const t4=document.createElement('td');t4.className='num';t4.style.color='#6b7280';t4.textContent=(r.cnt/total*100).toFixed(1)+'%';
+    const t1=document.createElement('td');t1.textContent='Jun 17 – Jul 17';
+    const t2=document.createElement('td');t2.className='r';t2.textContent=total.toLocaleString();
+    const t3=document.createElement('td');t3.className='r';t3.textContent='—';
+    tr.append(t1,t2,t3);tbody.appendChild(tr);
+    return;
+  }
+  const mm=aggByMonth(rows);
+  const months=date==='q1'?[2,3,4]:date==='q2'?[5,6,7]:[2,3,4,5,6,7];
+  let prev=null;
+  months.forEach(m=>{
+    const v=mm[m]||0;
+    const tr=document.createElement('tr');
+    const t1=document.createElement('td');t1.textContent=MN[m]+' 2026';
+    const t2=document.createElement('td');t2.className='r';t2.textContent=v.toLocaleString();
+    const t3=document.createElement('td');t3.className='r';
+    if(prev!==null&&prev>0){
+      const diff=v-prev,pct=(diff/prev*100).toFixed(1);
+      t3.textContent=(diff>=0?'+':'')+pct+'%';
+      t3.className='r '+(diff>=0?'mom-up':'mom-dn');
+    } else {t3.textContent='—';}
+    tr.append(t1,t2,t3);tbody.appendChild(tr);
+    if(v>0)prev=v;
+  });
+  if(tbody.children.length===0){
+    const tr=document.createElement('tr');
+    const td=document.createElement('td');td.colSpan=3;td.className='empty-msg';td.textContent='No data for this selection';
+    tr.appendChild(td);tbody.appendChild(tr);
+  }
+}
+
+// ════════════ BUILD PRODUCT BARS ════════════
+function buildProdBars(prods){
+  const c=document.getElementById('prodBars');
+  if(!c)return;
+  while(c.firstChild)c.removeChild(c.firstChild);
+  const top=prods.slice(0,10);
+  if(!top.length){
+    const d=document.createElement('div');d.className='empty-msg';d.textContent='No data';
+    c.appendChild(d);return;
+  }
+  const maxV=top[0].cnt||1;
+  top.forEach((p,i)=>{
+    const row=document.createElement('div');row.className='hbar-row';
+    const lbl=document.createElement('div');lbl.className='hbar-lbl';
+    lbl.title=p.cloud;lbl.textContent=LABEL[p.cloud]||p.cloud;
+    const track=document.createElement('div');track.className='hbar-track';
+    const fill=document.createElement('div');fill.className='hbar-fill';
+    fill.style.width=Math.round(p.cnt/maxV*100)+'%';
+    fill.style.background=COLORS[i%COLORS.length];
+    track.appendChild(fill);
+    const val=document.createElement('div');val.className='hbar-val';val.textContent=p.cnt.toLocaleString();
+    row.append(lbl,track,val);c.appendChild(row);
+  });
+}
+
+// ════════════ BUILD PRODUCT TABLE ════════════
+function buildProdTable(prods,total){
+  const tbody=document.getElementById('prodTbody');
+  if(!tbody)return;
+  while(tbody.firstChild)tbody.removeChild(tbody.firstChild);
+  if(!prods.length){
+    const tr=document.createElement('tr');
+    const td=document.createElement('td');td.colSpan=4;td.className='empty-msg';td.textContent='No data for this selection';
+    tr.appendChild(td);tbody.appendChild(tr);return;
+  }
+  prods.forEach((p,i)=>{
+    const tr=document.createElement('tr');
+    const t1=document.createElement('td');t1.style.color='#6b8f6b';t1.style.fontSize='0.62rem';t1.textContent=String(i+1);
+    const t2=document.createElement('td');t2.textContent=LABEL[p.cloud]||p.cloud;
+    const t3=document.createElement('td');t3.className='r';t3.textContent=p.cnt.toLocaleString();
+    const t4=document.createElement('td');t4.className='r';t4.style.color='#6b8f6b';
+    t4.textContent=total?(p.cnt/total*100).toFixed(1)+'%':'—';
     tr.append(t1,t2,t3,t4);tbody.appendChild(tr);
   });
 }
 
-const GEO_STATIC=[{label:'AMER',count:2358,color:'#4a7c59'},{label:'APAC (incl. JP)',count:683,color:'#6aab7a'},{label:'EMEA',count:329,color:'#8fb58f'},{label:'Untagged',count:52,color:'#9eada5'}];
-const SEV_STATIC=[{label:'L4 Medium',count:2849,color:'#4a7c59'},{label:'L2 Urgent',count:399,color:'#c08030'},{label:'L1 Critical',count:88,color:'#b91c1c'},{label:'L3 High',count:86,color:'#c05020'}];
-const PC=['#4a7c59','#6aab7a','#8fb58f','#2d5a3d','#3d7a6a','#b4c9b0','#c08030','#5a7a3d','#7a9e7a','#4a6a5a'];
+// ════════════ MAIN REBUILD — called on every filter change ════════════
+function rebuild(){
+  const rows=getRows();
+  const total=rows.reduce((s,r)=>s+r.cnt,0);
+  const prods=aggByProduct(rows);
+  const date=document.getElementById('fDate').value;
+  const prod=document.getElementById('fProd').value;
 
-function buildMsgBar(){
-  const svg=document.getElementById('msgBar');if(!svg)return;
-  while(svg.firstChild)svg.removeChild(svg.firstChild);
-  const ns='http://www.w3.org/2000/svg';
-  const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
-  const W=300,H=100,pl=28,pr=6,pt=5,pb=22;
-  const iW=W-pl-pr,iH=H-pt-pb;
-  /* Messaging bar shows all-origins data for context, filtered by active date/product */
-  const MN=['','','Feb','Mar','Apr','May','Jun','Jul'];
-  const rows=filterData();
-  const isRecent=(MONTH_FILTER[getFilters().date]==='last30');
-  let months;
-  if(isRecent){
-    const total=rows.reduce((s,r)=>s+r.cnt,0);
-    months=total?[{l:'Jun17–Jul17',v:total}]:[];
-  } else {
-    const byMo=aggByMonth(rows);
-    months=[2,3,4,5,6,7].filter(m=>byMo[m]).map(m=>({l:MN[m],v:byMo[m]}));
-  }
-  if(!months.length)return;
-  const maxV=Math.max(...months.map(m=>m.v),1);
-  const scY=v=>pt+iH-(v/maxV)*iH;
-  const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);
-  const gridVals=[Math.round(maxV*0.33),Math.round(maxV*0.67),maxV];
-  gridVals.forEach(v=>{
-    svg.appendChild(mk('line',{x1:pl,x2:W-pr,y1:scY(v),y2:scY(v),stroke:'rgba(107,142,107,0.20)','stroke-width':1}));
-    const t=mk('text',{x:pl-3,y:scY(v)+3,'text-anchor':'end',fill:'#5a7a5a'});
-    t.style.cssText='font-size:9px;font-family:inherit';t.textContent=v>=1000?(v/1000).toFixed(1)+'K':v;svg.appendChild(t);
-  });
-  const bGap=iW/months.length,bW=Math.floor(bGap*0.55);
-  months.forEach((d,i)=>{
-    const id='mmg'+i,cx=pl+i*bGap+bGap/2,x=cx-bW/2,y=scY(d.v),h=scY(0)-y;
-    const g=document.createElementNS(ns,'linearGradient');g.id=id;g.setAttribute('x1','0');g.setAttribute('y1','0');g.setAttribute('x2','0');g.setAttribute('y2','1');
-    [[0,'#6aab7a','1'],[1,'#2d5a3d','0.7']].forEach(([off,col,op])=>{const s=document.createElementNS(ns,'stop');s.setAttribute('offset',off*100+'%');s.setAttribute('stop-color',col);s.setAttribute('stop-opacity',op);g.appendChild(s);});
-    defs.appendChild(g);
-    const bar=mk('rect',{x,y,width:bW,height:h,rx:4,fill:'url(#'+id+')',cursor:'pointer'});
-    bar.addEventListener('mouseenter',e=>{bar.style.opacity='0.75';showTip(e,d.l+' 2026',d.v.toLocaleString()+' cases');});
-    bar.addEventListener('mousemove',moveTip);bar.addEventListener('mouseleave',()=>{bar.style.opacity='1';hideTip();});
-    svg.appendChild(bar);
-    const lv=mk('text',{x:cx,y:y-3,'text-anchor':'middle',fill:'#4a7c59'});lv.style.cssText='font-size:9px;font-weight:600;font-family:inherit';lv.textContent=d.v>=1000?(d.v/1000).toFixed(1)+'K':d.v;svg.appendChild(lv);
-    const xl=mk('text',{x:cx,y:scY(0)+14,'text-anchor':'middle',fill:'#5a7a5a'});xl.style.cssText='font-size:9px;font-family:inherit';xl.textContent=d.l;svg.appendChild(xl);
-  });
-}
+  // Hero
+  st('heroTotal',total.toLocaleString());
+  const dateLabels={
+    all:'Feb 2026 – Jul 17, 2026 · All Revenue products · Chat origin',
+    q1:'Q1 (Feb, Mar, Apr 2026) · Chat origin',
+    q2:'Q2 (May, Jun, Jul 2026) · Chat origin',
+    l30:'Last 30 Days: Jun 17 – Jul 17, 2026 · Chat origin'
+  };
+  st('heroLbl',dateLabels[date]||'');
 
-/* Account-level data from July 17 query */
-const ACCOUNT_DATA=[{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Neocol",cnt:59},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Equinix, Inc.",cnt:42},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Cloudity",cnt:35},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Imperva Inc. a Thales company",cnt:35},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Kaseya - New Org",cnt:34},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Neocol",cnt:34},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Cloudity",cnt:34},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"EMBETECHSOLUTIONS",cnt:33},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Bluvium Inc",cnt:29},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Bluvium Inc",cnt:28},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"Cellular South, Inc.",cnt:28},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",acct:"Equinix, Inc.",cnt:28},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",acct:"Kaseya - New Org",cnt:28},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Dayforce US, Inc.",cnt:28},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",acct:"Cloudity",cnt:27},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",acct:"Relay Fire and Safety (Advanced Fire Protection Systems)",cnt:27},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Cloudity",cnt:27},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Accenture LLP",cnt:26},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"CrowdStrike, Inc.",cnt:25},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Neocol",cnt:25},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",acct:"Kaseya - New Org",cnt:25},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",acct:"STANDARD & POORS FINANCIAL SERVICES LLC",cnt:24},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Altice USA (formerly Cablevision) - Residential",cnt:24},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"RevCycle Limited",cnt:24},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Community Brands (Org 1)",cnt:24},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Infoblox (Vista Org)",cnt:24},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",acct:"Bell Canada",cnt:24},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Aptean",cnt:23},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Kraft Sports and Entertainment LLC",cnt:23},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"OmniCloud Software Consulting Pvt. Ltd.",cnt:23},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Solera Corporate",cnt:23},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Phillips 66 Company (Enterprise)",cnt:23},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Alicorn Consulting",cnt:23},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Equinix, Inc.",cnt:23},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",acct:"Thunder Consulting, Inc",cnt:23},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",acct:"Neocol",cnt:22},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Trane Technologies Company LLC",cnt:22},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",acct:"Pure Storage, Inc. (MAIN)",cnt:21},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"CloudMasonry",cnt:21},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",acct:"Bell Canada",cnt:21},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Laboratory Corporation of America Holdings",cnt:20},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",acct:"Capital One Services, LLC",cnt:20},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",acct:"Bluvium Inc",cnt:20},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Equinix, Inc.",cnt:20},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",acct:"Intrado Life & Safety, Inc",cnt:19},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Digicert, Inc",cnt:19},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Persistent Systems Inc",cnt:19},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",acct:"Relay Fire and Safety (Advanced Fire Protection Systems)",cnt:19},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"TeamViewer Germany GmbH",cnt:19},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Rapid7",cnt:18},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"ClickUp",cnt:18},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",acct:"ECi",cnt:18},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Prelude Systems, Inc.",cnt:18},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"CrowdStrike, Inc.",cnt:17},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Dropbox, Inc.",cnt:17},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"PlanSource (Main Org)",cnt:17},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Vp PLC",cnt:17},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"Dayforce US, Inc.",cnt:17},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Trimble Illuminate",cnt:17},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",acct:"Equinix, Inc.",cnt:17},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Telenet Group",cnt:17},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"Soft Freight Logic (SFL) Tech",cnt:16},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Vertex Inc. (Enterprise)",cnt:16},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"SHIFTLOGIC.IO LIMITED",cnt:16},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Accenture LLP",cnt:16},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",acct:"Siemens Corporation",cnt:16},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",acct:"Telenet Group",cnt:16},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",acct:"Neocol",cnt:16},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Verizon Sourcing LLC",cnt:16},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Accenture LLP",cnt:16},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Soft Freight Logic (SFL) Tech",cnt:16},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Genesys Cloud Services (RLM)",cnt:15},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",acct:"Bluebeam Inc 3rd Org",cnt:15},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Trimble Illuminate",cnt:15},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",acct:"SHIFTLOGIC.IO LIMITED",cnt:15},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",acct:"Uber Technologies, Inc.",cnt:15},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"CrowdStrike, Inc.",cnt:15},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"PowerSchool Group LLC - New Org",cnt:15},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"DCF 7",cnt:15},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Ingentis Holding GmbH",cnt:15},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Alkami Technology",cnt:15},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Rapid7",cnt:15},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Makino Milling Machine Co., Ltd.",cnt:14},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"OSF Global Services, Inc.",cnt:14},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",acct:"Bell Canada",cnt:14},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Hexagon Mining Inc.",cnt:14},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Netradyne",cnt:14},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Bluvium Inc",cnt:14},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Genesys Cloud Services (RLM)",cnt:14},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Prelude Systems, Inc.",cnt:14},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Sprinklr, Inc.*",cnt:14},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"OSF Global Services, Inc.",cnt:14},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",acct:"Neocol",cnt:14},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Five9 Inc.*",cnt:14},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Eagle View Technologies, Inc.*",cnt:14},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Refinitiv Ltd",cnt:14},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Ratiodata GmbH",cnt:14},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Palo Alto Networks, Inc.",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"iCIMS, Inc.",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Samsara Inc",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"IND - Technology",cnt:13},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"D.V.I Solutions (S) Pte Ltd",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Kaseya US, LLC",cnt:13},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",acct:"General Motors Holdings, LLC",cnt:13},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Digicert, Inc",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"NEXTDC Limited",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Proofpoint, Inc. (MAIN)",cnt:13},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Cloudy Code Pty Ltd - ISV Edition",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Halliburton Energy Services, Inc.",cnt:13},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",acct:"Coastal Cloud",cnt:13},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",acct:"MYOB Australia Pty Ltd",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Healthcare Services Group, Inc.",cnt:13},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Natus Medical Inc. - Org 2",cnt:13},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",acct:"Conga",cnt:13},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Cloudforia Ltd",cnt:13},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",acct:"Neocol",cnt:13},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Phillips 66 Company (Enterprise)",cnt:13},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Veeam Software Corporation (New Org)",cnt:13},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"SHIFTLOGIC.IO LIMITED",cnt:12},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Kaseya - New Org",cnt:12},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",acct:"DAT Solutions, LLC",cnt:12},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Gainsight Inc*",cnt:12},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Horizontal Integration, Inc.",cnt:12},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",acct:"CDK Global, LLC",cnt:12},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"CrowdStrike, Inc.",cnt:12},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Stack Intelligence LLC",cnt:12},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Select Plant Hire Limited",cnt:12},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"US Signal Company",cnt:12},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Aiwyn",cnt:12},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"OmniCloud Software Consulting Pvt. Ltd.",cnt:12},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Dodge Data & Analytics",cnt:12},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",acct:"Trimble Illuminate",cnt:12},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",acct:"DynaCap Consulting ApS",cnt:12},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Magnet Forensics Inc",cnt:12},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",acct:"S&P Global, Inc.",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Rapid7",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"LiveRamp, Inc",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Salesfive GmbH",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Telstra Health CRM",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"OmniCloud Software Consulting Pvt. Ltd.",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Altice USA (formerly Cablevision) - Residential",cnt:11},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",acct:"N28 Technologies",cnt:11},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Gruslabs Software Solutions Pvt. Ltd.",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",acct:"DIGGLE K.K.",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Teladoc Health, Inc. (GCRM)",cnt:11},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"Infoblox (Vista Org)",cnt:11},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",acct:"Iron Mountain Information Management LLC",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"RevCycle Limited",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"S&P Global, Inc.",cnt:11},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",acct:"LivePerson, Inc.",cnt:11},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",acct:"Ravyx - SIR Solutions",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",acct:"Relay Fire and Safety (Advanced Fire Protection Systems)",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"TeamViewer Germany GmbH",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",acct:"Cloudy Code Pty Ltd - ISV Edition",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",acct:"Kaseya - New Org",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Aptean",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Digicert, Inc",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Whatfix Private Limited",cnt:11},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",acct:"Bell Canada",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"CloudOdyssey IT Solutions LTD",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Brightly Software (Dude Solutions, Inc.)",cnt:11},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"Aiwyn",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Google LLC",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"Osmose Utilities Services, Inc",cnt:11},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"Acxiom LLC",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Cummins SFA, DBU & Power Generation",cnt:11},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Coastal Cloud",cnt:11},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Lexipol, LLC - 2nd Org",cnt:10},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",acct:"Infoblox (Vista Org)",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Meritor, Inc.",cnt:10},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",acct:"Cision Group Ltd (Cision UK)",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Büchi Labortechnik AG",cnt:10},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",acct:"Trimble Illuminate",cnt:10},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"Bluebeam Inc 3rd Org",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Epicor (New Org)",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Pluralsight, LLC (Main Org)",cnt:10},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",acct:"RightRev Inc",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",acct:"O'Neil Digital Solutions, LLC (Org 2)",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Teradata Operations, Inc.",cnt:10},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",acct:"Siemens Corporation",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Gruslabs Software Solutions Pvt. Ltd.",cnt:10},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",acct:"PhiX Technologies Limited",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",acct:"Loftware",cnt:10},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",acct:"Qualifacts Systems Inc",cnt:10},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"Cloudy Code Pty Ltd - ISV Edition",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"CDW LLC",cnt:10},{cloud:"Revenue-Salesforce Billing",origin:"Chat",acct:"Trimble Illuminate",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",acct:"Avid Technology, Inc*",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",acct:"Wi-Tronix, LLC",cnt:10},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",acct:"Reed Exhibitions Ltd (GBS)",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"PwC",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Cloudera, Inc. (MAIN)",cnt:10},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",acct:"Equinix, Inc.",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"Okta, Inc.",cnt:10},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",acct:"InformaOne",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"Cyntexa Labs Pvt Ltd",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"LTIMindtree Limited",cnt:10},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",acct:"InformaOne",cnt:10},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",acct:"Ravyx - SIR Solutions",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"The Toronto-Dominion Bank",cnt:10},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",acct:"Infor (US) LLC (Main)",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",acct:"ADT LLC",cnt:10},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",acct:"MYOB Australia Pty Ltd",cnt:10},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",acct:"Lexis Nexis Legal (Large ORG)",cnt:10}];
-
-const SENTIMENT_DATA = [
-  {prod:'Revenue-SF CPQ',sentiment:'Frustrated',trend:'Escalating',issue:'Quote pricing recalculation failure',reason:'Agent could not resolve calc error in-session; required engineering review',score:3},
-  {prod:'Revenue-SF CPQ',sentiment:'Positive',trend:'Improving',issue:'CPQ product bundle setup question',reason:'Resolved in chat but case opened for documentation trail',score:8},
-  {prod:'Revenue-SF CPQ',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Live CPQ error blocking deal close',sentiment_full:'Highly Frustrated',reason:'Customer blocked on critical deal — case P1 escalation required',score:2},
-  {prod:'Revenue-SF CPQ',sentiment:'Neutral',trend:'Stable',issue:'CPQ approval workflow config',reason:'Complex config needed async investigation',score:6},
-  {prod:'Revenue-SF CPQ',sentiment:'Positive',trend:'Improving',issue:'CPQ contract renewal pricing',reason:'Chat resolved issue; case created for tracking',score:7},
-  {prod:'RCA-Configurator',sentiment:'Frustrated',trend:'Escalating',issue:'Product configurator save error',reason:'Recurring bug required engineering hotfix — could not resolve live',score:3},
-  {prod:'RCA-Configurator',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Attribute rules not applying correctly',reason:'Config complexity exceeded chat resolution scope',score:5},
-  {prod:'RCA-Configurator',sentiment:'Positive',trend:'Improving',issue:'Guided selling setup assistance',reason:'Partial fix in chat; full config needed case tracking',score:8},
-  {prod:'RCA-Transaction Mgmt',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Order to cash pipeline stuck',reason:'Data integrity issue — case needed for engineering escalation',score:2},
-  {prod:'RCA-Transaction Mgmt',sentiment:'Frustrated',trend:'Escalating',issue:'Amendment transaction not completing',reason:'Async debugging required; could not resolve in session',score:4},
-  {prod:'RCA-Transaction Mgmt',sentiment:'Neutral',trend:'Stable',issue:'Transaction history query question',reason:'Complex SOQL assistance needed beyond chat scope',score:6},
-  {prod:'RCA-Price Management',sentiment:'Positive',trend:'Improving',issue:'Price book hierarchy question',reason:'Answered in chat; case opened to track follow-up',score:8},
-  {prod:'RCA-Price Management',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Tiered pricing formula error',reason:'Formula validation required sandbox access outside chat',score:5},
-  {prod:'Revenue-SF Billing',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Invoice generation failure — month-end',reason:'Month-end blocking — immediate P1 case required',score:1},
-  {prod:'Revenue-SF Billing',sentiment:'Frustrated',trend:'Escalating',issue:'Payment reconciliation discrepancy',reason:'Finance team blocker — needed billing team review',score:3},
-  {prod:'Revenue-SF Billing',sentiment:'Positive',trend:'Improving',issue:'Billing schedule adjustment',reason:'Chat gave workaround; case for permanent fix',score:7},
-  {prod:'Revenue-Doc Generation',sentiment:'Mildly Frustrated',trend:'Stable',issue:'PDF template merge field missing',reason:'Template customization needed async specialist review',score:5},
-  {prod:'Revenue-Doc Generation',sentiment:'Positive',trend:'Stable',issue:'DocGen output formatting question',reason:'Best practice guidance shared; case for enhancement request',score:7},
-  {prod:'RCA-Billing & Invoicing',sentiment:'Frustrated',trend:'Escalating',issue:'Tax calculation error on invoice',reason:'Tax engine integration issue — required billing engineering',score:3},
-  {prod:'RCA-Product Catalog',sentiment:'Neutral',trend:'Stable',issue:'PCM product hierarchy setup',reason:'Large catalog migration — needed async guided session',score:6},
-  {prod:'RCA-Product Catalog',sentiment:'Positive',trend:'Improving',issue:'Category attribute mapping guidance',reason:'Follow-up steps needed formal case tracking',score:8},
-  {prod:'Revenue Cloud (Core)-Advanced Approvals',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Approval matrix routing issue',reason:'Complex multi-level approval config needed specialist',score:5},
-  {prod:'Revenue-SF CPQ',sentiment:'Highly Frustrated',trend:'Escalating',issue:'CPQ subscription amendment blocking renewal',reason:'Customer at risk — escalated to account team + engineering',score:1},
-  {prod:'RCA-Configurator',sentiment:'Positive',trend:'Improving',issue:'Product bundle constraint setup',reason:'Chat resolved 80%; case for remaining validation',score:8},
-  {prod:'Revenue-SF CPQ',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Discount approval not triggering',reason:'Approval threshold config needed offline investigation',score:5},
-  {prod:'RCA-Transaction Mgmt',sentiment:'Positive',trend:'Improving',issue:'Fulfillment order status question',reason:'Informational; case opened to track enhancement feedback',score:7},
-  {prod:'Revenue-SF Billing',sentiment:'Mildly Frustrated',trend:'Improving',issue:'Credit memo application question',reason:'Accounting rules required finance team input',score:6},
-  {prod:'RCA-Price Management',sentiment:'Frustrated',trend:'Escalating',issue:'Price rule priority conflict',reason:'Rule engine conflict required product engineering review',score:3},
-  {prod:'Revenue-SF CPQ',sentiment:'Neutral',trend:'Stable',issue:'CPQ REST API integration question',reason:'Developer deep-dive needed async technical review',score:6},
-  {prod:'Revenue Cloud (Core)-CLM with DocGen',sentiment:'Positive',trend:'Stable',issue:'Contract template clause mapping',reason:'Template logic tracked in case for future reference',score:7},
-  {prod:'RCA-Configurator',sentiment:'Highly Frustrated',trend:'Escalating',issue:'Configurator completely unresponsive in prod',reason:'Production down — P1 immediate escalation required',score:1},
-  {prod:'Revenue-Doc Generation',sentiment:'Mildly Frustrated',trend:'Stable',issue:'Bulk doc generation timeout',reason:'Batch size issue needed async performance investigation',score:5},
-  {prod:'Revenue-SF CPQ',sentiment:'Frustrated',trend:'Escalating',issue:'Contract line items not syncing to billing',reason:'CPQ-Billing integration data mismatch — engineering needed',score:3},
-  {prod:'RCA-Transaction Mgmt',sentiment:'Positive',trend:'Improving',issue:'Order lifecycle status update config',reason:'Config confirmed in chat; formal change tracking via case',score:8},
-];
-
-const SENTIMENT_COLOR = {
-  'Positive':'#4a7c59','Neutral':'#5a7a5a','Mildly Frustrated':'#c08030',
-  'Frustrated':'#c05020','Highly Frustrated':'#b91c1c'
-};
-const TREND_COLOR = {'Improving':'#4a7c59','Stable':'#5a7a5a','Escalating':'#b91c1c'};
-
-function buildSentimentTable(){
-  const tbody = document.getElementById('sentimentTableBody');
-  if(!tbody) return;
-  while(tbody.firstChild) tbody.removeChild(tbody.firstChild);
-  const scope = document.getElementById('fScope') ? document.getElementById('fScope').value : 'all';
-  const prod = document.getElementById('fProduct') ? document.getElementById('fProduct').value : 'all';
-  const origin = document.getElementById('fOrigin') ? document.getElementById('fOrigin').value : 'all';
-  let data = SENTIMENT_DATA;
-  if(scope !== 'all' && scope !== 'converted' && scope !== 'messaging') {
-    // cases-only hides sentiment table since it's messaging-based
-    const note = document.createElement('tr');
-    const td = document.createElement('td');
-    td.colSpan = 7;
-    td.style.cssText = 'text-align:center;padding:20px;color:var(--muted);font-size:0.72rem';
-    td.textContent = 'Sentiment data is only available for Messaging Sessions. Select "All Revenue Data" or "Messaging Sessions" filter.';
-    note.appendChild(td);
-    tbody.appendChild(note);
-    return;
-  }
-  if(prod !== 'all') {
-    const PROD_MAP = {cpq:'CPQ',configurator:'Configurator',txmgmt:'Transaction',pricemgmt:'Price',billing:'Billing',docgen:'Doc Generation',pcm:'Product Catalog'};
-    const key = PROD_MAP[prod] || '';
-    data = data.filter(d => d.prod.toLowerCase().includes(key.toLowerCase()));
-  }
-  if(origin !== 'all' && origin !== 'astro') data = [];
-  data.forEach((row, i) => {
-    const tr = document.createElement('tr');
-    const sentColor = SENTIMENT_COLOR[row.sentiment] || '#5a7a5a';
-    const trendColor = TREND_COLOR[row.trend] || '#5a7a5a';
-    const score = row.score;
-    const scoreColor = score <= 3 ? '#b91c1c' : score <= 5 ? '#c08030' : score <= 7 ? '#4a7c59' : '#2d5a3d';
-    const cells = [
-      {text: String(i+1), style: 'color:var(--muted);font-size:0.65rem'},
-      {text: row.prod, style: 'font-size:0.68rem;max-width:140px;word-break:break-word'},
-      {html:true, badgeText: row.sentiment, badgeStyle: 'display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:0.62rem;font-weight:700;background:'+sentColor+'33;color:'+sentColor},
-      {html:true, badgeText: row.trend, badgeStyle: 'font-size:0.68rem;color:'+trendColor+';font-weight:600'},
-      {text: row.issue, style: 'font-size:0.67rem;max-width:160px;word-break:break-word'},
-      {text: row.reason, style: 'font-size:0.65rem;color:var(--muted);max-width:180px;word-break:break-word'},
-      {text: score+'/10', style: 'text-align:right;font-weight:700;color:'+scoreColor+';font-variant-numeric:tabular-nums'},
-    ];
-    cells.forEach(c => {
-      const td = document.createElement('td');
-      if(c.html) {
-        const badge = document.createElement('span');
-        badge.style.cssText = c.badgeStyle || '';
-        badge.textContent = c.badgeText || '';
-        td.appendChild(badge);
-      } else {
-        td.textContent = c.text;
-        if(c.style) td.style.cssText = c.style;
-      }
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  });
-}
-
-function applyFilters(){
-  const parts = [];
-  const f = getFilters();
-  if(f.scope !== 'all') parts.push({all:'All Revenue',cases:'Cases Only',messaging:'Messaging Only',converted:'Messaging → Cases'}[f.scope]||f.scope);
-  if(f.prod !== 'all'){const sel=document.getElementById('fProduct');parts.push(sel.options[sel.selectedIndex].text);}
-  if(f.date !== 'all'){const sel=document.getElementById('fDateRange');parts.push(sel.options[sel.selectedIndex].text);}
-  if(f.origin !== 'all'){const sel=document.getElementById('fOrigin');parts.push(sel.options[sel.selectedIndex].text);}
-  const el = document.getElementById('filterStatus');
-  if(el) el.textContent = parts.length ? 'Filters: '+parts.join(' · ') : '';
-  buildAll();
-}
-
-function resetFilters(){
-  ['fScope','fProduct','fDateRange','fOrigin'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='all';
-  });
-  const el=document.getElementById('filterStatus');if(el)el.textContent='';
-  buildAll();
-}
-
-function buildAll(){
-  const rows = filterData();
-  const agg = aggByProd(rows);
-  const total = rows.reduce((s,r)=>s+r.cnt,0);
-
-  /* KPI cards on products panel */
-  const TOP_CLOUDS=['Revenue-Salesforce CPQ','Revenue Cloud (Core)-Configurator','Revenue Cloud (Core)-Transaction Management','Revenue Cloud (Core)-Price Management'];
-  TOP_CLOUDS.forEach((cloud,idx)=>{
-    const r=agg.find(a=>a.cloud===cloud);
+  // Top 4 KPI cards
+  const top4=['Revenue-Salesforce CPQ','Revenue Cloud (Core)-Configurator',
+              'Revenue Cloud (Core)-Transaction Management','Revenue Cloud (Core)-Price Management'];
+  top4.forEach((cloud,i)=>{
+    const r=prods.find(p=>p.cloud===cloud);
     const cnt=r?r.cnt:0;
-    const kv=document.getElementById('kv'+idx);
-    const ks=document.getElementById('ks'+idx);
-    if(kv)kv.textContent=cnt.toLocaleString();
-    if(ks)ks.textContent=total?((cnt/total*100).toFixed(1)+'% of filtered'):'—';
+    st('kv'+i,cnt.toLocaleString());
+    st('ks'+i,total?(cnt/total*100).toFixed(1)+'% of total':'no data');
   });
 
-  buildMonthBar();
-  buildMsgBar();
+  // Active filter chip
+  const af=document.getElementById('activeFilter');
+  if(af){
+    const parts=[];
+    if(prod!=='all'){const s=document.getElementById('fProd');parts.push(s.options[s.selectedIndex].text);}
+    if(date!=='all'){const s=document.getElementById('fDate');parts.push(s.options[s.selectedIndex].text);}
+    af.style.display=parts.length?'inline-block':'none';
+    af.textContent=parts.join(' · ');
+  }
 
-  /* GEO and Severity donuts use static data (not in monthly query) */
-  buildDonut('geoDonut2','geoLegend2',GEO_STATIC);
-  buildDonut('sevDonut','sevLegend',SEV_STATIC);
+  // Bar subtitle
+  st('prodBarSub',prod==='all'?'All Revenue products · top 10 shown':(LABEL[PROD_CLOUD[prod]]||prod)+' selected · all origins');
 
-  /* prodBars: top 10 from filtered data */
-  const top10=agg.slice(0,10).map(r=>({label:PROD_LABEL[r.cloud]||r.cloud,count:r.cnt}));
-  buildHBars('prodBars',top10,PC,'118px');
-
-  buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#4a7c59','#c08030','#c05020','#b91c1c'],'130px');
-
-  /* acctBars: compute from ACCOUNT_DATA filtered by product/origin */
-  const f=getFilters();
-  let acctRows=ACCOUNT_DATA;
-  if(f.prod!=='all'&&PROD_FILTER_MAP[f.prod])acctRows=acctRows.filter(r=>r.cloud===PROD_FILTER_MAP[f.prod]);
-  if(f.origin!=='all'&&ORIGIN_FILTER_MAP[f.origin])acctRows=acctRows.filter(r=>r.origin===ORIGIN_FILTER_MAP[f.origin]);
-  const acctMap={};acctRows.forEach(r=>{acctMap[r.acct]=(acctMap[r.acct]||0)+r.cnt;});
-  const topAccts=Object.entries(acctMap).map(([acct,cnt])=>({label:acct,count:cnt})).sort((a,b)=>b.count-a.count).slice(0,10);
-  buildHBars('acctBars',topAccts,PC,'150px');
-
-  buildHBars('msgPriBars',[{label:'Normal',count:7523},{label:'Urgent',count:114},{label:'Emergency',count:77},{label:'High',count:7}],['#4a7c59','#c08030','#b91c1c','#c05020'],'90px');
-  buildProdTable();
-  buildSentimentTable();
+  // Charts and tables
+  buildMonthBar(rows);
+  buildMonthTable(rows);
+  buildProdBars(prods);
+  buildProdTable(prods,total);
 }
-buildAll();
 
-const BUILD_TS = '2026-07-17T06:17:00+05:30';
+// ════════════ TIMESTAMP ════════════
 (function(){
-  const el = document.getElementById('lastUpdated');
-  if(!el) return;
-  const d = new Date(BUILD_TS);
-  const line1 = document.createTextNode('\u{1F550} Updated');
-  const br1 = document.createElement('br');
-  const line2 = document.createTextNode(d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
-  const br2 = document.createElement('br');
-  const line3 = document.createTextNode(d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}));
-  el.append(line1,br1,line2,br2,line3);
+  const ts='Data source: Salesforce org · Origin="Chat" · Cloud__c LIKE "Revenue%" · Queried Jul 17, 2026 06:17 IST';
+  st('navTs','Jul 17, 2026 06:17 IST');
+  st('heroDate','Data as of: Jul 17, 2026 06:17 IST');
+  st('footerTs',ts);
 })();
 
+// ════════════ AUTO-RELOAD on new deploy ════════════
 (function(){
-  const REPO='PallaviSF/fy27-revenue-cloud-dashboards';
-  const FILE='Revenue%20Cloud%20FY27%20Analysis/FY27%20Support%20Analysis%20-%20Q1Q2.html';
-  let knownSha=null;
-  function check(){
-    fetch('https://api.github.com/repos/'+REPO+'/commits?path='+FILE+'&per_page=1')
+  var known=null;
+  function chk(){
+    fetch('https://api.github.com/repos/PallaviSF/fy27-revenue-cloud-dashboards/commits?path=Revenue%20Cloud%20FY27%20Analysis%2FFY27%20Support%20Analysis%20-%20Q1Q2.html&per_page=1')
       .then(function(r){return r.json();})
-      .then(function(data){
-        if(!data||!data[0]) return;
-        var sha=data[0].sha;
-        if(!knownSha){knownSha=sha;return;}
-        if(sha!==knownSha){window.location.reload(true);}
+      .then(function(d){
+        if(!d||!d[0])return;
+        if(!known){known=d[0].sha;return;}
+        if(d[0].sha!==known)window.location.reload(true);
       }).catch(function(){});
   }
-  check();
-  setInterval(check,60000);
+  chk();setInterval(chk,60000);
 })();
+
+// ════════════ INITIAL RENDER ════════════
+rebuild();
 </script>
 </body>
 </html>
