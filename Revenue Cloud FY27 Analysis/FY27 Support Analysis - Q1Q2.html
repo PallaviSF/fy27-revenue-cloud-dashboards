@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/fy27-revenue-cloud-dashboards/sw.js',{scope:'/fy27-revenue-cloud-dashboards/'}).catch(function(){});}</script>
-<title>Revenue Cloud FY27 — Chat Cases</title>
+<title>FY27 Support Chat Analysis</title>
 <style>
 /* Sage green + white — always light, no dark mode blacks */
 :root {
@@ -162,70 +162,61 @@ body{background:var(--bg);color:var(--text);display:flex;}
 
 <div class="main">
   <div class="hero">
-    <div class="hero-title">Revenue Cloud FY27 Support Analysis</div>
-    <div class="hero-pills">
-      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.1)">3,270 Revenue Accounts</span>
-      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.1)">3,422 Chat Cases</span>
-      <span class="hpill" style="border-color:rgba(107,143,107,0.4);color:#3d5c3d;background:rgba(107,143,107,0.1)">7,720 Messaging Sessions</span>
-      <span class="hpill" style="border-color:rgba(74,124,89,0.4);color:#2d5a3d;background:rgba(74,124,89,0.08)">98.7% Chat Resolved</span>
-      <span class="hpill" style="border-color:rgba(185,28,28,0.3);color:#991b1b;background:rgba(185,28,28,0.07)">88 Level-1 Critical</span>
-    </div>
-  </div>
-
-  <!-- GLOBAL FILTERS -->
-  <div id="globalFilters" style="flex-shrink:0;padding:8px 18px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap">Filters:</span>
-    <select id="fScope" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Revenue Data</option>
-      <option value="cases">Cases Only</option>
-      <option value="messaging">Messaging Sessions Only</option>
-      <option value="converted">Messaging → Case Converted</option>
-    </select>
-    <select id="fProduct" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Products</option>
-      <option value="cpq">Revenue-SF CPQ</option>
-      <option value="billing">Revenue-SF Billing</option>
-      <option value="docgen">Revenue-Doc Generation</option>
-      <option value="cpqdev">Revenue-CPQ Dev Support</option>
-      <option value="configurator">RCA-Configurator</option>
-      <option value="txmgmt">RCA-Transaction Management</option>
-      <option value="pricemgmt">RCA-Price Management</option>
-      <option value="billinv">RCA-Billing &amp; Invoicing</option>
-      <option value="pcm">RCA-Product Catalog Mgmt</option>
-      <option value="clm">RCA-CLM with DocGen</option>
-      <option value="adv">RCA-Advanced Approvals</option>
-      <option value="dro">RCA-Dynamic Rev Orch</option>
-      <option value="usage">RCA-Usage &amp; Ratings</option>
-      <option value="p2o">RCA-Dev Support P2O</option>
-      <option value="omnistudio">RCA-OmniStudio</option>
-      <option value="contracts">Revenue-SF Contracts</option>
-      <option value="billingdev">Revenue-Billing Dev Support</option>
-      <option value="biz">RCA-Business Rules Engine</option>
-      <option value="analytics">RCA-Rev Cloud Analytics</option>
-    </select>
-    <select id="fDateRange" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Dates (Feb–Jul 18, 2026)</option>
-      <option value="q1">Q1 (Feb–Apr)</option>
-      <option value="q2">Q2 (May–Jul)</option>
-      <option value="recent">Last 30 Days (Jun 17–Jul 17)</option>
-    </select>
-    <select id="fOrigin" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-      <option value="all">All Origins</option>
-      <option value="chat">Chat</option>
-      <option value="asa">ASA Case</option>
-      <option value="self">Self-Service</option>
-      <option value="internal">Salesforce Internal</option>
-      <option value="astro">Ask Astro</option>
-    </select>
-    <button onclick="applyFilters()" style="font-size:0.72rem;padding:4px 12px;border:1px solid rgba(74,124,89,0.4);border-radius:6px;background:rgba(74,124,89,0.12);color:#2d5a3d;cursor:pointer;font-weight:600">Apply</button>
-    <button onclick="resetFilters()" style="font-size:0.72rem;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer">Reset</button>
-    <span id="filterStatus" style="font-size:0.65rem;color:var(--muted);margin-left:auto"></span>
+    <div class="hero-title">FY27 Support Chat Analysis</div>
   </div>
 
   <div class="panels">
 
     <!-- OVERVIEW: Chat Raised vs Converted -->
     <div class="panel active" id="panel-overview">
+      <!-- FILTERS — Overview only; apply globally across all tabs -->
+      <div id="globalFilters" style="flex-shrink:0;padding:8px 14px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap">Filters:</span>
+        <select id="fScope" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+          <option value="all">All Revenue Data</option>
+          <option value="cases">Cases Only</option>
+          <option value="messaging">Messaging Sessions Only</option>
+          <option value="converted">Messaging → Case Converted</option>
+        </select>
+        <select id="fProduct" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+          <option value="all">All Products</option>
+          <option value="cpq">Revenue-SF CPQ</option>
+          <option value="billing">Revenue-SF Billing</option>
+          <option value="docgen">Revenue-Doc Generation</option>
+          <option value="cpqdev">Revenue-CPQ Dev Support</option>
+          <option value="configurator">RCA-Configurator</option>
+          <option value="txmgmt">RCA-Transaction Management</option>
+          <option value="pricemgmt">RCA-Price Management</option>
+          <option value="billinv">RCA-Billing &amp; Invoicing</option>
+          <option value="pcm">RCA-Product Catalog Mgmt</option>
+          <option value="clm">RCA-CLM with DocGen</option>
+          <option value="adv">RCA-Advanced Approvals</option>
+          <option value="dro">RCA-Dynamic Rev Orch</option>
+          <option value="usage">RCA-Usage &amp; Ratings</option>
+          <option value="p2o">RCA-Dev Support P2O</option>
+          <option value="omnistudio">RCA-OmniStudio</option>
+          <option value="contracts">Revenue-SF Contracts</option>
+          <option value="billingdev">Revenue-Billing Dev Support</option>
+          <option value="biz">RCA-Business Rules Engine</option>
+          <option value="analytics">RCA-Rev Cloud Analytics</option>
+        </select>
+        <select id="fDateRange" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+          <option value="all">All Dates (Feb–Jul 18, 2026)</option>
+          <option value="q1">Q1 (Feb–Apr)</option>
+          <option value="q2">Q2 (May–Jul)</option>
+          <option value="recent">Last 30 Days (Jun 17–Jul 17)</option>
+        </select>
+        <select id="fOrigin" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
+          <option value="all">All Origins</option>
+          <option value="chat">Chat</option>
+          <option value="asa">ASA Case</option>
+          <option value="self">Self-Service</option>
+          <option value="internal">Salesforce Internal</option>
+          <option value="astro">Ask Astro</option>
+        </select>
+        <button onclick="resetFilters()" style="font-size:0.72rem;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer">Reset</button>
+        <span id="filterStatus" style="font-size:0.65rem;color:var(--muted);margin-left:auto"></span>
+      </div>
       <!-- Two-column side-by-side layout -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
 
@@ -426,143 +417,157 @@ body{background:var(--bg);color:var(--text);display:flex;}
     <!-- COMPARISON (Vs) -->
     <div class="panel" id="panel-comparison">
       <div style="margin-bottom:10px">
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px">Revenue-Only · Account Adoption vs Messaging Session Adoption · Feb–Jul 18, 2026</div>
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px">Revenue-Only · Chat Cases vs All-Channel Support · Feb–Jul 18, 2026</div>
       </div>
       <!-- Top KPIs -->
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
         <div class="card c-blue">
-          <div class="card-label">Total Revenue Accounts</div>
-          <div class="card-value">3,270</div>
-          <div class="card-sub">Unique accounts · any Revenue case</div>
+          <div class="card-label">Total Revenue Cases</div>
+          <div class="card-value">15,336</div>
+          <div class="card-sub">All origins · Feb–Jul 18, 2026</div>
         </div>
         <div class="card c-green">
-          <div class="card-label">Accounts with Chat Cases</div>
-          <div class="card-value">1,245</div>
-          <div class="card-sub">38.1% of Revenue accounts</div>
+          <div class="card-label">Chat Cases</div>
+          <div class="card-value">3,422</div>
+          <div class="card-sub">22.3% of all Revenue cases</div>
         </div>
         <div class="card c-purple">
-          <div class="card-label">Accts w/ Messaging Sessions</div>
-          <div class="card-value">~320</div>
-          <div class="card-sub">~9.8% adopted Ask Astro chat</div>
+          <div class="card-label">Ask Astro Sessions (Org)</div>
+          <div class="card-value">30,753</div>
+          <div class="card-sub">Enhanced Astro Bot channel · Mar–Jul</div>
         </div>
         <div class="card c-amber">
-          <div class="card-label">Messaging → Case Conversion</div>
+          <div class="card-label">Ask Astro → Revenue Case</div>
           <div class="card-value">34</div>
-          <div class="card-sub">Revenue Ask Astro → Case</div>
+          <div class="card-sub">Messaging sessions that became Revenue cases</div>
         </div>
       </div>
 
       <!-- Two column layout -->
       <div class="cgrid g2">
-        <!-- Venn breakdown -->
+        <!-- Channel breakdown -->
         <div class="scard">
-          <div class="scard-title">Account Channel Adoption Breakdown</div>
-          <div class="scard-sub">Revenue accounts segmented by support channel used</div>
+          <div class="scard-title">Revenue Cases by Support Channel</div>
+          <div class="scard-sub">All Revenue support interactions Feb–Jul 18, 2026</div>
           <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
-            <!-- Cases Only -->
+            <!-- Chat -->
             <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(74,124,89,0.08);border:1px solid rgba(74,124,89,0.2);border-radius:8px">
               <div style="width:12px;height:12px;border-radius:3px;background:#4a7c59;flex-shrink:0"></div>
               <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#2d5a3d">Cases Only</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Accounts that raised Cases but never used Messaging Sessions</div>
+                <div style="font-size:0.75rem;font-weight:700;color:#2d5a3d">Chat (Origin = Chat)</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Revenue Cloud cases raised via Chat channel — primary dataset for this dashboard</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#2d5a3d;font-variant-numeric:tabular-nums">2,025</div>
-                <div style="font-size:0.62rem;color:var(--muted)">61.9% of Revenue accounts</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#2d5a3d;font-variant-numeric:tabular-nums">3,422</div>
+                <div style="font-size:0.62rem;color:var(--muted)">22.3% of Revenue cases</div>
               </div>
             </div>
-            <!-- Messaging Only -->
+            <!-- ASA Case -->
             <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,143,107,0.08);border:1px solid rgba(107,143,107,0.2);border-radius:8px">
               <div style="width:12px;height:12px;border-radius:3px;background:#6b8f6b;flex-shrink:0"></div>
               <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#3d5c3d">Messaging Sessions Only</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Used Ask Astro Messaging but have no Chat-origin Cases</div>
+                <div style="font-size:0.75rem;font-weight:700;color:#3d5c3d">ASA Case</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Automated Support Assignment — highest volume channel</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#3d5c3d;font-variant-numeric:tabular-nums">~286</div>
-                <div style="font-size:0.62rem;color:var(--muted)">~8.7% of Revenue accounts</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#3d5c3d;font-variant-numeric:tabular-nums">5,580</div>
+                <div style="font-size:0.62rem;color:var(--muted)">36.4% of Revenue cases</div>
               </div>
             </div>
-            <!-- Both -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(45,90,60,0.1);border:1px solid rgba(45,90,60,0.25);border-radius:8px">
+            <!-- Self-Service -->
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(45,90,60,0.08);border:1px solid rgba(45,90,60,0.2);border-radius:8px">
               <div style="width:12px;height:12px;border-radius:3px;background:#2d5a3d;flex-shrink:0"></div>
               <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#1a3d28">Both Channels</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Accounts that used both Messaging Sessions AND Chat Cases</div>
+                <div style="font-size:0.75rem;font-weight:700;color:#1a3d28">Self-Service</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Customer portal self-service submissions</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#1a3d28;font-variant-numeric:tabular-nums">~34</div>
-                <div style="font-size:0.62rem;color:var(--muted)">~1.0% overlap — high-engagement accounts</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#1a3d28;font-variant-numeric:tabular-nums">5,401</div>
+                <div style="font-size:0.62rem;color:var(--muted)">35.2% of Revenue cases</div>
               </div>
             </div>
-            <!-- Non-Chat Revenue -->
+            <!-- Salesforce Internal -->
             <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,114,128,0.06);border:1px solid rgba(107,114,128,0.15);border-radius:8px">
               <div style="width:12px;height:12px;border-radius:3px;background:#9ca3af;flex-shrink:0"></div>
               <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:var(--muted)">Revenue Cases (Non-Chat Origin)</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">ASA Case, Self-Service, SF Internal — no chat or messaging</div>
+                <div style="font-size:0.75rem;font-weight:700;color:var(--muted)">Salesforce Internal + Other</div>
+                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Internal team cases, Ask Astro escalations, Phone, Email, Partner Portal</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums">1,959</div>
-                <div style="font-size:0.62rem;color:var(--muted)">Non-chat Revenue accounts</div>
+                <div style="font-size:1.3rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums">933</div>
+                <div style="font-size:0.62rem;color:var(--muted)">6.1% · incl. 34 Ask Astro</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Adoption funnel + product breakdown -->
+        <!-- Funnel + origin table -->
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="scard">
-            <div class="scard-title">Messaging Adoption Funnel — Revenue Accounts</div>
-            <div class="scard-sub">How many Revenue accounts progressed through each channel</div>
+            <div class="scard-title">Chat vs All-Channel Volume — Monthly Trend</div>
+            <div class="scard-sub">Revenue Cloud chat cases as share of total Revenue cases per month</div>
             <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Total Revenue Accounts</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">3,270</span>
+                  <span style="font-size:0.68rem;color:var(--dim)">Feb — All Revenue</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,736 total · 897 Chat (32.8%)</span>
                 </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:100%;background:#4a7c59;border-radius:4px"></div></div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:32.8%;background:#4a7c59;border-radius:4px"></div></div>
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Accounts Used Chat Cases (38.1%)</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">1,245</span>
+                  <span style="font-size:0.68rem;color:var(--dim)">Mar — All Revenue</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,986 total · 940 Chat (31.5%)</span>
                 </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:38.1%;background:#6aab7a;border-radius:4px"></div></div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:31.5%;background:#6aab7a;border-radius:4px"></div></div>
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Accounts Used Messaging (~9.8%)</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">~320</span>
+                  <span style="font-size:0.68rem;color:var(--dim)">Apr — All Revenue</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,720 total · 842 Chat (30.9%)</span>
                 </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:9.8%;background:#8fb58f;border-radius:4px"></div></div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:30.9%;background:#8fb58f;border-radius:4px"></div></div>
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Messaging → Case Converted (1.0%)</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">34</span>
+                  <span style="font-size:0.68rem;color:var(--dim)">May — All Revenue</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,628 total · 817 Chat (31.1%)</span>
                 </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:1%;background:#c08030;border-radius:4px"></div></div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:31.1%;background:#8fb58f;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="font-size:0.68rem;color:var(--dim)">Jun — All Revenue</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,649 total · 715 Chat (27.0%)</span>
+                </div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:27%;background:#b5d5b5;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="font-size:0.68rem;color:var(--dim)">Jul 1–18 — All Revenue</span>
+                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">617 total · 211 Chat (34.2%)</span>
+                </div>
+                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:34.2%;background:#4a7c59;border-radius:4px"></div></div>
               </div>
             </div>
           </div>
 
           <div class="scard">
             <div class="scard-title">Revenue Cases by Origin — All Channels</div>
-            <div class="scard-sub">All Revenue support interactions Feb–Jul 18, 2026</div>
+            <div class="scard-sub">All Revenue support interactions Feb–Jul 18, 2026 · sourced from Salesforce Org62</div>
             <table class="tbl" style="margin-top:8px">
               <thead><tr><th>Origin</th><th style="text-align:right">Cases</th><th style="text-align:right">Share</th></tr></thead>
               <tbody>
                 <tr><td>ASA Case</td><td class="num">5,580</td><td class="num">36.4%</td></tr>
                 <tr><td>Self-Service</td><td class="num">5,401</td><td class="num">35.2%</td></tr>
-                <tr><td>Chat</td><td class="num">3,460</td><td class="num">22.6%</td></tr>
+                <tr><td>Chat</td><td class="num">3,422</td><td class="num">22.3%</td></tr>
                 <tr><td>Salesforce Internal</td><td class="num">838</td><td class="num">5.5%</td></tr>
                 <tr><td>Ask Astro (Messaging)</td><td class="num">34</td><td class="num">0.2%</td></tr>
-                <tr><td>Other</td><td class="num">23</td><td class="num">0.1%</td></tr>
+                <tr><td>Other (Phone/Email/Partner)</td><td class="num">61</td><td class="num">0.4%</td></tr>
               </tbody>
             </table>
-            <div style="margin-top:10px;padding:9px;background:rgba(192,128,48,0.08);border-radius:7px;font-size:0.67rem;color:var(--muted);line-height:1.55">
-              <strong style="color:#a06030">Messaging → Case is only 0.2% of Revenue cases.</strong> Ask Astro Messaging Sessions that escalate to Revenue Cloud cases are rare — most sessions resolve in-chat. This is an early adoption signal worth tracking as Ask Astro grows.
+            <div style="margin-top:10px;padding:9px;background:rgba(74,124,89,0.07);border-radius:7px;font-size:0.67rem;color:var(--muted);line-height:1.55">
+              <strong style="color:#2d5a3d">Note on Messaging Sessions:</strong> Ask Astro MessagingSessions and Revenue Cloud Chat Cases are separate systems — Revenue Chat cases (Origin = Chat) do not link to MessagingSession records. The 30,753 org-wide Astro sessions are Sales/internal use; only 34 escalated to Revenue Cloud cases.
             </div>
           </div>
         </div>
@@ -1221,7 +1226,7 @@ function buildAll(){
 }
 buildAll();
 
-const BUILD_TS = '2026-07-18T09:30:00+05:30';
+const BUILD_TS = '2026-07-18T15:00:00+05:30';
 (function(){
   const el = document.getElementById('lastUpdated');
   if(!el) return;
