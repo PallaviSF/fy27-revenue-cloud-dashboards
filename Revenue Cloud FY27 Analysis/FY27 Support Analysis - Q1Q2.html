@@ -217,75 +217,47 @@ body{background:var(--bg);color:var(--text);display:flex;}
         <button onclick="resetFilters()" style="font-size:0.72rem;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer">Reset</button>
         <span id="filterStatus" style="font-size:0.65rem;color:var(--muted);margin-left:auto"></span>
       </div>
-      <!-- Two-column side-by-side layout -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <!-- Chat Cases — full width -->
+      <div>
 
-        <!-- LEFT: CHATS RAISED (Messaging Sessions) -->
-        <div style="border:1px solid rgba(139,92,246,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(139,92,246,0.07),rgba(109,40,217,0.03))">
-          <div style="font-size:0.72rem;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#8b5cf6"></span>Chats Raised
+        <!-- CHAT CASES (Revenue Cloud · Origin = Chat) -->
+        <div style="border:1px solid rgba(74,124,89,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(74,124,89,0.07),rgba(45,90,60,0.03))">
+          <div style="font-size:0.72rem;font-weight:700;color:#4a7c59;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#4a7c59"></span>Revenue Cloud Chat Cases · Origin = Chat
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">
-            <div class="card c-purple" style="padding:10px 12px"><div class="card-label">Total Chats Raised</div><div class="card-value">7,720</div><div class="card-sub">Org-wide · Ask Astro</div></div>
-            <div class="card c-green" style="padding:10px 12px"><div class="card-label">Closed</div><div class="card-value">7,500</div><div class="card-sub">97.2% closure rate</div></div>
-            <div class="card c-amber" style="padding:10px 12px"><div class="card-label">Still Open</div><div class="card-value">220</div><div class="card-sub">In progress / new</div></div>
-            <div class="card c-red" style="padding:10px 12px"><div class="card-label">Emergency</div><div class="card-value">77</div><div class="card-sub">1.0% · needs review</div></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
+            <div class="card c-blue" style="padding:12px 14px"><div class="card-label">Total Chat Cases</div><div id="ov-total" class="card-value">3,492</div><div class="card-sub">Revenue Cloud · Feb–Jul 18</div></div>
+            <div class="card c-green" style="padding:12px 14px"><div class="card-label">Resolved</div><div id="ov-resolved" class="card-value">3,447</div><div class="card-sub">98.7% closure rate</div></div>
+            <div class="card c-amber" style="padding:12px 14px"><div class="card-label">Still Open</div><div id="ov-open" class="card-value">45</div><div class="card-sub">Working + Waiting</div></div>
+            <div class="card c-red" style="padding:12px 14px"><div class="card-label">Level 1 Critical</div><div id="ov-l1" class="card-value">91</div><div id="ov-l1pct" class="card-sub">2.6% of cases</div></div>
           </div>
-          <div class="scard" style="padding:10px">
-            <div class="scard-title">Monthly Trend</div>
-            <div class="scard-sub">May · Jun · Jul 2026</div>
-            <svg style="width:100%;height:100px;overflow:visible" viewBox="0 0 300 100" id="msgBar"></svg>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
-            <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);border-radius:7px;padding:8px 10px;text-align:center">
-              <div style="font-size:0.58rem;color:#a78bfa;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Urgent</div>
-              <div style="font-size:1.1rem;font-weight:800;color:#c4b5fd;font-variant-numeric:tabular-nums">114</div>
-              <div style="font-size:0.6rem;color:#a78bfa;opacity:0.8">1.5%</div>
+          <!-- Monthly trend + severity side by side -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="scard" style="padding:10px">
+              <div class="scard-title">Monthly Chat Cases Trend</div>
+              <div class="scard-sub">Feb · Mar · Apr · May · Jun · Jul 2026</div>
+              <svg style="width:100%;height:110px;overflow:visible" viewBox="0 0 300 110" id="monthBar"></svg>
             </div>
-            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:8px 10px;text-align:center">
-              <div style="font-size:0.58rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Normal</div>
-              <div style="font-size:1.1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">7,523</div>
-              <div style="font-size:0.6rem;color:#fbbf24;opacity:0.8">97.4%</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: CHAT CONVERTED TO CASE (Revenue Cloud Chat Cases) -->
-        <div style="border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(59,130,246,0.07),rgba(37,99,235,0.03))">
-          <div style="font-size:0.72rem;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3b82f6"></span>Chat Converted to Case
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">
-            <div class="card c-blue" style="padding:10px 12px"><div class="card-label">Total Cases</div><div id="ov-total" class="card-value">3,422</div><div class="card-sub">Revenue Cloud · Feb–Jul</div></div>
-            <div class="card c-green" style="padding:10px 12px"><div class="card-label">Resolved</div><div id="ov-resolved" class="card-value">3,379</div><div class="card-sub">98.7% closure rate</div></div>
-            <div class="card c-amber" style="padding:10px 12px"><div class="card-label">Still Open</div><div id="ov-open" class="card-value">43</div><div class="card-sub">Working + Waiting</div></div>
-            <div class="card c-red" style="padding:10px 12px"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% of cases</div></div>
-          </div>
-          <div class="scard" style="padding:10px">
-            <div class="scard-title">Monthly Trend</div>
-            <div class="scard-sub">Feb · Mar · Apr · May · Jun–Jul 2026</div>
-            <svg style="width:100%;height:100px;overflow:visible" viewBox="0 0 300 100" id="monthBar"></svg>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px">
-            <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#f87171;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L1 Crit</div>
-              <div id="ov-l1" style="font-size:1rem;font-weight:800;color:#fca5a5;font-variant-numeric:tabular-nums">88</div>
-              <div id="ov-l1pct" style="font-size:0.58rem;color:#f87171;opacity:0.8">2.6%</div>
-            </div>
-            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L2 Urg</div>
-              <div id="ov-l2" style="font-size:1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">399</div>
-              <div id="ov-l2pct" style="font-size:0.58rem;color:#fbbf24;opacity:0.8">11.7%</div>
-            </div>
-            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#fb923c;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L3 High</div>
-              <div id="ov-l3" style="font-size:1rem;font-weight:800;color:#fed7aa;font-variant-numeric:tabular-nums">86</div>
-              <div id="ov-l3pct" style="font-size:0.58rem;color:#fb923c;opacity:0.8">2.5%</div>
-            </div>
-            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18);border-radius:7px;padding:7px 6px;text-align:center">
-              <div style="font-size:0.55rem;color:#60a5fa;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L4 Med</div>
-              <div id="ov-l4" style="font-size:1rem;font-weight:800;color:#93c5fd;font-variant-numeric:tabular-nums">2,849</div>
-              <div style="font-size:0.58rem;color:#60a5fa;opacity:0.8">83.2%</div>
+            <div class="scard" style="padding:10px">
+              <div class="scard-title">Severity Breakdown</div>
+              <div class="scard-sub">Filtered · proportional to total chat cases</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px">
+                <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:8px 6px;text-align:center">
+                  <div style="font-size:0.55rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L2 Urgent</div>
+                  <div id="ov-l2" style="font-size:1.1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">409</div>
+                  <div id="ov-l2pct" style="font-size:0.58rem;color:#fbbf24;opacity:0.8">11.7%</div>
+                </div>
+                <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.18);border-radius:7px;padding:8px 6px;text-align:center">
+                  <div style="font-size:0.55rem;color:#fb923c;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L3 High</div>
+                  <div id="ov-l3" style="font-size:1.1rem;font-weight:800;color:#fed7aa;font-variant-numeric:tabular-nums">87</div>
+                  <div id="ov-l3pct" style="font-size:0.58rem;color:#fb923c;opacity:0.8">2.5%</div>
+                </div>
+                <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18);border-radius:7px;padding:8px 6px;text-align:center">
+                  <div style="font-size:0.55rem;color:#60a5fa;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L4 Medium</div>
+                  <div id="ov-l4" style="font-size:1.1rem;font-weight:800;color:#93c5fd;font-variant-numeric:tabular-nums">2,905</div>
+                  <div style="font-size:0.58rem;color:#60a5fa;opacity:0.8">83.2%</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
