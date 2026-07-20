@@ -426,7 +426,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
     <div class="nav-item" data-panel="messaging">
       <span class="ni">💬</span>
       <span class="nav-label">Messaging Sessions</span>
-      <span class="nbadge">7,974</span>
+      <span class="nbadge">7,971</span>
     </div>
     <div class="nav-grp">Analysis</div>
     <div class="nav-item" data-panel="sentiment">
@@ -472,7 +472,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
           <select id="fScope" class="filter-select" onchange="applyFilters()">
             <option value="all">All Cases</option>
             <option value="chat">Chat Cases (Origin=Chat)</option>
-            <option value="messaging">Chat + Messaging Session</option>
+            <option value="messaging">Cases with Messaging Session</option>
           </select>
         </div>
         <div class="filter-group">
@@ -537,9 +537,9 @@ body{background:var(--bg);color:var(--text);display:flex;}
           <div class="card-sub" id="ov-chatpct">22.6% of all Revenue cases</div>
         </div>
         <div class="card c-purple">
-          <div class="card-label">Chat + Messaging Session</div>
-          <div class="card-value" style="font-size:1.2rem;padding-top:6px">0 linked</div>
-          <div class="card-sub">Revenue Chat cases have no linked MessagingSession records — separate channel architecture</div>
+          <div class="card-label">Cases with Messaging Session</div>
+          <div id="ov-msgcases" class="card-value">7,971</div>
+          <div class="card-sub" id="ov-msgpct">Ask Astro · cases where a MessagingSession record is linked</div>
         </div>
       </div>
 
@@ -868,7 +868,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
               </tbody>
             </table>
             <div class="info-note">
-              <strong>Note on Messaging Sessions:</strong> Ask Astro MessagingSessions and Revenue Cloud Chat Cases are entirely separate systems in Org62. Revenue Chat cases (Origin = Chat) have zero linked MessagingSession records — they use a different support channel architecture. All 7,974 MessagingSessions link exclusively to Ask Astro (Origin = 'Ask Astro') cases.
+              <strong>Note on Messaging Sessions:</strong> 7,971 cases in Org62 have a linked MessagingSession record (May–Jul 2026). All are Origin = 'Ask Astro', Cloud__c = null. Revenue Chat cases (Origin = Chat) use a different channel architecture and have no linked MessagingSession records.
             </div>
           </div>
         </div>
@@ -885,24 +885,24 @@ body{background:var(--bg);color:var(--text);display:flex;}
       <!-- Top KPIs -->
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
         <div class="card c-purple">
-          <div class="card-label">Total Sessions (Feb–Jul)</div>
-          <div class="card-value">7,974</div>
-          <div class="card-sub">Ask Astro · all Revenue cases with sessions</div>
+          <div class="card-label">Total Sessions (May–Jul)</div>
+          <div class="card-value">7,971</div>
+          <div class="card-sub">Ask Astro · cases with linked MessagingSession · Org-wide</div>
         </div>
         <div class="card c-blue">
-          <div class="card-label">Ended / Closed</div>
-          <div class="card-value">7,974</div>
-          <div class="card-sub">All sessions ended — none active</div>
+          <div class="card-label">Sessions Ended</div>
+          <div class="card-value">7,971</div>
+          <div class="card-sub">All sessions closed — none currently active</div>
         </div>
         <div class="card c-teal">
-          <div class="card-label">Revenue Cases Linked</div>
-          <div class="card-value">34</div>
-          <div class="card-sub">Ask Astro sessions that escalated to a Revenue case</div>
+          <div class="card-label">Origin: Ask Astro</div>
+          <div class="card-value">7,971</div>
+          <div class="card-sub">100% of linked cases have Origin = Ask Astro</div>
         </div>
         <div class="card c-amber">
-          <div class="card-label">Chat Cases Linked</div>
-          <div class="card-value" style="font-size:1.4rem;padding-top:6px">0</div>
-          <div class="card-sub">Revenue Chat cases (Origin=Chat) have no linked sessions</div>
+          <div class="card-label">Revenue Cloud Tag</div>
+          <div class="card-value" style="font-size:1.4rem;padding-top:6px">34</div>
+          <div class="card-sub">Cases with Cloud__c set to a Revenue product (escalations)</div>
         </div>
       </div>
 
@@ -924,18 +924,18 @@ body{background:var(--bg);color:var(--text);display:flex;}
             </div>
             <div class="hbar-row">
               <div class="hbar-lbl" style="width:80px">May</div>
-              <div class="hbar-track"><div class="hbar-fill" style="width:14.2%;background:#7c3aed"></div></div>
-              <div class="hbar-val">1,131</div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:25.8%;background:#7c3aed"></div></div>
+              <div class="hbar-val">1,121</div>
             </div>
             <div class="hbar-row">
               <div class="hbar-lbl" style="width:80px">June</div>
               <div class="hbar-track"><div class="hbar-fill" style="width:100%;background:#7c3aed"></div></div>
-              <div class="hbar-val">4,346</div>
+              <div class="hbar-val">4,349</div>
             </div>
             <div class="hbar-row">
               <div class="hbar-lbl" style="width:80px">Jul 1–18</div>
               <div class="hbar-track"><div class="hbar-fill" style="width:57.5%;background:#7c3aed"></div></div>
-              <div class="hbar-val">2,497</div>
+              <div class="hbar-val">2,501</div>
             </div>
           </div>
           <div class="info-note" style="margin-top:14px">
@@ -965,19 +965,11 @@ body{background:var(--bg);color:var(--text);display:flex;}
                 <div class="ch-name">Ask Astro Sessions (Origin = Ask Astro)</div>
                 <div class="ch-desc">Internal Salesforce Ask Astro bot → creates a MessagingSession linked to a Case with Origin='Ask Astro' and Cloud__c=null. Separate pipeline from Revenue Chat support.</div>
               </div>
-              <div style="text-align:right"><div class="ch-num">7,974</div><div class="ch-pct">sessions</div></div>
-            </div>
-            <div class="ch-row" style="background:rgba(220,38,38,0.03);border-color:rgba(220,38,38,0.15)">
-              <div class="ch-dot" style="background:#dc2626"></div>
-              <div class="ch-info">
-                <div class="ch-name">Chat Cases with linked MessagingSession</div>
-                <div class="ch-desc">Per SOQL query on Org62: zero Revenue Chat cases (Origin='Chat') have a linked MessagingSession record. The two systems do not intersect.</div>
-              </div>
-              <div style="text-align:right"><div class="ch-num" style="color:#dc2626">0</div><div class="ch-pct">confirmed</div></div>
+              <div style="text-align:right"><div class="ch-num">7,971</div><div class="ch-pct">cases</div></div>
             </div>
           </div>
           <div class="info-note" style="margin-top:12px;border-left-color:#7c3aed;background:rgba(124,58,237,0.04)">
-            <strong style="color:#6d28d9">Data verified July 18, 2026:</strong> SOQL query <code style="font-size:0.65rem;background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:3px">SELECT COUNT() FROM Case WHERE Origin='Chat' AND Id IN (SELECT CaseId FROM MessagingSession)</code> returned 0 on Org62.
+            <strong style="color:#6d28d9">Data verified July 2026:</strong> SOQL: <code style="font-size:0.65rem;background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:3px">SELECT Origin, CALENDAR_MONTH(CreatedDate) mo, COUNT(Id) FROM Case WHERE Id IN (SELECT CaseId FROM MessagingSession WHERE CaseId != null) GROUP BY Origin, CALENDAR_MONTH(CreatedDate)</code> — May 1,121 · Jun 4,349 · Jul 2,501 (all Origin='Ask Astro', Cloud__c=null).
           </div>
         </div>
       </div>
@@ -1281,6 +1273,19 @@ function getFilters(){
 /* Last 30 days dataset: Jun 17 – Jul 17, 2026 (no mo field — flat cloud+origin+cnt) */
 const LAST30_DATA=[{cloud:"Revenue-Billing Developer Support",origin:"ASA Case",cnt:2},{cloud:"Revenue-Billing Developer Support",origin:"Self-Service",cnt:1},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"ASA Case",cnt:10},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Ask Astro",cnt:1},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Chat",cnt:5},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue Cloud (Core)-Advanced Approvals",origin:"Self-Service",cnt:13},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"ASA Case",cnt:36},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Chat",cnt:14},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Salesforce Internal",cnt:10},{cloud:"Revenue Cloud (Core)-Billing & Invoicing",origin:"Self-Service",cnt:42},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Chat",cnt:3},{cloud:"Revenue Cloud (Core)-Business Rules Engine",origin:"Self-Service",cnt:3},{cloud:"Revenue Cloud (Core)-Configurator",origin:"ASA Case",cnt:172},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Ask Astro",cnt:1},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Chat",cnt:111},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Partner Community Support Alias",cnt:1},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Salesforce Internal",cnt:22},{cloud:"Revenue Cloud (Core)-Configurator",origin:"Self-Service",cnt:206},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"ASA Case",cnt:20},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Chat",cnt:14},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Salesforce Internal",cnt:1},{cloud:"Revenue Cloud (Core)-Contract Lifecycle Management with DocGen",origin:"Self-Service",cnt:32},{cloud:"Revenue Cloud (Core)-Developer Support - Invoice to Cash",origin:"Self-Service",cnt:2},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"ASA Case",cnt:12},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Chat",cnt:10},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue Cloud (Core)-Developer Support - Product to Order",origin:"Self-Service",cnt:22},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"ASA Case",cnt:9},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Chat",cnt:5},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Salesforce Internal",cnt:8},{cloud:"Revenue Cloud (Core)-Dynamic Revenue Orchestration",origin:"Self-Service",cnt:24},{cloud:"Revenue Cloud (Core)-OmniStudio",origin:"Self-Service",cnt:8},{cloud:"Revenue Cloud (Core)-Price Management",origin:"ASA Case",cnt:56},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Chat",cnt:51},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Salesforce Internal",cnt:5},{cloud:"Revenue Cloud (Core)-Price Management",origin:"Self-Service",cnt:85},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"ASA Case",cnt:15},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Chat",cnt:18},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Salesforce Internal",cnt:8},{cloud:"Revenue Cloud (Core)-Product Catalog Management",origin:"Self-Service",cnt:27},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Salesforce Internal",cnt:3},{cloud:"Revenue Cloud (Core)-Revenue Cloud Analytics",origin:"Self-Service",cnt:1},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"ASA Case",cnt:112},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Chat",cnt:53},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Salesforce Internal",cnt:14},{cloud:"Revenue Cloud (Core)-Transaction Management",origin:"Self-Service",cnt:126},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"ASA Case",cnt:3},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Chat",cnt:6},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Salesforce Internal",cnt:2},{cloud:"Revenue Cloud (Core)-Usage & Ratings",origin:"Self-Service",cnt:17},{cloud:"Revenue-CPQ Developer Support",origin:"ASA Case",cnt:40},{cloud:"Revenue-CPQ Developer Support",origin:"Chat",cnt:43},{cloud:"Revenue-CPQ Developer Support",origin:"Outbound contact",cnt:1},{cloud:"Revenue-CPQ Developer Support",origin:"Salesforce Internal",cnt:3},{cloud:"Revenue-CPQ Developer Support",origin:"Self-Service",cnt:50},{cloud:"Revenue-Document Generation",origin:"ASA Case",cnt:25},{cloud:"Revenue-Document Generation",origin:"Chat",cnt:27},{cloud:"Revenue-Document Generation",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue-Document Generation",origin:"Self-Service",cnt:14},{cloud:"Revenue-Salesforce Billing",origin:"ASA Case",cnt:32},{cloud:"Revenue-Salesforce Billing",origin:"Chat",cnt:23},{cloud:"Revenue-Salesforce Billing",origin:"Salesforce Internal",cnt:6},{cloud:"Revenue-Salesforce Billing",origin:"Self-Service",cnt:42},{cloud:"Revenue-Salesforce Contracts",origin:"ASA Case",cnt:2},{cloud:"Revenue-Salesforce Contracts",origin:"Chat",cnt:1},{cloud:"Revenue-Salesforce Contracts",origin:"Salesforce Internal",cnt:4},{cloud:"Revenue-Salesforce Contracts",origin:"Self-Service",cnt:2},{cloud:"Revenue-Salesforce CPQ",origin:"ASA Case",cnt:269},{cloud:"Revenue-Salesforce CPQ",origin:"Ask Astro",cnt:1},{cloud:"Revenue-Salesforce CPQ",origin:"Chat",cnt:259},{cloud:"Revenue-Salesforce CPQ",origin:"Salesforce Internal",cnt:8},{cloud:"Revenue-Salesforce CPQ",origin:"Self-Service",cnt:141}]
 
+/* Cases WHERE a MessagingSession record exists as a related object (CaseId in MessagingSession).
+   All are Origin='Ask Astro', Cloud__c=null. Org-wide (not Revenue-specific).
+   Source: SELECT Origin, CALENDAR_MONTH(CreatedDate) mo, COUNT(Id) FROM Case
+           WHERE Id IN (SELECT CaseId FROM MessagingSession WHERE CaseId!=null)
+           AND CreatedDate >= 2026-02-01T00:00:00Z AND CreatedDate <= 2026-07-18T23:59:59Z
+           GROUP BY Origin, CALENDAR_MONTH(CreatedDate)
+   Result: May=1121, Jun=4349, Jul(1-18)=2501  Total=7971 */
+const MSESSION_DATA=[
+  {origin:"Ask Astro",mo:5,cnt:1121},
+  {origin:"Ask Astro",mo:6,cnt:4349},
+  {origin:"Ask Astro",mo:7,cnt:2501}
+];
+
 /* Filter data by active filters.
    Three scopes:
    - "all"       → all Case records (all origins)
@@ -1306,14 +1311,21 @@ function filterData(){
       const want = ORIGIN_FILTER_MAP[f.origin];
       if(want && row.origin !== want) return false;
     }
-    // Scope — new three-category model
+    // Scope — three-category model
     if(f.scope === 'chat'){
       if(row.origin !== 'Chat') return false;
-    } else if(f.scope === 'messaging'){
-      // Chat Cases with linked MessagingSession = 0 in Org62; return nothing
-      return false;
     }
     // scope === 'all' → no origin restriction
+    return true;
+  });
+}
+
+/* Cases with linked MessagingSession (MSESSION_DATA), filtered by date */
+function filterMsessionData(){
+  const f = getFilters();
+  const months = MONTH_FILTER[f.date] === 'last30' ? null : (MONTH_FILTER[f.date] || MONTH_FILTER.all);
+  return MSESSION_DATA.filter(row => {
+    if(months && !months.includes(row.mo)) return false;
     return true;
   });
 }
@@ -1564,7 +1576,7 @@ function buildSentimentTable(){
     const td = document.createElement('td');
     td.colSpan = 7;
     td.style.cssText = 'text-align:center;padding:20px;color:var(--muted);font-size:0.72rem';
-    td.textContent = 'No records — Revenue Chat cases have zero linked MessagingSession records in Org62.';
+    td.textContent = 'Sentiment data not available for Ask Astro (Messaging Session) cases — these cases use a separate support channel.';
     note.appendChild(td);
     tbody.appendChild(note);
     return;
@@ -1610,7 +1622,7 @@ function buildSentimentTable(){
 function applyFilters(){
   const parts = [];
   const f = getFilters();
-  if(f.scope !== 'all') parts.push({all:'All Cases',chat:'Chat Cases',messaging:'Chat + Session'}[f.scope]||f.scope);
+  if(f.scope !== 'all') parts.push({all:'All Cases',chat:'Chat Cases',messaging:'Msging Session Cases'}[f.scope]||f.scope);
   if(f.prod !== 'all'){const sel=document.getElementById('fProduct');parts.push(sel.options[sel.selectedIndex].text);}
   if(f.date !== 'all'){const sel=document.getElementById('fDateRange');parts.push(sel.options[sel.selectedIndex].text);}
   if(f.origin !== 'all'){const sel=document.getElementById('fOrigin');parts.push(sel.options[sel.selectedIndex].text);}
@@ -1648,11 +1660,18 @@ function buildAll(){
   const allCasesTotal = allCasesRows.reduce((s,r)=>s+r.cnt,0);
   const chatOnlyRows = filterChatOnly();
   const chatOnlyTotal = chatOnlyRows.reduce((s,r)=>s+r.cnt,0);
+  const msessionRows = filterMsessionData();
+  const msessionTotal = msessionRows.reduce((s,r)=>s+r.cnt,0);
   st('ov-allcases', allCasesTotal.toLocaleString());
   st('ov-chatcases', chatOnlyTotal.toLocaleString());
+  st('ov-msgcases', msessionTotal.toLocaleString());
   if(allCasesTotal){
     const el=document.getElementById('ov-chatpct');
     if(el) el.textContent = (chatOnlyTotal/allCasesTotal*100).toFixed(1)+'% of all Revenue cases';
+  }
+  {
+    const el=document.getElementById('ov-msgpct');
+    if(el) el.textContent = msessionTotal.toLocaleString()+' Ask Astro cases · MessagingSession linked';
   }
 
   /* ── Chat Cases Detail section ── */
@@ -1716,7 +1735,7 @@ function buildAll(){
 }
 buildAll();
 
-const BUILD_TS = '2026-07-18T16:30:00+05:30';
+const BUILD_TS = '2026-07-20T12:00:00+05:30';
 (function(){
   const el = document.getElementById('lastUpdated');
   if(!el) return;
