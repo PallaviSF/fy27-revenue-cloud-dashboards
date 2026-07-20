@@ -254,6 +254,15 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
 #filterStatus{font-size:0.65rem;color:var(--accent);font-weight:500;margin-left:auto;}
 
 /* ── HORIZONTAL BARS ─────────────────────────────────────────────── */
+/* ── PRODUCT FLASHCARD GRID ─────────────────────────────────────── */
+.prod-fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:4px;}
+.prod-fc{background:var(--card);border:1px solid rgba(15,113,115,0.13);border-radius:10px;padding:10px 11px;cursor:default;transition:box-shadow 0.18s,transform 0.15s;}
+.prod-fc:hover{box-shadow:0 4px 18px rgba(15,113,115,0.15);transform:translateY(-2px);}
+.prod-fc-rank{font-size:0.58rem;color:var(--muted);font-weight:700;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:3px;}
+.prod-fc-name{font-size:0.7rem;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:5px;min-height:2em;}
+.prod-fc-count{font-size:1.1rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1;}
+.prod-fc-pct{font-size:0.6rem;color:var(--muted);margin-top:2px;}
+.prod-fc-case{font-size:0.55rem;color:var(--muted);margin-top:5px;padding-top:5px;border-top:1px solid rgba(0,0,0,0.06);font-variant-numeric:tabular-nums;}
 .hbar-list{display:flex;flex-direction:column;gap:7px;}
 .hbar-row{display:flex;align-items:center;gap:8px;}
 .hbar-lbl{font-size:0.68rem;color:var(--dim);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
@@ -527,7 +536,6 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
   </div>
   <div class="nav-foot">
     <div class="nav-foot-inner">
-      <button class="theme-btn" onclick="toggleTheme()">🌓 Toggle theme</button>
       <div id="lastUpdated"></div>
     </div>
   </div>
@@ -541,7 +549,6 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     <div class="hero-right">
       <span class="hero-tag hero-tag-teal">FY27</span>
       <span class="hero-tag hero-tag-grey">Feb–Jul 21, 2026</span>
-      <span class="hero-tag hero-tag-grey">Org62</span>
     </div>
   </div>
 
@@ -551,9 +558,8 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     <div class="filter-group">
       <label>Scope</label>
       <select id="fScope" class="filter-select" onchange="applyFilters()">
-        <option value="all">All Cases</option>
-        <option value="chat">Chat Transformed to Cases</option>
         <option value="messaging">Chats Raised</option>
+        <option value="chat">Chat Transformed to Cases</option>
       </select>
     </div>
     <div class="filter-group">
@@ -701,22 +707,15 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
 
     <!-- PRODUCTS -->
     <div class="panel" id="panel-products">
-      <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
-        <div class="card c-blue"><div class="card-label">SF CPQ</div><div id="kv0" class="card-value">1,566</div><div id="ks0" class="card-sub">45.2% of chat cases</div></div>
-        <div class="card c-purple"><div class="card-label">RCA Configurator</div><div id="kv1" class="card-value">468</div><div id="ks1" class="card-sub">13.5%</div></div>
-        <div class="card c-cyan"><div class="card-label">Transaction Mgmt</div><div id="kv2" class="card-value">262</div><div id="ks2" class="card-sub">7.6%</div></div>
-        <div class="card c-amber"><div class="card-label">Price Management</div><div id="kv3" class="card-value">213</div><div id="ks3" class="card-sub">6.2%</div></div>
-      </div>
-      <div class="cgrid g12">
+      <div id="prod-flashcards" class="prod-fc-grid"></div>
+      <div class="cgrid g2" style="margin-top:14px">
         <div class="scard">
           <div class="scard-title">Volume by Product</div>
-          <div class="scard-sub">Top 10 · all Revenue products with chat origin</div>
           <div class="hbar-list" id="prodBars"></div>
         </div>
         <div class="scard">
-          <div class="scard-title">All 19 Revenue Products</div>
-          <div class="scard-sub">Ranked by chat case count · Feb–Jul 21, 2026</div>
-          <table class="tbl"><thead><tr><th>#</th><th>Product</th><th style="text-align:right">Cases</th><th style="text-align:right">%</th></tr></thead><tbody id="prodTableBody"></tbody></table>
+          <div class="scard-title">Monthly Chat Transformed to Cases</div>
+          <svg style="width:100%;height:110px;overflow:visible" viewBox="0 0 300 110" id="prodMonthBar"></svg>
         </div>
       </div>
     </div>
@@ -725,7 +724,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     <div class="panel" id="panel-geo">
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
         <div class="card c-blue"><div class="card-label">AMER</div><div class="card-value">2,358</div><div class="card-sub">68.9% · +16pp vs all-Rev</div></div>
-        <div class="card c-green"><div class="card-label">APAC (incl. JP)</div><div class="card-value">683</div><div class="card-sub">20.0% · −9pp vs all-Rev</div></div>
+        <div class="card c-green"><div class="card-label">APAC</div><div class="card-value">683</div><div class="card-sub">20.0% · −9pp vs all-Rev</div></div>
         <div class="card c-pink"><div class="card-label">EMEA</div><div class="card-value">329</div><div class="card-sub">9.6% · −7pp vs all-Rev</div></div>
         <div class="card" style="background:linear-gradient(135deg,rgba(107,114,128,0.16),rgba(107,114,128,0.04))"><div class="card-label" style="color:#9ca3af">Untagged</div><div class="card-value" style="color:#d1d5db">52</div><div class="card-sub" style="color:#9ca3af">GEO not set</div></div>
       </div>
@@ -745,7 +744,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
             <thead><tr><th>GEO</th><th style="text-align:right">Chat</th><th style="text-align:right">Chat %</th><th style="text-align:right">All Rev %</th><th>Delta</th></tr></thead>
             <tbody>
               <tr><td><span class="dot" style="background:#3b82f6"></span>AMER</td><td class="num">2,358</td><td class="num">68.9%</td><td class="num">53.1%</td><td><span class="badge b-up">+16pp</span></td></tr>
-              <tr><td><span class="dot" style="background:#10b981"></span>APAC (incl. JP)</td><td class="num">683</td><td class="num">20.0%</td><td class="num">30.1%</td><td><span class="badge b-dn">−10pp</span></td></tr>
+              <tr><td><span class="dot" style="background:#10b981"></span>APAC</td><td class="num">683</td><td class="num">20.0%</td><td class="num">30.1%</td><td><span class="badge b-dn">−10pp</span></td></tr>
               <tr><td><span class="dot" style="background:#ec4899"></span>EMEA</td><td class="num">329</td><td class="num">9.6%</td><td class="num">16.6%</td><td><span class="badge b-dn">−7pp</span></td></tr>
               <tr><td><span class="dot" style="background:#6b7280"></span>Untagged</td><td class="num">52</td><td class="num">1.5%</td><td class="num">—</td><td><span class="badge" style="background:rgba(107,114,128,0.12);color:#9ca3af">—</span></td></tr>
             </tbody>
@@ -1227,7 +1226,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
         <div class="ins" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(139,92,246,0.03));border-color:rgba(139,92,246,0.2)">
           <div class="ins-num" style="color:#a78bfa">05 — GEO</div>
           <div class="ins-head">AMER over-indexed by +16pp in chat usage</div>
-          <div class="ins-body">AMER represents 68.9% of Revenue chat vs 53.1% of all Revenue cases. APAC (incl. JP, 683 cases) and EMEA under-use chat proportionally. Investigate timezone coverage gaps or promote chat as a channel in these regions.</div>
+          <div class="ins-body">AMER represents 68.9% of Revenue chat vs 53.1% of all Revenue cases. APAC (683 cases) and EMEA under-use chat proportionally. Investigate timezone coverage gaps or promote chat as a channel in these regions.</div>
         </div>
         <div class="ins" style="background:linear-gradient(135deg,rgba(6,182,212,0.12),rgba(6,182,212,0.03));border-color:rgba(6,182,212,0.2)">
           <div class="ins-num" style="color:#22d3ee">06 — Accounts</div>
@@ -1451,8 +1450,15 @@ function aggByOrigin(rows){
   return map;
 }
 
+function buildBarSvg(svgId){
+  const svgEl=document.getElementById(svgId);if(!svgEl)return;
+  buildMonthBarOn(svgEl);
+}
 function buildMonthBar(){
   const svg=document.getElementById('monthBar');if(!svg)return;
+  buildMonthBarOn(svg);
+}
+function buildMonthBarOn(svg){
   while(svg.firstChild)svg.removeChild(svg.firstChild);
   const ns='http://www.w3.org/2000/svg';
   const mk=(tag,a)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));return el;};
@@ -1554,7 +1560,50 @@ function buildProdTable(){
   });
 }
 
-const GEO_STATIC=[{label:'AMER',count:2422,color:'#0f7173'},{label:'APAC (incl. JP)',count:710,color:'#2563eb'},{label:'EMEA',count:333,color:'#7c3aed'},{label:'Untagged',count:55,color:'#9ca3af'}];
+/* One representative global case number per product (most recent chat case) */
+const PROD_CASE_MAP = {
+  'Revenue-Salesforce CPQ':                                         '67047818',
+  'Revenue Cloud (Core)-Configurator':                              '67044812',
+  'Revenue Cloud (Core)-Transaction Management':                    '67018705',
+  'Revenue Cloud (Core)-Price Management':                          '67015918',
+  'Revenue-CPQ Developer Support':                                  '67025973',
+  'Revenue-Document Generation':                                    '67025980',
+  'Revenue-Salesforce Billing':                                     '67047420',
+  'Revenue Cloud (Core)-Product Catalog Management':                '67006110',
+  'Revenue Cloud (Core)-Developer Support - Product to Order':      '66988347',
+  'Revenue Cloud (Core)-Billing & Invoicing':                       '67041008',
+  'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen': '67042448',
+  'Revenue Cloud (Core)-Advanced Approvals':                        '67045309',
+  'Revenue Cloud (Core)-Dynamic Revenue Orchestration':             '66989109',
+  'Revenue Cloud (Core)-Usage & Ratings':                           '67016780',
+  'Revenue Cloud (Core)-Business Rules Engine':                     '66975680',
+  'Revenue Cloud (Core)-OmniStudio':                                '58210216',
+  'Revenue-Salesforce Contracts':                                   '67000257',
+  'Revenue Cloud (Core)-Revenue Cloud Analytics':                   '58233969',
+  'Revenue-Billing Developer Support':                              '59687286'
+};
+
+function buildProdFlashcards(){
+  const el=document.getElementById('prod-flashcards');if(!el)return;
+  while(el.firstChild)el.removeChild(el.firstChild);
+  const rows=filterData();
+  const agg=aggByProd(rows);
+  const total=agg.reduce((s,r)=>s+r.cnt,0)||1;
+  const colors=PC;
+  agg.forEach((r,i)=>{
+    const fc=document.createElement('div');fc.className='prod-fc';
+    const rank=document.createElement('div');rank.className='prod-fc-rank';rank.textContent='#'+(i+1);
+    const name=document.createElement('div');name.className='prod-fc-name';name.textContent=PROD_LABEL[r.cloud]||r.cloud;
+    const cnt=document.createElement('div');cnt.className='prod-fc-count';cnt.style.color=colors[i%colors.length];cnt.textContent=r.cnt.toLocaleString();
+    const pct=document.createElement('div');pct.className='prod-fc-pct';pct.textContent=(r.cnt/total*100).toFixed(1)+'% of total';
+    const caseNum=PROD_CASE_MAP[r.cloud];
+    fc.append(rank,name,cnt,pct);
+    if(caseNum){const c=document.createElement('div');c.className='prod-fc-case';c.textContent='eg. Case #'+caseNum;fc.appendChild(c);}
+    el.appendChild(fc);
+  });
+}
+
+const GEO_STATIC=[{label:'AMER',count:2422,color:'#0f7173'},{label:'APAC',count:710,color:'#2563eb'},{label:'EMEA',count:333,color:'#7c3aed'},{label:'Untagged',count:55,color:'#9ca3af'}];
 const SEV_STATIC=[{label:'L4 Medium',count:2849,color:'#2563eb'},{label:'L2 Urgent',count:399,color:'#d97706'},{label:'L1 Critical',count:88,color:'#dc2626'},{label:'L3 High',count:86,color:'#ea580c'}];
 const PC=['#0f7173','#2563eb','#7c3aed','#d97706','#16a34a','#dc2626','#0891b2','#ea580c','#6b7a99','#374260'];
 
@@ -1717,9 +1766,10 @@ function applyFilters(){
 }
 
 function resetFilters(){
-  ['fScope','fProduct','fDateRange','fOrigin'].forEach(id=>{
+  ['fProduct','fDateRange','fOrigin'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='all';
   });
+  const sc=document.getElementById('fScope');if(sc)sc.value='messaging';
   const el=document.getElementById('filterStatus');if(el)el.textContent='';
   buildAll();
 }
@@ -1799,9 +1849,11 @@ function buildAll(){
   buildDonut('geoDonut2','geoLegend2',GEO_STATIC);
   buildDonut('sevDonut','sevLegend',SEV_STATIC);
 
-  /* prodBars: top 10 from filtered data */
-  const top10=agg.slice(0,10).map(r=>({label:PROD_LABEL[r.cloud]||r.cloud,count:r.cnt}));
+  /* prodBars + flashcards */
+  const top10=agg.map(r=>({label:PROD_LABEL[r.cloud]||r.cloud,count:r.cnt}));
   buildHBars('prodBars',top10,PC,'118px');
+  buildProdFlashcards();
+  buildBarSvg('prodMonthBar');
 
   buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#2563eb','#d97706','#ea580c','#dc2626'],'130px');
 
@@ -1814,7 +1866,6 @@ function buildAll(){
   buildHBars('acctBars',topAccts,PC,'150px');
 
   buildHBars('msgPriBars',[{label:'Normal',count:7523},{label:'Urgent',count:114},{label:'Emergency',count:77},{label:'High',count:7}],['#4a7c59','#c08030','#b91c1c','#c05020'],'90px');
-  buildProdTable();
   buildSentimentTable();
 }
 buildAll();
