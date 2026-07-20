@@ -512,11 +512,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
       <span class="nav-label">Comparison</span>
       <span class="nbadge">vs All</span>
     </div>
-    <div class="nav-item" data-panel="messaging">
-      <span class="ni">💬</span>
-      <span class="nav-label">Messaging Sessions</span>
-      <span class="nbadge">7,971</span>
-    </div>
+
     <div class="nav-grp">Analysis</div>
     <div class="nav-item" data-panel="sentiment">
       <span class="ni">🧠</span>
@@ -549,14 +545,14 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     </div>
   </div>
 
-  <!-- GLOBAL FILTER STRIP — always visible across all tabs -->
-  <div id="globalFilters" class="filter-strip">
+  <!-- FILTER STRIP — shown only on Products and GEO Split panels -->
+  <div id="globalFilters" class="filter-strip" style="display:none">
     <span class="filters-label">Filters</span>
     <div class="filter-group">
       <label>Scope</label>
       <select id="fScope" class="filter-select" onchange="applyFilters()">
         <option value="all">All Cases</option>
-        <option value="chat">Cases Converted to Chat</option>
+        <option value="chat">Chat Transformed to Cases</option>
         <option value="messaging">Chats Raised</option>
       </select>
     </div>
@@ -622,7 +618,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           <div class="card-sub">All origins · Feb–Jul 21, 2026</div>
         </div>
         <div class="card c-teal">
-          <div class="card-label">Cases Converted to Chat</div>
+          <div class="card-label">Chat Transformed to Cases</div>
           <div id="ov-chatcases" class="card-value">3,520</div>
           <div class="card-sub" id="ov-chatpct">22.7% of all Revenue cases</div>
         </div>
@@ -636,13 +632,12 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
       <div class="ov-section">
         <div class="section-strip">
           <span class="ss-dot"></span>
-          <span class="ss-title">Cases Converted to Chat — Detail</span>
-          <span class="ss-sub">Origin = Chat · updates with filter selections above</span>
+          <span class="ss-title">Chat Transformed to Cases — Detail</span>
         </div>
         <!-- 4-col KPI row -->
         <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
           <div class="card c-teal">
-            <div class="card-label">Total (Converted to Chat)</div>
+            <div class="card-label">Total (Chat Transformed to Cases)</div>
             <div id="ov-total" class="card-value">3,520</div>
             <div class="card-sub">Revenue Cloud · Feb–Jul 21</div>
           </div>
@@ -667,7 +662,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           <div class="scard">
             <div class="scard-header">
               <div>
-                <div class="scard-title">Monthly Cases Converted to Chat</div>
+                <div class="scard-title">Monthly Chat Transformed to Cases</div>
                 <div class="scard-sub">Feb · Mar · Apr · May · Jun · Jul 2026</div>
               </div>
               <span class="scard-badge">Monthly</span>
@@ -830,7 +825,6 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
       <div class="section-strip" style="margin-bottom:16px">
         <span class="ss-dot"></span>
         <span class="ss-title">Chat vs All-Channel</span>
-        <span class="ss-sub">Revenue Cloud · Feb–Jul 21, 2026</span>
       </div>
       <!-- Top KPIs -->
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
@@ -840,7 +834,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           <div class="card-sub">All origins · Feb–Jul 21, 2026</div>
         </div>
         <div class="card c-teal">
-          <div class="card-label">Cases Converted to Chat</div>
+          <div class="card-label">Chat Transformed to Cases</div>
           <div class="card-value">3,520</div>
           <div class="card-sub">22.7% of all Revenue cases</div>
         </div>
@@ -970,7 +964,6 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
       <div class="section-strip" style="margin-bottom:16px">
         <span class="ss-dot" style="background:#7c3aed"></span>
         <span class="ss-title" style="color:#7c3aed">Messaging Sessions</span>
-        <span class="ss-sub">Ask Astro · Org-wide · Feb–Jul 21, 2026</span>
       </div>
       <!-- Top KPIs -->
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
@@ -1106,7 +1099,6 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
       <div class="section-strip" style="margin-bottom:16px">
         <span class="ss-dot"></span>
         <span class="ss-title">AI Sentiment Analysis</span>
-        <span class="ss-sub">Revenue Messaging Sessions → Cases · 34 records · AI-inferred</span>
       </div>
 
       <!-- Summary KPI row -->
@@ -1277,6 +1269,9 @@ document.querySelectorAll('.nav-item').forEach(item=>{
     const crumb=document.getElementById('heroCrumb');
     const lbl=item.querySelector('.nav-label');
     if(crumb&&lbl)crumb.textContent=lbl.textContent;
+    const filtersPanel=['products','geo'];
+    const gf=document.getElementById('globalFilters');
+    if(gf)gf.style.display=filtersPanel.includes(item.dataset.panel)?'flex':'none';
     buildAll();
   });
 });
@@ -1712,7 +1707,7 @@ function buildSentimentTable(){
 function applyFilters(){
   const parts = [];
   const f = getFilters();
-  if(f.scope !== 'all') parts.push({all:'All Cases',chat:'Cases Converted to Chat',messaging:'Chats Raised'}[f.scope]||f.scope);
+  if(f.scope !== 'all') parts.push({all:'All Cases',chat:'Chat Transformed to Cases',messaging:'Chats Raised'}[f.scope]||f.scope);
   if(f.prod !== 'all'){const sel=document.getElementById('fProduct');parts.push(sel.options[sel.selectedIndex].text);}
   if(f.date !== 'all'){const sel=document.getElementById('fDateRange');parts.push(sel.options[sel.selectedIndex].text);}
   if(f.origin !== 'all'){const sel=document.getElementById('fOrigin');parts.push(sel.options[sel.selectedIndex].text);}
