@@ -1811,7 +1811,6 @@ function buildAll(){
   buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#2563eb','#d97706','#ea580c','#dc2626'],'130px');
 
   /* acctBars: compute from ACCOUNT_DATA filtered by product/origin */
-  const f=getFilters();
   let acctRows=ACCOUNT_DATA;
   if(f.prod!=='all'&&PROD_FILTER_MAP[f.prod])acctRows=acctRows.filter(r=>r.cloud===PROD_FILTER_MAP[f.prod]);
   if(f.origin!=='all'&&ORIGIN_FILTER_MAP[f.origin])acctRows=acctRows.filter(r=>r.origin===ORIGIN_FILTER_MAP[f.origin]);
