@@ -707,15 +707,35 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
 
     <!-- PRODUCTS -->
     <div class="panel" id="panel-products">
-      <div id="prod-flashcards" class="prod-fc-grid"></div>
-      <div class="cgrid g2" style="margin-top:14px">
-        <div class="scard">
-          <div class="scard-title">Volume by Product</div>
-          <div class="hbar-list" id="prodBars"></div>
+      <div class="cgrid g21" style="gap:14px;align-items:start">
+        <div>
+          <div id="prod-flashcards" class="prod-fc-grid"></div>
+          <div class="cgrid g2" style="margin-top:14px">
+            <div class="scard">
+              <div class="scard-title">Volume by Product</div>
+              <div class="hbar-list" id="prodBars"></div>
+            </div>
+            <div class="scard">
+              <div class="scard-title">Monthly Chat Transformed to Cases</div>
+              <svg style="width:100%;height:110px;overflow:visible" viewBox="0 0 300 110" id="prodMonthBar"></svg>
+            </div>
+          </div>
         </div>
-        <div class="scard">
-          <div class="scard-title">Monthly Chat Transformed to Cases</div>
-          <svg style="width:100%;height:110px;overflow:visible" viewBox="0 0 300 110" id="prodMonthBar"></svg>
+        <div class="scard" style="overflow-y:auto;max-height:calc(100vh - 130px)">
+          <div class="scard-title" style="margin-bottom:4px">Latest Chat Case per Product</div>
+          <div class="scard-sub" style="margin-bottom:10px">Global Case # · most recent FY27 chat case</div>
+          <table class="tbl" style="font-size:0.65rem">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Case #</th>
+                <th>Subject</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="prodCaseTbody"></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1560,27 +1580,27 @@ function buildProdTable(){
   });
 }
 
-/* One representative global case number per product (most recent chat case) */
-const PROD_CASE_MAP = {
-  'Revenue-Salesforce CPQ':                                         '67047818',
-  'Revenue Cloud (Core)-Configurator':                              '67044812',
-  'Revenue Cloud (Core)-Transaction Management':                    '67018705',
-  'Revenue Cloud (Core)-Price Management':                          '67015918',
-  'Revenue-CPQ Developer Support':                                  '67025973',
-  'Revenue-Document Generation':                                    '67025980',
-  'Revenue-Salesforce Billing':                                     '67047420',
-  'Revenue Cloud (Core)-Product Catalog Management':                '67006110',
-  'Revenue Cloud (Core)-Developer Support - Product to Order':      '66988347',
-  'Revenue Cloud (Core)-Billing & Invoicing':                       '67041008',
-  'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen': '67042448',
-  'Revenue Cloud (Core)-Advanced Approvals':                        '67045309',
-  'Revenue Cloud (Core)-Dynamic Revenue Orchestration':             '66989109',
-  'Revenue Cloud (Core)-Usage & Ratings':                           '67016780',
-  'Revenue Cloud (Core)-Business Rules Engine':                     '66975680',
-  'Revenue Cloud (Core)-OmniStudio':                                '58210216',
-  'Revenue-Salesforce Contracts':                                   '67000257',
-  'Revenue Cloud (Core)-Revenue Cloud Analytics':                   '58233969',
-  'Revenue-Billing Developer Support':                              '59687286'
+/* Global Case details per product — most recent FY27 chat case (Global_Case__c field) */
+const PROD_CASE_DETAILS = {
+  'Revenue-Salesforce CPQ':                                         {gc:'474127312', subj:'API Only User error', sev:'Normal', status:'Closed - Resolved'},
+  'Revenue Cloud (Core)-Configurator':                              {gc:'474092422', subj:'Rate Card Entry issue', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Transaction Management':                    {gc:'474113679', subj:'Agent assistance request', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Price Management':                          {gc:'474112095', subj:'The pricing is not calculated correctly on org 00DUC000005PjBx', sev:'Normal', status:'Closed'},
+  'Revenue-CPQ Developer Support':                                  {gc:'474049688', subj:'Error in screenflow Opportunity_Post_Send_to_Purchasing_Renewal', sev:'Normal', status:'Closed'},
+  'Revenue-Document Generation':                                    {gc:'474075250', subj:'Revert incorrect fix for Quote - No Price Breakdown template', sev:'Normal', status:'Closed'},
+  'Revenue-Salesforce Billing':                                     {gc:'474127180', subj:'Non admin users unable to create credit notes', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Product Catalog Management':                {gc:'474106229', subj:'Error on the quote line', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Developer Support - Product to Order':      {gc:'474038020', subj:'Urgent Production Issue: POST Apex Hook in Procedure Plan', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Billing & Invoicing':                       {gc:'474122920', subj:'Tax calculation issue on invoice', sev:'Normal', status:'New'},
+  'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen': {gc:'474124233', subj:"Unable to see 'Design document template' in Revenue Cloud", sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Advanced Approvals':                        {gc:'474117608', subj:'Issue with preview quote approval workflow', sev:'Normal', status:'Working'},
+  'Revenue Cloud (Core)-Dynamic Revenue Orchestration':             {gc:'474094815', subj:'Debugging custom flow orchestration step not moving to in progress', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Usage & Ratings':                           {gc:'474112220', subj:'Prices not reflecting for usage-based products', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-Business Rules Engine':                     {gc:'474043787', subj:'Permission error accessing custom Pricing Procedures', sev:'Normal', status:'Closed'},
+  'Revenue Cloud (Core)-OmniStudio':                                {gc:'473573554', subj:'Single Doc Core - DOCX Serverside(LWC) omniscript tokens not translating', sev:'Normal', status:'Closed'},
+  'Revenue-Salesforce Contracts':                                   {gc:'474081114', subj:'Issue with amend/renew quote in Revenue Cloud', sev:'Normal', status:'Closed - Resolved'},
+  'Revenue Cloud (Core)-Revenue Cloud Analytics':                   {gc:'473575416', subj:'Help with Revenue Intelligence dashboard setup', sev:'Normal', status:'Closed'},
+  'Revenue-Billing Developer Support':                              {gc:'473632424', subj:'Refund functionality issue', sev:'Normal', status:'Closed'}
 };
 
 function buildProdFlashcards(){
@@ -1596,10 +1616,34 @@ function buildProdFlashcards(){
     const name=document.createElement('div');name.className='prod-fc-name';name.textContent=PROD_LABEL[r.cloud]||r.cloud;
     const cnt=document.createElement('div');cnt.className='prod-fc-count';cnt.style.color=colors[i%colors.length];cnt.textContent=r.cnt.toLocaleString();
     const pct=document.createElement('div');pct.className='prod-fc-pct';pct.textContent=(r.cnt/total*100).toFixed(1)+'% of total';
-    const caseNum=PROD_CASE_MAP[r.cloud];
     fc.append(rank,name,cnt,pct);
-    if(caseNum){const c=document.createElement('div');c.className='prod-fc-case';c.textContent='eg. Case #'+caseNum;fc.appendChild(c);}
     el.appendChild(fc);
+  });
+}
+
+function buildProdCaseTable(){
+  const tbody=document.getElementById('prodCaseTbody');if(!tbody)return;
+  while(tbody.firstChild)tbody.removeChild(tbody.firstChild);
+  const rows=filterData();
+  const agg=aggByProd(rows);
+  agg.forEach((r,i)=>{
+    const d=PROD_CASE_DETAILS[r.cloud];
+    if(!d)return;
+    const tr=document.createElement('tr');
+    const tdN=document.createElement('td');tdN.textContent=String(i+1);tdN.style.cssText='color:var(--muted);font-size:0.62rem';
+    const tdP=document.createElement('td');tdP.textContent=PROD_LABEL[r.cloud]||r.cloud;tdP.style.cssText='font-size:0.63rem;max-width:90px;word-break:break-word';
+    const tdG=document.createElement('td');tdG.textContent=d.gc;tdG.style.cssText='font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700;white-space:nowrap';
+    const tdS=document.createElement('td');
+    const subjSpan=document.createTextNode(d.subj.length>42?d.subj.slice(0,42)+'…':d.subj);
+    tdS.appendChild(subjSpan);tdS.style.cssText='font-size:0.62rem;color:var(--dim);max-width:130px';
+    const tdSt=document.createElement('td');
+    const stSpan=document.createElement('span');
+    const isOpen=d.status==='New'||d.status==='Working';
+    stSpan.style.cssText='font-size:0.6rem;font-weight:600;padding:1px 5px;border-radius:3px;background:'+(isOpen?'rgba(217,119,6,0.12)':'rgba(22,163,74,0.1)')+';color:'+(isOpen?'#b45309':'#15803d');
+    stSpan.textContent=d.status;
+    tdSt.appendChild(stSpan);
+    tr.append(tdN,tdP,tdG,tdS,tdSt);
+    tbody.appendChild(tr);
   });
 }
 
@@ -1853,6 +1897,7 @@ function buildAll(){
   const top10=agg.map(r=>({label:PROD_LABEL[r.cloud]||r.cloud,count:r.cnt}));
   buildHBars('prodBars',top10,PC,'118px');
   buildProdFlashcards();
+  buildProdCaseTable();
   buildBarSvg('prodMonthBar');
 
   buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#2563eb','#d97706','#ea580c','#dc2626'],'130px');
