@@ -156,6 +156,15 @@ body{background:var(--bg);color:var(--text);display:flex;}
 .hero-tag-grey{background:rgba(107,122,153,0.10);color:var(--muted);}
 
 /* ── PANELS ──────────────────────────────────────────────────────── */
+/* ── GLOBAL FILTER STRIP (always visible, above all panels) ─────── */
+.filter-strip{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:8px 16px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  box-shadow:0 1px 0 var(--border2);
+  z-index:5;
+}
 .panels{flex:1;overflow:hidden;position:relative;}
 .panel{position:absolute;inset:0;overflow-y:auto;padding:20px 24px 24px;display:none;}
 .panel.active{display:block;}
@@ -460,69 +469,70 @@ body{background:var(--bg);color:var(--text);display:flex;}
     </div>
   </div>
 
+  <!-- GLOBAL FILTER STRIP — always visible across all tabs -->
+  <div id="globalFilters" class="filter-strip">
+    <span class="filters-label">Filters</span>
+    <div class="filter-group">
+      <label>Scope</label>
+      <select id="fScope" class="filter-select" onchange="applyFilters()">
+        <option value="all">All Cases</option>
+        <option value="chat">Cases Converted to Chat</option>
+        <option value="messaging">Chats Raised</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Product</label>
+      <select id="fProduct" class="filter-select" onchange="applyFilters()">
+        <option value="all">All Products</option>
+        <option value="cpq">Revenue-SF CPQ</option>
+        <option value="billing">Revenue-SF Billing</option>
+        <option value="docgen">Revenue-Doc Generation</option>
+        <option value="cpqdev">Revenue-CPQ Dev Support</option>
+        <option value="configurator">RCA-Configurator</option>
+        <option value="txmgmt">RCA-Transaction Management</option>
+        <option value="pricemgmt">RCA-Price Management</option>
+        <option value="billinv">RCA-Billing &amp; Invoicing</option>
+        <option value="pcm">RCA-Product Catalog Mgmt</option>
+        <option value="clm">RCA-CLM with DocGen</option>
+        <option value="adv">RCA-Advanced Approvals</option>
+        <option value="dro">RCA-Dynamic Rev Orch</option>
+        <option value="usage">RCA-Usage &amp; Ratings</option>
+        <option value="p2o">RCA-Dev Support P2O</option>
+        <option value="omnistudio">RCA-OmniStudio</option>
+        <option value="contracts">Revenue-SF Contracts</option>
+        <option value="billingdev">Revenue-Billing Dev Support</option>
+        <option value="biz">RCA-Business Rules Engine</option>
+        <option value="analytics">RCA-Rev Cloud Analytics</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Date Range</label>
+      <select id="fDateRange" class="filter-select" onchange="applyFilters()">
+        <option value="all">All Dates (Feb–Jul 18)</option>
+        <option value="q1">Q1 (Feb–Apr)</option>
+        <option value="q2">Q2 (May–Jul)</option>
+        <option value="recent">Last 30 Days</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Origin</label>
+      <select id="fOrigin" class="filter-select" onchange="applyFilters()">
+        <option value="all">All Origins</option>
+        <option value="chat">Chat</option>
+        <option value="asa">ASA Case</option>
+        <option value="self">Self-Service</option>
+        <option value="internal">Salesforce Internal</option>
+        <option value="astro">Ask Astro</option>
+      </select>
+    </div>
+    <button class="filter-reset" onclick="resetFilters()">Reset</button>
+    <span id="filterStatus"></span>
+  </div>
+
   <div class="panels">
 
-    <!-- OVERVIEW: Chat Raised vs Converted -->
+    <!-- OVERVIEW -->
     <div class="panel active" id="panel-overview">
-      <!-- FILTERS — Overview only; apply globally across all tabs -->
-      <div id="globalFilters" class="filters-bar">
-        <span class="filters-label">Filters</span>
-        <div class="filter-group">
-          <label>Scope</label>
-          <select id="fScope" class="filter-select" onchange="applyFilters()">
-            <option value="all">All Cases</option>
-            <option value="chat">Chat Cases (Origin=Chat)</option>
-            <option value="messaging">Cases with Messaging Session</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Product</label>
-          <select id="fProduct" class="filter-select" onchange="applyFilters()">
-            <option value="all">All Products</option>
-            <option value="cpq">Revenue-SF CPQ</option>
-            <option value="billing">Revenue-SF Billing</option>
-            <option value="docgen">Revenue-Doc Generation</option>
-            <option value="cpqdev">Revenue-CPQ Dev Support</option>
-            <option value="configurator">RCA-Configurator</option>
-            <option value="txmgmt">RCA-Transaction Management</option>
-            <option value="pricemgmt">RCA-Price Management</option>
-            <option value="billinv">RCA-Billing &amp; Invoicing</option>
-            <option value="pcm">RCA-Product Catalog Mgmt</option>
-            <option value="clm">RCA-CLM with DocGen</option>
-            <option value="adv">RCA-Advanced Approvals</option>
-            <option value="dro">RCA-Dynamic Rev Orch</option>
-            <option value="usage">RCA-Usage &amp; Ratings</option>
-            <option value="p2o">RCA-Dev Support P2O</option>
-            <option value="omnistudio">RCA-OmniStudio</option>
-            <option value="contracts">Revenue-SF Contracts</option>
-            <option value="billingdev">Revenue-Billing Dev Support</option>
-            <option value="biz">RCA-Business Rules Engine</option>
-            <option value="analytics">RCA-Rev Cloud Analytics</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Date Range</label>
-          <select id="fDateRange" class="filter-select" onchange="applyFilters()">
-            <option value="all">All Dates (Feb–Jul 18)</option>
-            <option value="q1">Q1 (Feb–Apr)</option>
-            <option value="q2">Q2 (May–Jul)</option>
-            <option value="recent">Last 30 Days</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Origin</label>
-          <select id="fOrigin" class="filter-select" onchange="applyFilters()">
-            <option value="all">All Origins</option>
-            <option value="chat">Chat</option>
-            <option value="asa">ASA Case</option>
-            <option value="self">Self-Service</option>
-            <option value="internal">Salesforce Internal</option>
-            <option value="astro">Ask Astro</option>
-          </select>
-        </div>
-        <button class="filter-reset" onclick="resetFilters()">Reset</button>
-        <span id="filterStatus"></span>
-      </div>
       <!-- Chat Cases — full width -->
       <!-- 3-category KPI summary row -->
       <div class="cards-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
@@ -532,12 +542,12 @@ body{background:var(--bg);color:var(--text);display:flex;}
           <div class="card-sub">All origins · Feb–Jul 18, 2026</div>
         </div>
         <div class="card c-teal">
-          <div class="card-label">Chat Cases</div>
+          <div class="card-label">Cases Converted to Chat</div>
           <div id="ov-chatcases" class="card-value">3,495</div>
           <div class="card-sub" id="ov-chatpct">22.6% of all Revenue cases</div>
         </div>
         <div class="card c-purple">
-          <div class="card-label">Cases with Messaging Session</div>
+          <div class="card-label">Chats Raised</div>
           <div id="ov-msgcases" class="card-value">7,971</div>
           <div class="card-sub" id="ov-msgpct">Ask Astro · cases where a MessagingSession record is linked</div>
         </div>
@@ -546,13 +556,13 @@ body{background:var(--bg);color:var(--text);display:flex;}
       <div class="ov-section">
         <div class="section-strip">
           <span class="ss-dot"></span>
-          <span class="ss-title">Chat Cases Detail</span>
-          <span class="ss-sub">Origin = Chat · filtered by selections above</span>
+          <span class="ss-title">Cases Converted to Chat — Detail</span>
+          <span class="ss-sub">Origin = Chat · updates with filter selections above</span>
         </div>
         <!-- 4-col KPI row -->
         <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
           <div class="card c-teal">
-            <div class="card-label">Total Chat Cases</div>
+            <div class="card-label">Total (Converted to Chat)</div>
             <div id="ov-total" class="card-value">3,495</div>
             <div class="card-sub">Revenue Cloud · Feb–Jul 18</div>
           </div>
@@ -577,7 +587,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
           <div class="scard">
             <div class="scard-header">
               <div>
-                <div class="scard-title">Monthly Chat Cases Trend</div>
+                <div class="scard-title">Monthly Cases Converted to Chat</div>
                 <div class="scard-sub">Feb · Mar · Apr · May · Jun · Jul 2026</div>
               </div>
               <span class="scard-badge">Monthly</span>
@@ -750,7 +760,7 @@ body{background:var(--bg);color:var(--text);display:flex;}
           <div class="card-sub">All origins · Feb–Jul 18, 2026</div>
         </div>
         <div class="card c-teal">
-          <div class="card-label">Chat Cases</div>
+          <div class="card-label">Cases Converted to Chat</div>
           <div class="card-value">3,495</div>
           <div class="card-sub">22.6% of all Revenue cases</div>
         </div>
@@ -1622,7 +1632,7 @@ function buildSentimentTable(){
 function applyFilters(){
   const parts = [];
   const f = getFilters();
-  if(f.scope !== 'all') parts.push({all:'All Cases',chat:'Chat Cases',messaging:'Msging Session Cases'}[f.scope]||f.scope);
+  if(f.scope !== 'all') parts.push({all:'All Cases',chat:'Cases Converted to Chat',messaging:'Chats Raised'}[f.scope]||f.scope);
   if(f.prod !== 'all'){const sel=document.getElementById('fProduct');parts.push(sel.options[sel.selectedIndex].text);}
   if(f.date !== 'all'){const sel=document.getElementById('fDateRange');parts.push(sel.options[sel.selectedIndex].text);}
   if(f.origin !== 'all'){const sel=document.getElementById('fOrigin');parts.push(sel.options[sel.selectedIndex].text);}
@@ -1735,7 +1745,7 @@ function buildAll(){
 }
 buildAll();
 
-const BUILD_TS = '2026-07-20T12:00:00+05:30';
+const BUILD_TS = '2026-07-21T10:00:00+05:30';
 (function(){
   const el = document.getElementById('lastUpdated');
   if(!el) return;
