@@ -9,160 +9,450 @@
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/fy27-revenue-cloud-dashboards/sw.js',{scope:'/fy27-revenue-cloud-dashboards/'}).catch(function(){});}</script>
 <title>Revenue Cloud Chat Analysis</title>
 <style>
-/* Sage green + white — always light, no dark mode blacks */
-:root {
-  --bg:#f5f7f5; --bg2:#ffffff; --bg3:#edf2ed;
-  --nav-bg:#e8efe8; --border:rgba(107,142,107,0.18);
-  --text:#1e2d1e; --muted:#5a7a5a; --dim:#3d5c3d;
-}
-[data-theme="light"] {
-  --bg:#f5f7f5; --bg2:#ffffff; --bg3:#edf2ed;
-  --nav-bg:#e8efe8; --border:rgba(107,142,107,0.18);
-  --text:#1e2d1e; --muted:#5a7a5a; --dim:#3d5c3d;
+/* ── Enterprise Design System ─────────────────────────────────────
+   Palette: white / light-grey / charcoal / navy · accent: #0f7173 (teal)
+   ──────────────────────────────────────────────────────────────── */
+:root{
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;
+  --nav-bg:#1a2035;--nav-w:220px;
+  --border:#e2e5ea;--border2:rgba(0,0,0,0.06);
+  --text:#1c2333;--muted:#6b7a99;--dim:#374260;
+  --accent:#0f7173;--accent2:#0a5254;--accent-soft:rgba(15,113,115,0.08);
+  --red:#dc2626;--amber:#d97706;--green:#16a34a;--blue:#2563eb;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.05);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.10),0 4px 8px rgba(0,0,0,0.06);
+  --radius:12px;--radius-sm:8px;--radius-xs:6px;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;}
+html,body{height:100%;overflow:hidden;font-family:var(--font);}
 body{background:var(--bg);color:var(--text);display:flex;}
 
-/* NAV */
-.nav{width:210px;flex-shrink:0;background:var(--nav-bg);display:flex;flex-direction:column;height:100vh;border-right:1px solid var(--border);}
-.nav-logo{padding:18px 16px 14px;border-bottom:1px solid var(--border);}
-.nav-logo-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#4a7c59,#6aab7a);border-radius:8px;padding:5px 10px;margin-bottom:8px;}
-.nav-logo-badge span{font-size:0.7rem;font-weight:700;color:#fff;letter-spacing:0.04em;}
-.nav-logo-title{font-size:0.78rem;font-weight:600;color:#2d4a2d;}
-.nav-logo-sub{font-size:0.63rem;color:var(--muted);margin-top:2px;line-height:1.4;}
-.nav-body{flex:1;overflow-y:auto;padding:6px 0;}
-.nav-grp{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:10px 16px 4px;font-weight:600;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;cursor:pointer;font-size:0.78rem;color:var(--muted);border-left:2px solid transparent;transition:all 0.15s;user-select:none;}
-.nav-item:hover{background:rgba(74,122,74,0.07);color:var(--dim);}
-.nav-item.active{color:#2d4a2d;border-left-color:#4a7c59;background:rgba(74,122,74,0.12);}
-.nav-item .ni{font-size:0.85rem;width:18px;text-align:center;}
-.nav-item .nbadge{margin-left:auto;font-size:0.62rem;font-variant-numeric:tabular-nums;background:rgba(74,122,74,0.10);color:var(--muted);padding:1px 6px;border-radius:8px;}
-.nav-item.active .nbadge{background:rgba(74,122,74,0.20);color:#4a7c59;}
-.nav-foot{padding:12px 16px;border-top:1px solid var(--border);}
-.theme-btn{width:100%;background:rgba(74,122,74,0.08);border:1px solid var(--border);border-radius:6px;padding:7px;font-size:0.72rem;color:var(--muted);cursor:pointer;transition:background 0.15s;}
-.theme-btn:hover{background:rgba(74,122,74,0.16);color:#2d4a2d;}
+/* ── SIDEBAR NAV ─────────────────────────────────────────────────── */
+.nav{
+  width:var(--nav-w);flex-shrink:0;
+  background:var(--nav-bg);
+  display:flex;flex-direction:column;height:100vh;
+  transition:width 0.25s cubic-bezier(0.4,0,0.2,1);
+  overflow:hidden;position:relative;z-index:10;
+}
+.nav.collapsed{width:56px;}
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+/* Logo area */
+.nav-logo{
+  padding:20px 16px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;gap:10px;
+  min-height:72px;flex-shrink:0;
+}
+.nav-logo-icon{
+  width:32px;height:32px;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--accent),#0a9396);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(15,113,115,0.40);
+}
+.nav-logo-text{overflow:hidden;white-space:nowrap;}
+.nav-logo-title{font-size:0.8rem;font-weight:700;color:#fff;line-height:1.3;letter-spacing:-0.01em;}
+.nav-logo-sub{font-size:0.62rem;color:rgba(255,255,255,0.45);margin-top:2px;line-height:1.3;}
+.nav.collapsed .nav-logo-text{display:none;}
 
-/* HERO */
-.hero{flex-shrink:0;text-align:center;padding:14px 24px 12px;background:linear-gradient(135deg,rgba(74,122,74,0.10),rgba(106,171,122,0.07) 50%,rgba(200,225,200,0.12));border-bottom:1px solid var(--border);position:relative;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% -10%,rgba(74,122,74,0.08),transparent);pointer-events:none;}
-.hero-eye{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:#4a7c59;font-weight:600;margin-bottom:4px;position:relative;}
-.hero-title{font-size:1.3rem;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#2d4a2d,#4a7c59,#6aab7a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;}
-.hero-sub{font-size:0.7rem;color:var(--muted);margin-top:3px;position:relative;}
-.hero-pills{display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap;position:relative;}
-.hpill{padding:3px 10px;border-radius:12px;font-size:0.67rem;font-weight:600;border:1px solid;}
+/* Toggle button */
+.nav-toggle{
+  position:absolute;top:22px;right:-12px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:0.7rem;color:var(--muted);
+  box-shadow:var(--shadow-sm);transition:all 0.2s;z-index:20;
+}
+.nav-toggle:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.nav-toggle-icon{transition:transform 0.25s;display:inline-block;}
+.nav.collapsed .nav-toggle-icon{transform:rotate(180deg);}
 
-/* PANELS */
+/* Section groups */
+.nav-body{flex:1;overflow-y:auto;padding:8px 0;scrollbar-width:none;}
+.nav-body::-webkit-scrollbar{display:none;}
+.nav-grp{
+  font-size:0.58rem;text-transform:uppercase;letter-spacing:0.12em;
+  color:rgba(255,255,255,0.3);padding:12px 16px 4px;
+  font-weight:600;white-space:nowrap;overflow:hidden;
+  transition:opacity 0.2s;
+}
+.nav.collapsed .nav-grp{opacity:0;padding:12px 16px 4px;}
+
+/* Nav items */
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px;cursor:pointer;
+  font-size:0.78rem;color:rgba(255,255,255,0.55);
+  position:relative;transition:all 0.15s;user-select:none;
+  white-space:nowrap;
+}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);}
+.nav-item.active{color:#fff;background:rgba(15,113,115,0.25);}
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:4px;bottom:4px;
+  width:3px;border-radius:0 3px 3px 0;background:var(--accent);
+}
+.nav-item .ni{
+  font-size:1rem;width:24px;text-align:center;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-item .nav-label{overflow:hidden;flex:1;}
+.nav-item .nbadge{
+  flex-shrink:0;font-size:0.6rem;font-variant-numeric:tabular-nums;
+  background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);
+  padding:1px 6px;border-radius:10px;transition:opacity 0.2s;
+}
+.nav-item.active .nbadge{background:rgba(15,113,115,0.4);color:#94d5d6;}
+.nav.collapsed .nav-label,.nav.collapsed .nbadge{display:none;}
+.nav.collapsed .nav-item{padding:10px;justify-content:center;}
+.nav.collapsed .nav-item .ni{width:auto;}
+
+/* Nav tooltip on collapsed */
+.nav.collapsed .nav-item{position:relative;}
+
+/* Footer */
+.nav-foot{
+  padding:12px 16px;border-top:1px solid rgba(255,255,255,0.08);
+  flex-shrink:0;
+}
+.nav-foot-inner{overflow:hidden;transition:opacity 0.2s;}
+.nav.collapsed .nav-foot-inner{opacity:0;height:0;padding:0;}
+.theme-btn{
+  width:100%;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-xs);
+  padding:7px 10px;font-size:0.72rem;color:rgba(255,255,255,0.55);
+  cursor:pointer;transition:all 0.15s;text-align:left;
+  display:flex;align-items:center;gap:6px;
+}
+.theme-btn:hover{background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.85);}
+#lastUpdated{margin-top:8px;font-size:0.58rem;color:rgba(255,255,255,0.3);line-height:1.6;}
+
+/* ── MAIN CONTENT ────────────────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0;}
+
+/* ── TOPBAR / HERO ───────────────────────────────────────────────── */
+.hero{
+  flex-shrink:0;padding:0 24px;height:52px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;
+  box-shadow:0 1px 0 var(--border);
+}
+.hero-title{
+  font-size:0.95rem;font-weight:700;color:var(--text);
+  letter-spacing:-0.01em;white-space:nowrap;
+}
+.hero-sep{color:var(--border);font-size:1.2rem;user-select:none;}
+.hero-crumb{font-size:0.78rem;color:var(--muted);}
+.hero-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.hero-tag{
+  font-size:0.65rem;font-weight:600;padding:3px 9px;
+  border-radius:20px;letter-spacing:0.03em;
+}
+.hero-tag-teal{background:rgba(15,113,115,0.10);color:var(--accent);}
+.hero-tag-grey{background:rgba(107,122,153,0.10);color:var(--muted);}
+
+/* ── PANELS ──────────────────────────────────────────────────────── */
 .panels{flex:1;overflow:hidden;position:relative;}
-.panel{position:absolute;inset:0;overflow-y:auto;padding:14px 18px 18px;display:none;}
+.panel{position:absolute;inset:0;overflow-y:auto;padding:20px 24px 24px;display:none;}
 .panel.active{display:block;}
 
-/* FLASH CARDS */
-.cards-row{display:grid;gap:10px;margin-bottom:12px;}
-.card{border-radius:12px;padding:14px 16px;position:relative;overflow:hidden;border:1px solid rgba(107,142,107,0.18);}
-.card-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;font-weight:600;position:relative;}
-.card-value{font-size:1.75rem;font-weight:800;line-height:1;position:relative;font-variant-numeric:tabular-nums;}
-.card-sub{font-size:0.67rem;margin-top:4px;position:relative;opacity:0.8;}
-/* Sage green + white palette */
-.c-blue{background:linear-gradient(135deg,rgba(74,124,89,0.15),rgba(45,90,60,0.06));} .c-blue .card-label{color:#4a7c59;} .c-blue .card-value{color:#2d5a3d;}
-.c-purple{background:linear-gradient(135deg,rgba(107,143,107,0.15),rgba(74,107,74,0.06));} .c-purple .card-label{color:#5a7a5a;} .c-purple .card-value{color:#3d5c3d;}
-.c-pink{background:linear-gradient(135deg,rgba(143,174,143,0.15),rgba(107,143,107,0.06));} .c-pink .card-label{color:#6b8f6b;} .c-pink .card-value{color:#4a6a4a;}
-.c-amber{background:linear-gradient(135deg,rgba(180,130,70,0.15),rgba(140,95,40,0.06));} .c-amber .card-label{color:#a06030;} .c-amber .card-value{color:#7a4820;}
-.c-green{background:linear-gradient(135deg,rgba(74,124,89,0.18),rgba(45,90,60,0.08));} .c-green .card-label{color:#2d5a3d;} .c-green .card-value{color:#1a3d28;}
-.c-red{background:linear-gradient(135deg,rgba(200,60,60,0.15),rgba(160,30,30,0.06));} .c-red .card-label{color:#b91c1c;} .c-red .card-value{color:#991b1b;}
-.c-cyan{background:linear-gradient(135deg,rgba(91,154,139,0.15),rgba(60,120,107,0.06));} .c-cyan .card-label{color:#3d7a6a;} .c-cyan .card-value{color:#2a5a4e;}
-.c-orange{background:linear-gradient(135deg,rgba(130,160,100,0.15),rgba(96,128,72,0.06));} .c-orange .card-label{color:#5a7a3d;} .c-orange .card-value{color:#3d5a28;}
+/* ── METRIC CARDS ────────────────────────────────────────────────── */
+.cards-row{display:grid;gap:12px;margin-bottom:14px;}
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 18px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow 0.2s, transform 0.2s;
+  cursor:default;
+}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.card-label{font-size:0.63rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:600;color:var(--muted);}
+.card-value{font-size:1.85rem;font-weight:800;line-height:1;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;}
+.card-sub{font-size:0.67rem;margin-top:5px;color:var(--muted);}
+.card-delta{display:inline-flex;align-items:center;gap:3px;font-size:0.62rem;font-weight:600;padding:2px 6px;border-radius:4px;margin-top:4px;}
 
-/* CONTENT CARDS */
-.cgrid{display:grid;gap:10px;}
+/* Card colour variants */
+.c-blue::before{background:linear-gradient(90deg,#2563eb,#3b82f6);}
+.c-blue .card-value{color:#1d4ed8;}
+.c-green::before{background:linear-gradient(90deg,#16a34a,#22c55e);}
+.c-green .card-value{color:#15803d;}
+.c-amber::before{background:linear-gradient(90deg,#d97706,#f59e0b);}
+.c-amber .card-value{color:#b45309;}
+.c-red::before{background:linear-gradient(90deg,#dc2626,#ef4444);}
+.c-red .card-value{color:#b91c1c;}
+.c-teal::before{background:linear-gradient(90deg,var(--accent),#0a9396);}
+.c-teal .card-value{color:var(--accent2);}
+.c-purple::before{background:linear-gradient(90deg,#7c3aed,#a78bfa);}
+.c-purple .card-value{color:#6d28d9;}
+.c-cyan::before{background:linear-gradient(90deg,#0891b2,#22d3ee);}
+.c-cyan .card-value{color:#0e7490;}
+.c-orange::before{background:linear-gradient(90deg,#ea580c,#fb923c);}
+.c-orange .card-value{color:#c2410c;}
+.c-pink::before{background:linear-gradient(90deg,#db2777,#f472b6);}
+.c-pink .card-value{color:#be185d;}
+
+/* ── CONTENT CARDS / SECTION CARDS ──────────────────────────────── */
+.cgrid{display:grid;gap:12px;}
 .g2{grid-template-columns:1fr 1fr;} .g3{grid-template-columns:1fr 1fr 1fr;}
 .g21{grid-template-columns:2fr 1fr;} .g12{grid-template-columns:1fr 2fr;}
-.scard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;}
-.scard-title{font-size:0.8rem;font-weight:600;margin-bottom:2px;}
-.scard-sub{font-size:0.65rem;color:var(--muted);margin-bottom:10px;}
+.scard{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;
+  box-shadow:var(--shadow-sm);
+}
+.scard-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
+.scard-title{font-size:0.82rem;font-weight:700;color:var(--text);letter-spacing:-0.01em;}
+.scard-sub{font-size:0.65rem;color:var(--muted);margin-bottom:12px;line-height:1.4;}
+.scard-badge{font-size:0.6rem;font-weight:600;padding:2px 7px;border-radius:10px;background:var(--accent-soft);color:var(--accent);flex-shrink:0;}
 
-/* HBARS */
-.hbar-list{display:flex;flex-direction:column;gap:6px;}
+/* ── FILTERS ─────────────────────────────────────────────────────── */
+.filters-bar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:10px 14px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:var(--radius);
+  margin-bottom:16px;box-shadow:var(--shadow-sm);
+}
+.filters-label{font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap;}
+.filter-group{display:flex;flex-direction:column;gap:2px;}
+.filter-group label{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);font-weight:600;}
+.filter-select{
+  font-size:0.72rem;padding:5px 10px;
+  border:1px solid var(--border);border-radius:var(--radius-xs);
+  background:var(--bg3);color:var(--text);cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7a99'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;
+  padding-right:24px;transition:border-color 0.15s,box-shadow 0.15s;
+  font-family:var(--font);
+}
+.filter-select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,113,115,0.12);}
+.filter-reset{
+  font-size:0.7rem;padding:5px 12px;
+  border:1px solid var(--border);border-radius:var(--radius-xs);
+  background:transparent;color:var(--muted);cursor:pointer;
+  transition:all 0.15s;font-family:var(--font);margin-left:4px;
+}
+.filter-reset:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);}
+#filterStatus{font-size:0.65rem;color:var(--accent);font-weight:500;margin-left:auto;}
+
+/* ── HORIZONTAL BARS ─────────────────────────────────────────────── */
+.hbar-list{display:flex;flex-direction:column;gap:7px;}
 .hbar-row{display:flex;align-items:center;gap:8px;}
 .hbar-lbl{font-size:0.68rem;color:var(--dim);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
-.hbar-track{flex:1;background:rgba(74,124,89,0.12);border-radius:3px;height:9px;overflow:hidden;}
-.hbar-fill{height:100%;border-radius:3px;}
-.hbar-val{font-size:0.68rem;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;min-width:34px;}
+.hbar-track{flex:1;background:rgba(15,113,115,0.08);border-radius:4px;height:8px;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:4px;transition:width 0.4s cubic-bezier(0.4,0,0.2,1);}
+.hbar-val{font-size:0.68rem;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;min-width:36px;}
 
-/* TABLE */
+/* ── TABLE ───────────────────────────────────────────────────────── */
 .tbl{width:100%;border-collapse:collapse;font-size:0.73rem;}
-.tbl th{padding:5px 7px;text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;}
-.tbl td{padding:5px 7px;color:var(--dim);border-bottom:1px solid rgba(107,142,107,0.12);}
+.tbl thead{position:sticky;top:0;z-index:1;}
+.tbl th{
+  padding:8px 10px;text-align:left;
+  color:var(--muted);font-weight:600;
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  font-size:0.61rem;text-transform:uppercase;letter-spacing:0.05em;
+}
+.tbl td{padding:7px 10px;color:var(--dim);border-bottom:1px solid rgba(0,0,0,0.04);}
 .tbl td.num{text-align:right;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;}
 .tbl tr:last-child td{border-bottom:none;}
-.tbl tbody tr:hover td{background:rgba(74,124,89,0.05);}
+.tbl tbody tr:hover td{background:rgba(15,113,115,0.04);}
+.tbl tbody tr:nth-child(even) td{background:rgba(0,0,0,0.015);}
+.tbl tbody tr:nth-child(even):hover td{background:rgba(15,113,115,0.04);}
 
-/* BADGES */
-.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:0.6rem;font-weight:700;}
-.b-up{background:rgba(185,28,28,0.12);color:#b91c1c;} .b-dn{background:rgba(74,124,89,0.15);color:#2d5a3d;}
-.b-blue{background:rgba(74,124,89,0.15);color:#2d5a3d;}
+/* ── BADGES ──────────────────────────────────────────────────────── */
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:0.61rem;font-weight:700;}
+.b-up{background:rgba(220,38,38,0.10);color:#dc2626;}
+.b-dn{background:rgba(22,163,74,0.10);color:#16a34a;}
+.b-blue{background:rgba(37,99,235,0.10);color:#2563eb;}
 
-/* DONUT */
-.donut-wrap{display:flex;gap:12px;align-items:center;}
-.legend{display:flex;flex-direction:column;gap:5px;flex:1;}
-.leg-row{display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--dim);}
+/* ── DONUT ───────────────────────────────────────────────────────── */
+.donut-wrap{display:flex;gap:16px;align-items:center;}
+.legend{display:flex;flex-direction:column;gap:6px;flex:1;}
+.leg-row{display:flex;align-items:center;gap:7px;font-size:0.69rem;color:var(--dim);}
 .sw{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
-.lc{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;}
+.lc{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--text);font-weight:700;}
 
-/* SEVERITY STRIP */
-.sev-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
-.sev-pill{border-radius:8px;padding:10px 12px;border:1px solid rgba(107,142,107,0.18);}
-.sev-lbl{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:3px;}
-.sev-val{font-size:1.15rem;font-weight:800;font-variant-numeric:tabular-nums;}
-.sev-pct{font-size:0.63rem;margin-top:2px;opacity:0.75;}
+/* ── INSIGHTS ────────────────────────────────────────────────────── */
+.ins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.ins{
+  border-radius:var(--radius);padding:16px;
+  border:1px solid var(--border);background:var(--bg2);
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow 0.2s,transform 0.2s;
+}
+.ins:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.ins-num{font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+.ins-head{font-size:0.8rem;font-weight:700;margin-bottom:6px;color:var(--text);}
+.ins-body{font-size:0.7rem;color:var(--muted);line-height:1.6;}
 
-/* INSIGHTS */
-.ins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.ins{border-radius:10px;padding:14px;border:1px solid rgba(107,142,107,0.18);background:var(--bg3);}
-.ins-num{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
-.ins-head{font-size:0.78rem;font-weight:700;margin-bottom:5px;}
-.ins-body{font-size:0.7rem;color:var(--muted);line-height:1.55;}
+/* ── CHANNEL ROW (comparison) ────────────────────────────────────── */
+.ch-row{
+  display:flex;align-items:center;gap:14px;
+  padding:11px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg3);
+  transition:box-shadow 0.15s;
+}
+.ch-row:hover{box-shadow:var(--shadow-sm);}
+.ch-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.ch-info{flex:1;}
+.ch-name{font-size:0.75rem;font-weight:700;color:var(--text);}
+.ch-desc{font-size:0.64rem;color:var(--muted);margin-top:1px;}
+.ch-num{font-size:1.2rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;}
+.ch-pct{font-size:0.62rem;color:var(--muted);}
 
-/* TOOLTIP */
-.tt{position:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;font-size:0.74rem;color:var(--text);pointer-events:none;box-shadow:0 4px 16px rgba(74,100,74,0.18);z-index:999;opacity:0;transition:opacity 0.1s;white-space:nowrap;}
+/* ── FUNNEL BARS (comparison) ────────────────────────────────────── */
+.funnel-row{margin-bottom:8px;}
+.funnel-meta{display:flex;justify-content:space-between;margin-bottom:4px;}
+.funnel-track{height:10px;background:rgba(15,113,115,0.10);border-radius:5px;overflow:hidden;}
+.funnel-fill{height:100%;border-radius:5px;transition:width 0.4s;}
+
+/* ── INFO NOTE ───────────────────────────────────────────────────── */
+.info-note{
+  padding:10px 13px;border-radius:var(--radius-sm);
+  font-size:0.68rem;color:var(--muted);line-height:1.6;
+  background:rgba(15,113,115,0.05);
+  border-left:3px solid var(--accent);
+  margin-top:10px;
+}
+.info-note strong{color:var(--accent2);}
+
+/* ── SEVERITY PILLS ──────────────────────────────────────────────── */
+.sev-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.sev-pill{border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border);background:var(--bg2);box-shadow:var(--shadow-sm);}
+.sev-lbl{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;margin-bottom:4px;}
+.sev-val{font-size:1.2rem;font-weight:800;font-variant-numeric:tabular-nums;}
+.sev-pct{font-size:0.62rem;margin-top:2px;opacity:0.7;}
+
+/* ── TOOLTIP ─────────────────────────────────────────────────────── */
+.tt{
+  position:fixed;background:var(--bg2);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:8px 12px;font-size:0.74rem;color:var(--text);
+  pointer-events:none;box-shadow:var(--shadow-lg);
+  z-index:999;opacity:0;transition:opacity 0.1s;white-space:nowrap;
+}
 .tt.vis{opacity:1;}
-.tt-lbl{font-size:0.63rem;color:var(--muted);}
+.tt-lbl{font-size:0.63rem;color:var(--muted);margin-bottom:2px;}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
+
+/* ── SECTION HEADER STRIP ────────────────────────────────────────── */
+.section-strip{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 12px;border-radius:var(--radius-sm);
+  background:var(--accent-soft);border:1px solid rgba(15,113,115,0.15);
+  margin-bottom:14px;
+}
+.section-strip .ss-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.section-strip .ss-title{font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;}
+.section-strip .ss-sub{font-size:0.65rem;color:var(--muted);margin-left:4px;}
+
+/* ── OVERVIEW WRAPPER ────────────────────────────────────────────── */
+.ov-section{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;background:var(--bg2);box-shadow:var(--shadow-sm);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────── */
+@media (max-width:1100px){
+  .ins-grid{grid-template-columns:repeat(2,1fr);}
+  .g3{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:820px){
+  .nav{width:56px;}
+  .nav .nav-logo-text,.nav .nav-label,.nav .nbadge,.nav .nav-grp{display:none;}
+  .nav .nav-item{padding:10px;justify-content:center;}
+  .nav .nav-item .ni{width:auto;}
+  .g2,.g12,.g21{grid-template-columns:1fr;}
+  .cards-row{grid-template-columns:repeat(2,1fr)!important;}
+  .ins-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body id="root">
 
-<nav class="nav">
+<nav class="nav" id="sidebar">
   <div class="nav-logo">
-    <div class="nav-logo-badge"><span>💬 CHAT CASES</span></div>
-    <div class="nav-logo-title">Revenue Cloud Chat Analysis</div>
-    <div class="nav-logo-sub">Chat + Messaging · Org-wide<br>Feb 1 – Jul 18, 2026</div>
+    <div class="nav-logo-icon">💬</div>
+    <div class="nav-logo-text">
+      <div class="nav-logo-title">Revenue Cloud</div>
+      <div class="nav-logo-sub">Chat Analysis · FY27</div>
+    </div>
+  </div>
+  <div class="nav-toggle" onclick="toggleNav()" title="Collapse sidebar">
+    <span class="nav-toggle-icon">◀</span>
   </div>
   <div class="nav-body">
-    <div class="nav-grp">Dashboard</div>
-    <div class="nav-item active" data-panel="overview"><span class="ni">◉</span>Chat Raised vs Converted<span class="nbadge">3,492</span></div>
+    <div class="nav-grp">Overview</div>
+    <div class="nav-item active" data-panel="overview">
+      <span class="ni">📊</span>
+      <span class="nav-label">Chat Overview</span>
+      <span class="nbadge">3,492</span>
+    </div>
     <div class="nav-grp">Deep Dive</div>
-    <div class="nav-item" data-panel="products"><span class="ni">⬡</span>Products<span class="nbadge">19</span></div>
-    <div class="nav-item" data-panel="geo"><span class="ni">◎</span>GEO Split<span class="nbadge">3</span></div>
-    <div class="nav-item" data-panel="accounts"><span class="ni">⬜</span>Top Accounts<span class="nbadge">10</span></div>
-    <div class="nav-item" data-panel="severity"><span class="ni">⚡</span>Severity<span class="nbadge">4</span></div>
-    <div class="nav-item" data-panel="comparison"><span class="ni">⇌</span>Comparison (Vs)<span class="nbadge">Rev</span></div>
+    <div class="nav-item" data-panel="products">
+      <span class="ni">📦</span>
+      <span class="nav-label">Products</span>
+      <span class="nbadge">19</span>
+    </div>
+    <div class="nav-item" data-panel="geo">
+      <span class="ni">🌐</span>
+      <span class="nav-label">GEO Split</span>
+      <span class="nbadge">3</span>
+    </div>
+    <div class="nav-item" data-panel="accounts">
+      <span class="ni">🏢</span>
+      <span class="nav-label">Top Accounts</span>
+      <span class="nbadge">10</span>
+    </div>
+    <div class="nav-item" data-panel="severity">
+      <span class="ni">⚡</span>
+      <span class="nav-label">Severity</span>
+      <span class="nbadge">4</span>
+    </div>
+    <div class="nav-item" data-panel="comparison">
+      <span class="ni">⚖️</span>
+      <span class="nav-label">Comparison</span>
+      <span class="nbadge">vs All</span>
+    </div>
     <div class="nav-grp">Analysis</div>
-    <div class="nav-item" data-panel="sentiment"><span class="ni">◈</span>Sentiment Analysis<span class="nbadge">AI</span></div>
-    <div class="nav-item" data-panel="insights"><span class="ni">★</span>Insights<span class="nbadge">6</span></div>
+    <div class="nav-item" data-panel="sentiment">
+      <span class="ni">🧠</span>
+      <span class="nav-label">Sentiment</span>
+      <span class="nbadge">AI</span>
+    </div>
+    <div class="nav-item" data-panel="insights">
+      <span class="ni">💡</span>
+      <span class="nav-label">Insights</span>
+      <span class="nbadge">6</span>
+    </div>
   </div>
   <div class="nav-foot">
-    <button class="theme-btn" onclick="toggleTheme()">🌓 Toggle theme</button>
-    <div id="lastUpdated" style="margin-top:7px;font-size:0.58rem;color:var(--muted);text-align:center;line-height:1.5"></div>
+    <div class="nav-foot-inner">
+      <button class="theme-btn" onclick="toggleTheme()">🌓 Toggle theme</button>
+      <div id="lastUpdated"></div>
+    </div>
   </div>
 </nav>
 
 <div class="main">
   <div class="hero">
     <div class="hero-title">Revenue Cloud Chat Analysis</div>
+    <span class="hero-sep">·</span>
+    <span class="hero-crumb" id="heroCrumb">Chat Overview</span>
+    <div class="hero-right">
+      <span class="hero-tag hero-tag-teal">FY27</span>
+      <span class="hero-tag hero-tag-grey">Feb–Jul 18, 2026</span>
+      <span class="hero-tag hero-tag-grey">Org62</span>
+    </div>
   </div>
 
   <div class="panels">
@@ -170,98 +460,134 @@ body{background:var(--bg);color:var(--text);display:flex;}
     <!-- OVERVIEW: Chat Raised vs Converted -->
     <div class="panel active" id="panel-overview">
       <!-- FILTERS — Overview only; apply globally across all tabs -->
-      <div id="globalFilters" style="flex-shrink:0;padding:8px 14px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap">Filters:</span>
-        <select id="fScope" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-          <option value="all">All Revenue Data</option>
-          <option value="cases">Cases Only</option>
-          <option value="messaging">Messaging Sessions Only</option>
-          <option value="converted">Messaging → Case Converted</option>
-        </select>
-        <select id="fProduct" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-          <option value="all">All Products</option>
-          <option value="cpq">Revenue-SF CPQ</option>
-          <option value="billing">Revenue-SF Billing</option>
-          <option value="docgen">Revenue-Doc Generation</option>
-          <option value="cpqdev">Revenue-CPQ Dev Support</option>
-          <option value="configurator">RCA-Configurator</option>
-          <option value="txmgmt">RCA-Transaction Management</option>
-          <option value="pricemgmt">RCA-Price Management</option>
-          <option value="billinv">RCA-Billing &amp; Invoicing</option>
-          <option value="pcm">RCA-Product Catalog Mgmt</option>
-          <option value="clm">RCA-CLM with DocGen</option>
-          <option value="adv">RCA-Advanced Approvals</option>
-          <option value="dro">RCA-Dynamic Rev Orch</option>
-          <option value="usage">RCA-Usage &amp; Ratings</option>
-          <option value="p2o">RCA-Dev Support P2O</option>
-          <option value="omnistudio">RCA-OmniStudio</option>
-          <option value="contracts">Revenue-SF Contracts</option>
-          <option value="billingdev">Revenue-Billing Dev Support</option>
-          <option value="biz">RCA-Business Rules Engine</option>
-          <option value="analytics">RCA-Rev Cloud Analytics</option>
-        </select>
-        <select id="fDateRange" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-          <option value="all">All Dates (Feb–Jul 18, 2026)</option>
-          <option value="q1">Q1 (Feb–Apr)</option>
-          <option value="q2">Q2 (May–Jul)</option>
-          <option value="recent">Last 30 Days (Jun 18–Jul 18)</option>
-        </select>
-        <select id="fOrigin" onchange="applyFilters()" style="font-size:0.72rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);cursor:pointer">
-          <option value="all">All Origins</option>
-          <option value="chat">Chat</option>
-          <option value="asa">ASA Case</option>
-          <option value="self">Self-Service</option>
-          <option value="internal">Salesforce Internal</option>
-          <option value="astro">Ask Astro</option>
-        </select>
-        <button onclick="resetFilters()" style="font-size:0.72rem;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer">Reset</button>
-        <span id="filterStatus" style="font-size:0.65rem;color:var(--muted);margin-left:auto"></span>
+      <div id="globalFilters" class="filters-bar">
+        <span class="filters-label">Filters</span>
+        <div class="filter-group">
+          <label>Scope</label>
+          <select id="fScope" class="filter-select" onchange="applyFilters()">
+            <option value="all">All Revenue Data</option>
+            <option value="cases">Cases Only</option>
+            <option value="messaging">Messaging Sessions Only</option>
+            <option value="converted">Messaging → Case Converted</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Product</label>
+          <select id="fProduct" class="filter-select" onchange="applyFilters()">
+            <option value="all">All Products</option>
+            <option value="cpq">Revenue-SF CPQ</option>
+            <option value="billing">Revenue-SF Billing</option>
+            <option value="docgen">Revenue-Doc Generation</option>
+            <option value="cpqdev">Revenue-CPQ Dev Support</option>
+            <option value="configurator">RCA-Configurator</option>
+            <option value="txmgmt">RCA-Transaction Management</option>
+            <option value="pricemgmt">RCA-Price Management</option>
+            <option value="billinv">RCA-Billing &amp; Invoicing</option>
+            <option value="pcm">RCA-Product Catalog Mgmt</option>
+            <option value="clm">RCA-CLM with DocGen</option>
+            <option value="adv">RCA-Advanced Approvals</option>
+            <option value="dro">RCA-Dynamic Rev Orch</option>
+            <option value="usage">RCA-Usage &amp; Ratings</option>
+            <option value="p2o">RCA-Dev Support P2O</option>
+            <option value="omnistudio">RCA-OmniStudio</option>
+            <option value="contracts">Revenue-SF Contracts</option>
+            <option value="billingdev">Revenue-Billing Dev Support</option>
+            <option value="biz">RCA-Business Rules Engine</option>
+            <option value="analytics">RCA-Rev Cloud Analytics</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Date Range</label>
+          <select id="fDateRange" class="filter-select" onchange="applyFilters()">
+            <option value="all">All Dates (Feb–Jul 18)</option>
+            <option value="q1">Q1 (Feb–Apr)</option>
+            <option value="q2">Q2 (May–Jul)</option>
+            <option value="recent">Last 30 Days</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Origin</label>
+          <select id="fOrigin" class="filter-select" onchange="applyFilters()">
+            <option value="all">All Origins</option>
+            <option value="chat">Chat</option>
+            <option value="asa">ASA Case</option>
+            <option value="self">Self-Service</option>
+            <option value="internal">Salesforce Internal</option>
+            <option value="astro">Ask Astro</option>
+          </select>
+        </div>
+        <button class="filter-reset" onclick="resetFilters()">Reset</button>
+        <span id="filterStatus"></span>
       </div>
       <!-- Chat Cases — full width -->
-      <div>
-
-        <!-- CHAT CASES (Revenue Cloud · Origin = Chat) -->
-        <div style="border:1px solid rgba(74,124,89,0.25);border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(74,124,89,0.07),rgba(45,90,60,0.03))">
-          <div style="font-size:0.72rem;font-weight:700;color:#4a7c59;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#4a7c59"></span>Revenue Cloud Chat Cases · Origin = Chat
+      <div class="ov-section">
+        <div class="section-strip">
+          <span class="ss-dot"></span>
+          <span class="ss-title">Revenue Cloud Chat Cases</span>
+          <span class="ss-sub">Origin = Chat · filtered by selections above</span>
+        </div>
+        <!-- 4-col KPI row -->
+        <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
+          <div class="card c-teal">
+            <div class="card-label">Total Chat Cases</div>
+            <div id="ov-total" class="card-value">3,492</div>
+            <div class="card-sub">Revenue Cloud · Feb–Jul 18</div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
-            <div class="card c-blue" style="padding:12px 14px"><div class="card-label">Total Chat Cases</div><div id="ov-total" class="card-value">3,492</div><div class="card-sub">Revenue Cloud · Feb–Jul 18</div></div>
-            <div class="card c-green" style="padding:12px 14px"><div class="card-label">Resolved</div><div id="ov-resolved" class="card-value">3,447</div><div class="card-sub">98.7% closure rate</div></div>
-            <div class="card c-amber" style="padding:12px 14px"><div class="card-label">Still Open</div><div id="ov-open" class="card-value">45</div><div class="card-sub">Working + Waiting</div></div>
-            <div class="card c-red" style="padding:12px 14px"><div class="card-label">Level 1 Critical</div><div id="ov-l1" class="card-value">91</div><div id="ov-l1pct" class="card-sub">2.6% of cases</div></div>
+          <div class="card c-green">
+            <div class="card-label">Resolved</div>
+            <div id="ov-resolved" class="card-value">3,447</div>
+            <div class="card-sub">98.7% closure rate</div>
           </div>
-          <!-- Monthly trend + severity side by side -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="scard" style="padding:10px">
-              <div class="scard-title">Monthly Chat Cases Trend</div>
-              <div class="scard-sub">Feb · Mar · Apr · May · Jun · Jul 2026</div>
-              <svg style="width:100%;height:110px;overflow:visible" viewBox="0 0 300 110" id="monthBar"></svg>
+          <div class="card c-amber">
+            <div class="card-label">Still Open</div>
+            <div id="ov-open" class="card-value">45</div>
+            <div class="card-sub">Working + Waiting</div>
+          </div>
+          <div class="card c-red">
+            <div class="card-label">Level 1 Critical</div>
+            <div id="ov-l1" class="card-value">91</div>
+            <div id="ov-l1pct" class="card-sub">2.6% of cases</div>
+          </div>
+        </div>
+        <!-- Trend + severity row -->
+        <div class="cgrid g2">
+          <div class="scard">
+            <div class="scard-header">
+              <div>
+                <div class="scard-title">Monthly Chat Cases Trend</div>
+                <div class="scard-sub">Feb · Mar · Apr · May · Jun · Jul 2026</div>
+              </div>
+              <span class="scard-badge">Monthly</span>
             </div>
-            <div class="scard" style="padding:10px">
-              <div class="scard-title">Severity Breakdown</div>
-              <div class="scard-sub">Filtered · proportional to total chat cases</div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px">
-                <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:7px;padding:8px 6px;text-align:center">
-                  <div style="font-size:0.55rem;color:#fbbf24;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L2 Urgent</div>
-                  <div id="ov-l2" style="font-size:1.1rem;font-weight:800;color:#fde68a;font-variant-numeric:tabular-nums">409</div>
-                  <div id="ov-l2pct" style="font-size:0.58rem;color:#fbbf24;opacity:0.8">11.7%</div>
-                </div>
-                <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.18);border-radius:7px;padding:8px 6px;text-align:center">
-                  <div style="font-size:0.55rem;color:#fb923c;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L3 High</div>
-                  <div id="ov-l3" style="font-size:1.1rem;font-weight:800;color:#fed7aa;font-variant-numeric:tabular-nums">87</div>
-                  <div id="ov-l3pct" style="font-size:0.58rem;color:#fb923c;opacity:0.8">2.5%</div>
-                </div>
-                <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18);border-radius:7px;padding:8px 6px;text-align:center">
-                  <div style="font-size:0.55rem;color:#60a5fa;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">L4 Medium</div>
-                  <div id="ov-l4" style="font-size:1.1rem;font-weight:800;color:#93c5fd;font-variant-numeric:tabular-nums">2,905</div>
-                  <div style="font-size:0.58rem;color:#60a5fa;opacity:0.8">83.2%</div>
-                </div>
+            <svg style="width:100%;height:110px;overflow:visible" viewBox="0 0 300 110" id="monthBar"></svg>
+          </div>
+          <div class="scard">
+            <div class="scard-header">
+              <div>
+                <div class="scard-title">Severity Breakdown</div>
+                <div class="scard-sub">Proportional to filtered total · excludes L1</div>
+              </div>
+              <span class="scard-badge">Filtered</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px">
+              <div class="sev-pill" style="border-left:3px solid #d97706">
+                <div class="sev-lbl" style="color:#d97706">L2 Urgent</div>
+                <div id="ov-l2" class="sev-val" style="color:#b45309">409</div>
+                <div id="ov-l2pct" class="sev-pct" style="color:#d97706">11.7%</div>
+              </div>
+              <div class="sev-pill" style="border-left:3px solid #ea580c">
+                <div class="sev-lbl" style="color:#ea580c">L3 High</div>
+                <div id="ov-l3" class="sev-val" style="color:#c2410c">87</div>
+                <div id="ov-l3pct" class="sev-pct" style="color:#ea580c">2.5%</div>
+              </div>
+              <div class="sev-pill" style="border-left:3px solid #2563eb">
+                <div class="sev-lbl" style="color:#2563eb">L4 Medium</div>
+                <div id="ov-l4" class="sev-val" style="color:#1d4ed8">2,905</div>
+                <div class="sev-pct" style="color:#2563eb">83.2%</div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -316,8 +642,8 @@ body{background:var(--bg);color:var(--text);display:flex;}
               <tr><td><span class="dot" style="background:#6b7280"></span>Untagged</td><td class="num">52</td><td class="num">1.5%</td><td class="num">—</td><td><span class="badge" style="background:rgba(107,114,128,0.12);color:#9ca3af">—</span></td></tr>
             </tbody>
           </table>
-          <div style="margin-top:12px;padding:11px;background:rgba(59,130,246,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
-            <strong style="color:#60a5fa">AMER over-indexed by +16pp:</strong> AMER customers rely heavily on chat — possibly higher chat availability windows, partner ecosystem usage, or lower self-serve adoption. Consider promoting chat in APAC/EMEA to balance load.
+          <div class="info-note">
+            <strong>AMER over-indexed by +16pp:</strong> AMER customers rely heavily on chat — possibly higher chat availability windows, partner ecosystem usage, or lower self-serve adoption. Consider promoting chat in APAC/EMEA to balance load.
           </div>
         </div>
       </div>
@@ -326,9 +652,9 @@ body{background:var(--bg);color:var(--text);display:flex;}
     <!-- ACCOUNTS -->
     <div class="panel" id="panel-accounts">
       <div class="cards-row" style="grid-template-columns:repeat(3,1fr)">
-        <div class="card c-blue"><div class="card-label">#1 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Relay Fire &amp; Safety</div><div class="card-sub">64 chat cases</div></div>
-        <div class="card c-purple"><div class="card-label">#2 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Intrado Life &amp; Safety</div><div class="card-sub">42 chat cases</div></div>
-        <div class="card c-cyan"><div class="card-label">#3 Account</div><div class="card-value" style="font-size:0.9rem;padding-top:5px">Ravyx – SIR Solutions</div><div class="card-sub">33 chat cases</div></div>
+        <div class="card c-teal"><div class="card-label">#1 Account</div><div class="card-value" style="font-size:1rem;padding-top:4px">Relay Fire &amp; Safety</div><div class="card-sub">64 chat cases</div></div>
+        <div class="card c-blue"><div class="card-label">#2 Account</div><div class="card-value" style="font-size:1rem;padding-top:4px">Intrado Life &amp; Safety</div><div class="card-sub">42 chat cases</div></div>
+        <div class="card c-cyan"><div class="card-label">#3 Account</div><div class="card-value" style="font-size:1rem;padding-top:4px">Ravyx – SIR Solutions</div><div class="card-sub">33 chat cases</div></div>
       </div>
       <div class="cgrid g2">
         <div class="scard">
@@ -371,8 +697,8 @@ body{background:var(--bg);color:var(--text);display:flex;}
           <div class="scard-title">Severity Distribution</div>
           <div class="scard-sub">Chat cases by severity level</div>
           <div class="hbar-list" id="sevBars" style="margin-top:8px"></div>
-          <div style="margin-top:14px;padding:11px;background:rgba(239,68,68,0.07);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.6">
-            <strong style="color:#f87171">88 Critical (L1) chat cases</strong> — chat-originated critical cases indicate customers hitting hard blockers mid-session. Review which products they belong to and whether routing to senior engineers is happening fast enough.
+          <div class="info-note" style="border-left-color:#dc2626;background:rgba(220,38,38,0.04)">
+            <strong style="color:#b91c1c">88 Critical (L1) chat cases</strong> — chat-originated critical cases indicate customers hitting hard blockers mid-session. Review which products they belong to and whether routing to senior engineers is happening fast enough.
           </div>
         </div>
         <div class="scard">
@@ -388,8 +714,10 @@ body{background:var(--bg);color:var(--text);display:flex;}
 
     <!-- COMPARISON (Vs) -->
     <div class="panel" id="panel-comparison">
-      <div style="margin-bottom:10px">
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px">Revenue Cloud · Chat Cases vs All-Channel · Feb–Jul 18, 2026</div>
+      <div class="section-strip" style="margin-bottom:16px">
+        <span class="ss-dot"></span>
+        <span class="ss-title">Chat vs All-Channel</span>
+        <span class="ss-sub">Revenue Cloud · Feb–Jul 18, 2026</span>
       </div>
       <!-- Top KPIs -->
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
@@ -421,53 +749,49 @@ body{background:var(--bg);color:var(--text);display:flex;}
         <div class="scard">
           <div class="scard-title">Revenue Cases by Support Channel</div>
           <div class="scard-sub">All Revenue support interactions Feb–Jul 18, 2026</div>
-          <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
-            <!-- Chat -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(74,124,89,0.08);border:1px solid rgba(74,124,89,0.2);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#4a7c59;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#2d5a3d">Chat (Origin = Chat)</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Revenue Cloud cases raised via Chat channel — primary dataset for this dashboard</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+            <div class="ch-row">
+              <div class="ch-dot" style="background:var(--accent)"></div>
+              <div class="ch-info">
+                <div class="ch-name">Chat (Origin = Chat)</div>
+                <div class="ch-desc">Revenue Cloud cases raised via Chat — primary dataset for this dashboard</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#2d5a3d;font-variant-numeric:tabular-nums">3,492</div>
-                <div style="font-size:0.62rem;color:var(--muted)">22.6% of Revenue cases</div>
+                <div class="ch-num">3,492</div>
+                <div class="ch-pct">22.6% of Revenue cases</div>
               </div>
             </div>
-            <!-- ASA Case -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,143,107,0.08);border:1px solid rgba(107,143,107,0.2);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#6b8f6b;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#3d5c3d">ASA Case</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Automated Support Assignment — highest volume channel</div>
+            <div class="ch-row">
+              <div class="ch-dot" style="background:#2563eb"></div>
+              <div class="ch-info">
+                <div class="ch-name">ASA Case</div>
+                <div class="ch-desc">Automated Support Assignment — highest volume channel</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#3d5c3d;font-variant-numeric:tabular-nums">5,580</div>
-                <div style="font-size:0.62rem;color:var(--muted)">36.4% of Revenue cases</div>
+                <div class="ch-num">5,580</div>
+                <div class="ch-pct">36.4% of Revenue cases</div>
               </div>
             </div>
-            <!-- Self-Service -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(45,90,60,0.08);border:1px solid rgba(45,90,60,0.2);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#2d5a3d;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:#1a3d28">Self-Service</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Customer portal self-service submissions</div>
+            <div class="ch-row">
+              <div class="ch-dot" style="background:#7c3aed"></div>
+              <div class="ch-info">
+                <div class="ch-name">Self-Service</div>
+                <div class="ch-desc">Customer portal self-service submissions</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:#1a3d28;font-variant-numeric:tabular-nums">5,401</div>
-                <div style="font-size:0.62rem;color:var(--muted)">35.2% of Revenue cases</div>
+                <div class="ch-num">5,401</div>
+                <div class="ch-pct">35.2% of Revenue cases</div>
               </div>
             </div>
-            <!-- Salesforce Internal -->
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(107,114,128,0.06);border:1px solid rgba(107,114,128,0.15);border-radius:8px">
-              <div style="width:12px;height:12px;border-radius:3px;background:#9ca3af;flex-shrink:0"></div>
-              <div style="flex:1">
-                <div style="font-size:0.75rem;font-weight:700;color:var(--muted)">Salesforce Internal + Other</div>
-                <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Internal team cases, Ask Astro escalations, Phone, Email, Partner Portal</div>
+            <div class="ch-row">
+              <div class="ch-dot" style="background:#9ca3af"></div>
+              <div class="ch-info">
+                <div class="ch-name">Salesforce Internal + Other</div>
+                <div class="ch-desc">Internal team cases, Ask Astro escalations, Phone, Email, Partner Portal</div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:1.3rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums">933</div>
-                <div style="font-size:0.62rem;color:var(--muted)">6.1% · incl. 34 Ask Astro</div>
+                <div class="ch-num">933</div>
+                <div class="ch-pct">6.1% · incl. 34 Ask Astro</div>
               </div>
             </div>
           </div>
@@ -478,48 +802,30 @@ body{background:var(--bg);color:var(--text);display:flex;}
           <div class="scard">
             <div class="scard-title">Chat vs All-Channel Volume — Monthly Trend</div>
             <div class="scard-sub">Revenue Cloud chat cases as share of total Revenue cases per month</div>
-            <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Feb — All Revenue</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,736 total · 897 Chat (32.8%)</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:32.8%;background:#4a7c59;border-radius:4px"></div></div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+              <div class="funnel-row">
+                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Feb — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,736 total · 897 Chat (32.8%)</span></div>
+                <div class="funnel-track"><div class="funnel-fill" style="width:32.8%;background:var(--accent)"></div></div>
               </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Mar — All Revenue</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,986 total · 940 Chat (31.5%)</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:31.5%;background:#6aab7a;border-radius:4px"></div></div>
+              <div class="funnel-row">
+                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Mar — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,986 total · 940 Chat (31.5%)</span></div>
+                <div class="funnel-track"><div class="funnel-fill" style="width:31.5%;background:var(--accent)"></div></div>
               </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Apr — All Revenue</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,720 total · 842 Chat (30.9%)</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:30.9%;background:#8fb58f;border-radius:4px"></div></div>
+              <div class="funnel-row">
+                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Apr — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,720 total · 842 Chat (30.9%)</span></div>
+                <div class="funnel-track"><div class="funnel-fill" style="width:30.9%;background:var(--accent)"></div></div>
               </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">May — All Revenue</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,628 total · 817 Chat (31.1%)</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:31.1%;background:#8fb58f;border-radius:4px"></div></div>
+              <div class="funnel-row">
+                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">May — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,628 total · 817 Chat (31.1%)</span></div>
+                <div class="funnel-track"><div class="funnel-fill" style="width:31.1%;background:var(--accent)"></div></div>
               </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Jun — All Revenue</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,649 total · 715 Chat (27.0%)</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:27%;background:#b5d5b5;border-radius:4px"></div></div>
+              <div class="funnel-row">
+                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Jun — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,649 total · 715 Chat (27.0%)</span></div>
+                <div class="funnel-track"><div class="funnel-fill" style="width:27%;background:var(--accent)"></div></div>
               </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-                  <span style="font-size:0.68rem;color:var(--dim)">Jul 1–18 — All Revenue</span>
-                  <span style="font-size:0.68rem;font-weight:700;color:var(--text)">1,364 total · 392 Chat (28.7%)</span>
-                </div>
-                <div style="height:10px;background:rgba(74,124,89,0.15);border-radius:4px;overflow:hidden"><div style="height:100%;width:28.7%;background:#4a7c59;border-radius:4px"></div></div>
+              <div class="funnel-row">
+                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Jul 1–18 — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">1,364 total · 392 Chat (28.7%)</span></div>
+                <div class="funnel-track"><div class="funnel-fill" style="width:28.7%;background:var(--accent)"></div></div>
               </div>
             </div>
           </div>
@@ -538,8 +844,8 @@ body{background:var(--bg);color:var(--text);display:flex;}
                 <tr><td>Other (Phone/Email/Partner)</td><td class="num">61</td><td class="num">0.4%</td></tr>
               </tbody>
             </table>
-            <div style="margin-top:10px;padding:9px;background:rgba(74,124,89,0.07);border-radius:7px;font-size:0.67rem;color:var(--muted);line-height:1.55">
-              <strong style="color:#2d5a3d">Note on Messaging Sessions:</strong> Ask Astro MessagingSessions and Revenue Cloud Chat Cases are separate systems — Revenue Chat cases (Origin = Chat) do not link to MessagingSession records. The 30,753 org-wide Astro sessions are Sales/internal use; only 34 escalated to Revenue Cloud cases.
+            <div class="info-note">
+              <strong>Note on Messaging Sessions:</strong> Ask Astro MessagingSessions and Revenue Cloud Chat Cases are separate systems — Revenue Chat cases (Origin = Chat) do not link to MessagingSession records. The 30,753 org-wide Astro sessions are Sales/internal use; only 34 escalated to Revenue Cloud cases.
             </div>
           </div>
         </div>
@@ -548,9 +854,10 @@ body{background:var(--bg);color:var(--text);display:flex;}
 
     <!-- SENTIMENT ANALYSIS -->
     <div class="panel" id="panel-sentiment">
-      <div style="margin-bottom:10px">
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px">AI Sentiment Analysis · Revenue Messaging Sessions → Cases · Feb–Jul 18, 2026</div>
-        <div style="font-size:0.65rem;color:var(--muted);line-height:1.5">Sentiment is AI-inferred from case subject, product area, priority, and status patterns. Revenue Cloud only — 34 sessions converted to cases.</div>
+      <div class="section-strip" style="margin-bottom:16px">
+        <span class="ss-dot"></span>
+        <span class="ss-title">AI Sentiment Analysis</span>
+        <span class="ss-sub">Revenue Messaging Sessions → Cases · 34 records · AI-inferred</span>
       </div>
 
       <!-- Summary KPI row -->
@@ -707,12 +1014,20 @@ function toggleTheme(){
   setTimeout(buildAll,50);
 }
 
+function toggleNav(){
+  const nav=document.getElementById('sidebar');
+  nav.classList.toggle('collapsed');
+}
+
 document.querySelectorAll('.nav-item').forEach(item=>{
   item.addEventListener('click',()=>{
     document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
     item.classList.add('active');
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-'+item.dataset.panel).classList.add('active');
+    const crumb=document.getElementById('heroCrumb');
+    const lbl=item.querySelector('.nav-label');
+    if(crumb&&lbl)crumb.textContent=lbl.textContent;
     buildAll();
   });
 });
@@ -877,8 +1192,8 @@ function buildMonthBar(){
   const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);
   const gridVals=[Math.round(maxV*0.25),Math.round(maxV*0.5),Math.round(maxV*0.75),maxV];
   gridVals.forEach(v=>{
-    svg.appendChild(mk('line',{x1:pl,x2:W-pr,y1:scY(v),y2:scY(v),stroke:'rgba(107,142,107,0.20)','stroke-width':1}));
-    const t=mk('text',{x:pl-3,y:scY(v)+3,'text-anchor':'end',fill:'#5a7a5a'});
+    svg.appendChild(mk('line',{x1:pl,x2:W-pr,y1:scY(v),y2:scY(v),stroke:'rgba(0,0,0,0.07)','stroke-width':1,'stroke-dasharray':'3,3'}));
+    const t=mk('text',{x:pl-3,y:scY(v)+3,'text-anchor':'end',fill:'#6b7a99'});
     t.style.cssText='font-size:9px;font-family:inherit';t.textContent=v>=1000?(v/1000).toFixed(1)+'K':v;svg.appendChild(t);
   });
   const bGap=iW/months.length,bW=Math.floor(bGap*0.55);
@@ -886,14 +1201,14 @@ function buildMonthBar(){
     if(!d.v)return;
     const id='mg'+i,cx=pl+i*bGap+bGap/2,x=cx-bW/2,y=scY(d.v),h=scY(0)-y;
     const g=document.createElementNS(ns,'linearGradient');g.id=id;g.setAttribute('x1','0');g.setAttribute('y1','0');g.setAttribute('x2','0');g.setAttribute('y2','1');
-    [[0,'#4a7c59','1'],[1,'#1a3d28','0.7']].forEach(([off,col,op])=>{const s=document.createElementNS(ns,'stop');s.setAttribute('offset',off*100+'%');s.setAttribute('stop-color',col);s.setAttribute('stop-opacity',op);g.appendChild(s);});
+    [[0,'#0f7173','1'],[1,'#0a5254','0.7']].forEach(([off,col,op])=>{const s=document.createElementNS(ns,'stop');s.setAttribute('offset',off*100+'%');s.setAttribute('stop-color',col);s.setAttribute('stop-opacity',op);g.appendChild(s);});
     defs.appendChild(g);
     const bar=mk('rect',{x,y,width:bW,height:h,rx:4,fill:'url(#'+id+')',cursor:'pointer'});
     bar.addEventListener('mouseenter',e=>{bar.style.opacity='0.75';showTip(e,d.l+' 2026',d.v.toLocaleString()+' cases');});
     bar.addEventListener('mousemove',moveTip);bar.addEventListener('mouseleave',()=>{bar.style.opacity='1';hideTip();});
     svg.appendChild(bar);
-    const lv=mk('text',{x:cx,y:y-3,'text-anchor':'middle',fill:'#2d5a3d'});lv.style.cssText='font-size:9px;font-weight:600;font-family:inherit';lv.textContent=d.v>=1000?(d.v/1000).toFixed(1)+'K':d.v;svg.appendChild(lv);
-    const xl=mk('text',{x:cx,y:scY(0)+14,'text-anchor':'middle',fill:'#5a7a5a'});xl.style.cssText='font-size:9px;font-family:inherit';xl.textContent=d.l;svg.appendChild(xl);
+    const lv=mk('text',{x:cx,y:y-3,'text-anchor':'middle',fill:'#0a5254'});lv.style.cssText='font-size:9px;font-weight:700;font-family:inherit';lv.textContent=d.v>=1000?(d.v/1000).toFixed(1)+'K':d.v;svg.appendChild(lv);
+    const xl=mk('text',{x:cx,y:scY(0)+14,'text-anchor':'middle',fill:'#6b7a99'});xl.style.cssText='font-size:9px;font-family:inherit';xl.textContent=d.l;svg.appendChild(xl);
   });
 }
 
@@ -957,9 +1272,9 @@ function buildProdTable(){
   });
 }
 
-const GEO_STATIC=[{label:'AMER',count:2358,color:'#4a7c59'},{label:'APAC (incl. JP)',count:683,color:'#6aab7a'},{label:'EMEA',count:329,color:'#8fb58f'},{label:'Untagged',count:52,color:'#9eada5'}];
-const SEV_STATIC=[{label:'L4 Medium',count:2849,color:'#4a7c59'},{label:'L2 Urgent',count:399,color:'#c08030'},{label:'L1 Critical',count:88,color:'#b91c1c'},{label:'L3 High',count:86,color:'#c05020'}];
-const PC=['#4a7c59','#6aab7a','#8fb58f','#2d5a3d','#3d7a6a','#b4c9b0','#c08030','#5a7a3d','#7a9e7a','#4a6a5a'];
+const GEO_STATIC=[{label:'AMER',count:2358,color:'#0f7173'},{label:'APAC (incl. JP)',count:683,color:'#2563eb'},{label:'EMEA',count:329,color:'#7c3aed'},{label:'Untagged',count:52,color:'#9ca3af'}];
+const SEV_STATIC=[{label:'L4 Medium',count:2849,color:'#2563eb'},{label:'L2 Urgent',count:399,color:'#d97706'},{label:'L1 Critical',count:88,color:'#dc2626'},{label:'L3 High',count:86,color:'#ea580c'}];
+const PC=['#0f7173','#2563eb','#7c3aed','#d97706','#16a34a','#dc2626','#0891b2','#ea580c','#6b7a99','#374260'];
 
 function buildMsgBar(){
   const svg=document.getElementById('msgBar');if(!svg)return;
@@ -1181,7 +1496,7 @@ function buildAll(){
   const top10=agg.slice(0,10).map(r=>({label:PROD_LABEL[r.cloud]||r.cloud,count:r.cnt}));
   buildHBars('prodBars',top10,PC,'118px');
 
-  buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#4a7c59','#c08030','#c05020','#b91c1c'],'130px');
+  buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#2563eb','#d97706','#ea580c','#dc2626'],'130px');
 
   /* acctBars: compute from ACCOUNT_DATA filtered by product/origin */
   const f=getFilters();
