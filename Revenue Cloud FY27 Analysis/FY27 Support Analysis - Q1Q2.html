@@ -532,6 +532,11 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
       <span class="nav-label">Sentiment</span>
       <span class="nbadge">AI</span>
     </div>
+    <div class="nav-item" data-panel="acct-insights">
+      <span class="ni">🔍</span>
+      <span class="nav-label">Account Insights</span>
+      <span class="nbadge">New</span>
+    </div>
     <div class="nav-item" data-panel="insights">
       <span class="ni">💡</span>
       <span class="nav-label">Insights</span>
@@ -1251,6 +1256,82 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     </div>
 
     <!-- INSIGHTS -->
+    <!-- ACCOUNT INSIGHTS -->
+    <div class="panel" id="panel-acct-insights">
+      <!-- KPI row -->
+      <div class="cards-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+        <div class="card c-red">
+          <div class="card-label">Highly Frustrated Products</div>
+          <div class="card-value" id="ai-hf-count">4</div>
+          <div class="card-sub">Products with P1-sentiment chat cases</div>
+        </div>
+        <div class="card c-amber">
+          <div class="card-label">Recurring Chat Accounts</div>
+          <div class="card-value" id="ai-recur-count">9</div>
+          <div class="card-sub">Accounts with 10+ chat cases in FY27</div>
+        </div>
+        <div class="card c-teal">
+          <div class="card-label">Top Recurring Account</div>
+          <div class="card-value" style="font-size:0.85rem;padding-top:6px">Relay Fire &amp; Safety</div>
+          <div class="card-sub">64 chat cases — multi-product</div>
+        </div>
+      </div>
+
+      <div class="cgrid g2" style="gap:14px">
+        <!-- Highly Frustrated -->
+        <div class="scard">
+          <div class="scard-header" style="margin-bottom:10px">
+            <div>
+              <div class="scard-title">Highly Frustrated Chat Cases</div>
+              <div class="scard-sub">Score ≤ 2 · Escalating sentiment · P1 risk</div>
+            </div>
+            <span class="scard-badge" style="background:rgba(220,38,38,0.10);color:#dc2626">At Risk</span>
+          </div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Issue</th>
+                <th>Reason</th>
+                <th style="text-align:right">Score</th>
+              </tr>
+            </thead>
+            <tbody id="hfTbody"></tbody>
+          </table>
+          <div class="info-note" style="border-left-color:#dc2626;background:rgba(220,38,38,0.04);margin-top:10px">
+            <strong style="color:#b91c1c">Action required:</strong> These cases represent live-session P1 escalations. Review routing rules and ensure engineering triage happened within SLA for each.
+          </div>
+        </div>
+
+        <!-- Recurring accounts -->
+        <div class="scard">
+          <div class="scard-header" style="margin-bottom:10px">
+            <div>
+              <div class="scard-title">Recurring Chat Accounts</div>
+              <div class="scard-sub">Top accounts by total chat case volume FY27</div>
+            </div>
+            <span class="scard-badge" style="background:rgba(217,119,6,0.10);color:#b45309">Recurring</span>
+          </div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Account</th>
+                <th style="text-align:right">Chat Cases</th>
+                <th>Top Product</th>
+                <th>Multi-Product</th>
+              </tr>
+            </thead>
+            <tbody id="recurTbody"></tbody>
+          </table>
+          <div class="info-note" style="margin-top:10px">
+            <strong>Proactive engagement opportunity:</strong> Accounts with 10+ chat cases likely have recurring configuration or adoption blockers. A targeted success review call could prevent re-opening of the same case types.
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="panel" id="panel-insights">
       <div class="ins-grid">
         <div class="ins" style="background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(59,130,246,0.03));border-color:rgba(59,130,246,0.2)">
@@ -1876,6 +1957,64 @@ function resetFilters(){
 
 function st(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
 
+function buildHighlyFrustrated(){
+  const tbody=document.getElementById('hfTbody');if(!tbody)return;
+  while(tbody.firstChild)tbody.removeChild(tbody.firstChild);
+  const hf=SENTIMENT_DATA.filter(d=>d.sentiment==='Highly Frustrated').sort((a,b)=>a.score-b.score);
+  st('ai-hf-count',String(new Set(hf.map(d=>d.prod)).size));
+  hf.forEach((d,i)=>{
+    const tr=document.createElement('tr');
+    const t1=document.createElement('td');t1.textContent=String(i+1);t1.style.color='var(--muted)';
+    const t2=document.createElement('td');t2.textContent=d.prod;t2.style.cssText='font-size:0.67rem;font-weight:600;max-width:110px;word-break:break-word';
+    const t3=document.createElement('td');t3.textContent=d.issue;t3.style.cssText='font-size:0.65rem;color:var(--dim);max-width:140px;word-break:break-word';
+    const t4=document.createElement('td');t4.textContent=d.reason;t4.style.cssText='font-size:0.62rem;color:var(--muted);max-width:150px;word-break:break-word';
+    const t5=document.createElement('td');
+    const badge=document.createElement('span');
+    badge.textContent=d.score+'/10';
+    badge.style.cssText='font-size:0.62rem;font-weight:700;padding:1px 6px;border-radius:3px;background:rgba(220,38,38,0.12);color:#b91c1c;font-variant-numeric:tabular-nums;white-space:nowrap;float:right';
+    t5.appendChild(badge);
+    tr.append(t1,t2,t3,t4,t5);tbody.appendChild(tr);
+  });
+}
+
+function buildRecurringAccounts(){
+  const tbody=document.getElementById('recurTbody');if(!tbody)return;
+  while(tbody.firstChild)tbody.removeChild(tbody.firstChild);
+  /* Aggregate chat cases per account from ACCOUNT_DATA (origin=Chat) */
+  const chatRows=ACCOUNT_DATA.filter(r=>r.origin==='Chat');
+  const acctMap={};
+  const acctProd={};
+  chatRows.forEach(r=>{
+    acctMap[r.acct]=(acctMap[r.acct]||0)+r.cnt;
+    if(!acctProd[r.acct])acctProd[r.acct]=[];
+    if(!acctProd[r.acct].includes(r.cloud))acctProd[r.acct].push(r.cloud);
+  });
+  const sorted=Object.entries(acctMap).map(([acct,cnt])=>({acct,cnt,prods:acctProd[acct]||[]}))
+    .sort((a,b)=>b.cnt-a.cnt).slice(0,12);
+  st('ai-recur-count',String(sorted.filter(r=>r.cnt>=10).length));
+  sorted.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    const t1=document.createElement('td');t1.textContent=String(i+1);t1.style.color='var(--muted)';
+    const t2=document.createElement('td');
+    const aName=document.createTextNode(r.acct.length>34?r.acct.slice(0,34)+'…':r.acct);
+    t2.appendChild(aName);t2.style.cssText='font-size:0.67rem;font-weight:600;max-width:160px';
+    const t3=document.createElement('td');t3.className='num';
+    const cBadge=document.createElement('span');
+    cBadge.textContent=r.cnt;
+    cBadge.style.cssText='font-size:0.72rem;font-weight:800;color:'+(r.cnt>=20?'#b91c1c':r.cnt>=14?'#b45309':'var(--accent)');
+    t3.appendChild(cBadge);
+    const t4=document.createElement('td');
+    const topProd=r.prods[0]?(PROD_LABEL[r.prods[0]]||r.prods[0]):'—';
+    t4.textContent=topProd;t4.style.cssText='font-size:0.63rem;color:var(--dim);max-width:110px';
+    const t5=document.createElement('td');
+    const mp=document.createElement('span');
+    mp.textContent=r.prods.length>1?r.prods.length+' products':'Single';
+    mp.style.cssText='font-size:0.6rem;font-weight:600;padding:1px 6px;border-radius:3px;background:'+(r.prods.length>1?'rgba(124,58,237,0.1)':'rgba(107,122,153,0.1)')+';color:'+(r.prods.length>1?'#7c3aed':'var(--muted)');
+    t5.appendChild(mp);
+    tr.append(t1,t2,t3,t4,t5);tbody.appendChild(tr);
+  });
+}
+
 function buildAll(){
   const rows = filterData();
   const agg = aggByProd(rows);
@@ -1968,6 +2107,8 @@ function buildAll(){
 
   buildHBars('msgPriBars',[{label:'Normal',count:7523},{label:'Urgent',count:114},{label:'Emergency',count:77},{label:'High',count:7}],['#4a7c59','#c08030','#b91c1c','#c05020'],'90px');
   buildSentimentTable();
+  buildHighlyFrustrated();
+  buildRecurringAccounts();
 }
 buildAll();
 
