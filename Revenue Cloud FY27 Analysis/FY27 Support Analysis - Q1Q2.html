@@ -1337,7 +1337,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
         <div class="section-strip" style="margin-bottom:12px">
           <span class="ss-dot"></span>
           <span class="ss-title">Guide Engagement Scope</span>
-          <span style="font-size:0.65rem;color:var(--muted);margin-left:8px">Products whose most recent chat case closed in &lt; 2 days — fast-resolution accounts</span>
+          <span style="font-size:0.65rem;color:var(--muted);margin-left:8px">Accounts raising the most chat cases on products that closed in &lt; 2 days</span>
           <span class="scard-badge" style="margin-left:auto" id="ges-count-badge">13 products</span>
         </div>
         <div id="ges-cards" class="prod-fc-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))"></div>
@@ -2006,64 +2006,51 @@ function buildGuideEngagement(){
   const el=document.getElementById('ges-cards');if(!el)return;
   while(el.firstChild)el.removeChild(el.firstChild);
 
-  /* Products where days starts with '<' — closed within same session or same day */
-  const fast=Object.entries(PROD_CASE_DETAILS).filter(([,d])=>d.days&&d.days.startsWith('<'));
+  /* Set of product clouds whose most recent chat case closed in < 2 days */
+  const fastClouds=new Set(
+    Object.entries(PROD_CASE_DETAILS).filter(([,d])=>d.days&&d.days.startsWith('<')).map(([c])=>c)
+  );
 
-  /* Update badge count */
-  const badge=document.getElementById('ges-count-badge');
-  if(badge)badge.textContent=fast.length+' products';
-
-  /* Aggregate chat case counts for these products from filterData */
-  const rows=filterData();
-  const agg=aggByProd(rows);
-  const total=agg.reduce((s,r)=>s+r.cnt,0)||1;
-  const countMap={};agg.forEach(r=>{countMap[r.cloud]=r.cnt;});
-
-  /* Also pull top chat account per product from ACCOUNT_DATA */
-  const chatAcct={};
-  ACCOUNT_DATA.filter(r=>r.origin==='Chat').forEach(r=>{
-    if(!chatAcct[r.cloud]||r.cnt>chatAcct[r.cloud].cnt)chatAcct[r.cloud]={acct:r.acct,cnt:r.cnt};
+  /* Filter ACCOUNT_DATA: chat origin + fast-close product only */
+  const acctMap={};
+  const acctTopProd={};
+  ACCOUNT_DATA.filter(r=>r.origin==='Chat'&&fastClouds.has(r.cloud)).forEach(r=>{
+    acctMap[r.acct]=(acctMap[r.acct]||0)+r.cnt;
+    if(!acctTopProd[r.acct]||r.cnt>acctTopProd[r.acct].cnt)
+      acctTopProd[r.acct]={prod:PROD_LABEL[r.cloud]||r.cloud,cnt:r.cnt};
   });
 
-  /* Sort by chat volume desc */
-  fast.sort((a,b)=>(countMap[b[0]]||0)-(countMap[a[0]]||0));
+  const sorted=Object.entries(acctMap).map(([acct,cnt])=>({acct,cnt,topProd:acctTopProd[acct]?.prod||'—'}))
+    .sort((a,b)=>b.cnt-a.cnt).slice(0,20);
 
-  fast.forEach(([cloud,d],i)=>{
-    const chatCnt=countMap[cloud]||0;
-    const pct=total?((chatCnt/total)*100).toFixed(1):'—';
-    const topAcct=chatAcct[cloud];
+  /* Update badge */
+  const badge=document.getElementById('ges-count-badge');
+  if(badge)badge.textContent=sorted.length+' accounts';
 
+  const colors=['#0f7173','#2563eb','#7c3aed','#d97706','#16a34a','#dc2626','#0891b2','#ea580c','#6b7a99','#374260'];
+
+  sorted.forEach((r,i)=>{
     const fc=document.createElement('div');
     fc.className='prod-fc';
-    fc.style.cssText='border-color:rgba(22,163,74,0.2);';
+    fc.style.cssText='border-color:rgba(22,163,74,0.18)';
 
     const rank=document.createElement('div');rank.className='prod-fc-rank';rank.textContent='#'+(i+1);
 
     const name=document.createElement('div');name.className='prod-fc-name';
-    name.textContent=PROD_LABEL[cloud]||cloud;
+    name.textContent=r.acct.length>26?r.acct.slice(0,26)+'…':r.acct;
 
     const cnt=document.createElement('div');cnt.className='prod-fc-count';
-    cnt.style.color='var(--accent)';cnt.textContent=chatCnt.toLocaleString();
+    cnt.style.color=colors[i%colors.length];
+    cnt.textContent=r.cnt.toLocaleString();
 
-    const pctEl=document.createElement('div');pctEl.className='prod-fc-pct';
-    pctEl.textContent=pct+'% of chat';
+    const sub=document.createElement('div');sub.className='prod-fc-pct';
+    sub.textContent='chat cases';
 
-    const dayRow=document.createElement('div');
-    dayRow.style.cssText='margin-top:5px;padding-top:5px;border-top:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;gap:4px';
-    const dayBadge=document.createElement('span');
-    dayBadge.textContent='⏱ '+d.days;
-    dayBadge.style.cssText='font-size:0.58rem;font-weight:700;color:#15803d;background:rgba(22,163,74,0.1);padding:1px 5px;border-radius:3px';
-    dayRow.appendChild(dayBadge);
+    const divider=document.createElement('div');
+    divider.style.cssText='margin-top:5px;padding-top:5px;border-top:1px solid rgba(0,0,0,0.06);font-size:0.58rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+    divider.textContent=r.topProd;
 
-    fc.append(rank,name,cnt,pctEl,dayRow);
-
-    if(topAcct){
-      const acctRow=document.createElement('div');
-      acctRow.style.cssText='margin-top:4px;font-size:0.58rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-      acctRow.textContent='\u{1F3E2} '+(topAcct.acct.length>22?topAcct.acct.slice(0,22)+'…':topAcct.acct);
-      fc.appendChild(acctRow);
-    }
-
+    fc.append(rank,name,cnt,sub,divider);
     el.appendChild(fc);
   });
 }
