@@ -627,14 +627,6 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
 
     <!-- OVERVIEW -->
     <div class="panel active" id="panel-overview">
-      <div class="ov-scope-bar">
-        <span class="filters-label">Scope</span>
-        <select id="ovScope" class="filter-select" onchange="buildAll()" style="min-width:180px">
-          <option value="messaging">Chats Raised</option>
-          <option value="chat">Chat Transformed to Cases</option>
-        </select>
-        <span id="ovScopeStatus" style="font-size:0.65rem;color:var(--accent);font-weight:500;margin-left:4px"></span>
-      </div>
       <!-- 3-category KPI summary row -->
       <div class="cards-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
         <div class="card c-blue">
@@ -643,7 +635,13 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           <div class="card-sub">All origins · Feb–Jul 23, 2026</div>
         </div>
         <div class="card c-teal">
-          <div class="card-label">Chat Transformed to Cases</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-label" style="margin-bottom:0">Chat Transformed to Cases</div>
+            <select id="ovScope" class="filter-select" onchange="buildAll()" style="font-size:0.62rem;padding:2px 6px;min-width:0;border-radius:4px;height:22px">
+              <option value="messaging">Chats Raised</option>
+              <option value="chat">Chat Transformed to Cases</option>
+            </select>
+          </div>
           <div id="ov-chatcases" class="card-value">3,578</div>
           <div class="card-sub" id="ov-chatpct">22.7% of all Revenue cases</div>
         </div>
@@ -1414,7 +1412,7 @@ document.querySelectorAll('.nav-item').forEach(item=>{
     const crumb=document.getElementById('heroCrumb');
     const lbl=item.querySelector('.nav-label');
     if(crumb&&lbl)crumb.textContent=lbl.textContent;
-    const filtersPanel=['products','geo'];
+    const filtersPanel=['products'];
     const gf=document.getElementById('globalFilters');
     if(gf)gf.style.display=filtersPanel.includes(item.dataset.panel)?'flex':'none';
     buildAll();
