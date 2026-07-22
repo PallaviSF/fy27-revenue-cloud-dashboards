@@ -766,6 +766,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
                   <th>Case</th>
                   <th>Subject</th>
                   <th>Severity</th>
+                  <th style="text-align:right">Days to Close</th>
                 </tr>
               </thead>
               <tbody id="prodCaseTbody"></tbody>
@@ -1697,25 +1698,25 @@ function buildProdTable(){
 
 /* Global Case details per product — most recent FY27 chat case (Global_Case__c field) */
 const PROD_CASE_DETAILS = {
-  'Revenue-Salesforce CPQ':                                         {gc:'474127312', subj:'API Only User error', sev:'Normal', status:'Closed - Resolved'},
-  'Revenue Cloud (Core)-Configurator':                              {gc:'474092422', subj:'Rate Card Entry issue', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Transaction Management':                    {gc:'474113679', subj:'Agent assistance request', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Price Management':                          {gc:'474112095', subj:'The pricing is not calculated correctly on org 00DUC000005PjBx', sev:'Normal', status:'Closed'},
-  'Revenue-CPQ Developer Support':                                  {gc:'474049688', subj:'Error in screenflow Opportunity_Post_Send_to_Purchasing_Renewal', sev:'Normal', status:'Closed'},
-  'Revenue-Document Generation':                                    {gc:'474075250', subj:'Revert incorrect fix for Quote - No Price Breakdown template', sev:'Normal', status:'Closed'},
-  'Revenue-Salesforce Billing':                                     {gc:'474127180', subj:'Non admin users unable to create credit notes', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Product Catalog Management':                {gc:'474106229', subj:'Error on the quote line', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Developer Support - Product to Order':      {gc:'474038020', subj:'Urgent Production Issue: POST Apex Hook in Procedure Plan', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Billing & Invoicing':                       {gc:'474122920', subj:'Tax calculation issue on invoice', sev:'Normal', status:'New'},
-  'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen': {gc:'474124233', subj:"Unable to see 'Design document template' in Revenue Cloud", sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Advanced Approvals':                        {gc:'474117608', subj:'Issue with preview quote approval workflow', sev:'Normal', status:'Working'},
-  'Revenue Cloud (Core)-Dynamic Revenue Orchestration':             {gc:'474094815', subj:'Debugging custom flow orchestration step not moving to in progress', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Usage & Ratings':                           {gc:'474112220', subj:'Prices not reflecting for usage-based products', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-Business Rules Engine':                     {gc:'474043787', subj:'Permission error accessing custom Pricing Procedures', sev:'Normal', status:'Closed'},
-  'Revenue Cloud (Core)-OmniStudio':                                {gc:'473573554', subj:'Single Doc Core - DOCX Serverside(LWC) omniscript tokens not translating', sev:'Normal', status:'Closed'},
-  'Revenue-Salesforce Contracts':                                   {gc:'474081114', subj:'Issue with amend/renew quote in Revenue Cloud', sev:'Normal', status:'Closed - Resolved'},
-  'Revenue Cloud (Core)-Revenue Cloud Analytics':                   {gc:'473575416', subj:'Help with Revenue Intelligence dashboard setup', sev:'Normal', status:'Closed'},
-  'Revenue-Billing Developer Support':                              {gc:'473632424', subj:'Refund functionality issue', sev:'Normal', status:'Closed'}
+  'Revenue-Salesforce CPQ':                                         {gc:'474127312', subj:'API Only User error', sev:'Normal', status:'Closed - Resolved', days:'< 1 min'},
+  'Revenue Cloud (Core)-Configurator':                              {gc:'474092422', subj:'Rate Card Entry issue', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue Cloud (Core)-Transaction Management':                    {gc:'474113679', subj:'Agent assistance request', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue Cloud (Core)-Price Management':                          {gc:'474112095', subj:'The pricing is not calculated correctly on org 00DUC000005PjBx', sev:'Normal', status:'Closed', days:'3 days'},
+  'Revenue-CPQ Developer Support':                                  {gc:'474049688', subj:'Error in screenflow Opportunity_Post_Send_to_Purchasing_Renewal', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue-Document Generation':                                    {gc:'474075250', subj:'Revert incorrect fix for Quote - No Price Breakdown template', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue-Salesforce Billing':                                     {gc:'474127180', subj:'Non admin users unable to create credit notes', sev:'Normal', status:'Closed', days:'< 1 day'},
+  'Revenue Cloud (Core)-Product Catalog Management':                {gc:'474106229', subj:'Error on the quote line', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue Cloud (Core)-Developer Support - Product to Order':      {gc:'474038020', subj:'Urgent Production Issue: POST Apex Hook in Procedure Plan', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue Cloud (Core)-Billing & Invoicing':                       {gc:'474122920', subj:'Tax calculation issue on invoice', sev:'Normal', status:'New', days:null},
+  'Revenue Cloud (Core)-Contract Lifecycle Management with DocGen': {gc:'474124233', subj:"Unable to see 'Design document template' in Revenue Cloud", sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue Cloud (Core)-Advanced Approvals':                        {gc:'474117608', subj:'Issue with preview quote approval workflow', sev:'Normal', status:'Working', days:null},
+  'Revenue Cloud (Core)-Dynamic Revenue Orchestration':             {gc:'474094815', subj:'Debugging custom flow orchestration step not moving to in progress', sev:'Normal', status:'Closed', days:'< 1 day'},
+  'Revenue Cloud (Core)-Usage & Ratings':                           {gc:'474112220', subj:'Prices not reflecting for usage-based products', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue Cloud (Core)-Business Rules Engine':                     {gc:'474043787', subj:'Permission error accessing custom Pricing Procedures', sev:'Normal', status:'Closed', days:'< 1 min'},
+  'Revenue Cloud (Core)-OmniStudio':                                {gc:'473573554', subj:'Single Doc Core - DOCX Serverside(LWC) omniscript tokens not translating', sev:'Normal', status:'Closed', days:'2 days'},
+  'Revenue-Salesforce Contracts':                                   {gc:'474081114', subj:'Issue with amend/renew quote in Revenue Cloud', sev:'Normal', status:'Closed - Resolved', days:'< 1 min'},
+  'Revenue Cloud (Core)-Revenue Cloud Analytics':                   {gc:'473575416', subj:'Help with Revenue Intelligence dashboard setup', sev:'Normal', status:'Closed', days:'9 days'},
+  'Revenue-Billing Developer Support':                              {gc:'473632424', subj:'Refund functionality issue', sev:'Normal', status:'Closed', days:'7 days'}
 };
 
 function buildProdFlashcards(){
@@ -1779,7 +1780,20 @@ function buildProdCaseTable(){
       sev.textContent=d.sev;
       sev.style.cssText='font-size:0.6rem;font-weight:600;padding:1px 5px;border-radius:3px;background:rgba(37,99,235,0.1);color:#1d4ed8';
       t4.appendChild(sev);
-      tr.append(t1,t2,t3,t4);caseTbody.appendChild(tr);
+      const t5=document.createElement('td');t5.style.textAlign='right';
+      if(d.days===null){
+        const openBadge=document.createElement('span');
+        openBadge.textContent='Open';
+        openBadge.style.cssText='font-size:0.6rem;font-weight:600;padding:1px 5px;border-radius:3px;background:rgba(217,119,6,0.12);color:#b45309';
+        t5.appendChild(openBadge);
+      } else {
+        const dBadge=document.createElement('span');
+        dBadge.textContent=d.days;
+        const isQuick=d.days.startsWith('<');
+        dBadge.style.cssText='font-size:0.6rem;font-weight:700;padding:1px 5px;border-radius:3px;background:'+(isQuick?'rgba(22,163,74,0.1)':'rgba(15,113,115,0.1)')+';color:'+(isQuick?'#15803d':'var(--accent)');
+        t5.appendChild(dBadge);
+      }
+      tr.append(t1,t2,t3,t4,t5);caseTbody.appendChild(tr);
     });
   }
 }
