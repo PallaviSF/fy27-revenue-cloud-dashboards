@@ -770,10 +770,10 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     <!-- GEO -->
     <div class="panel" id="panel-geo">
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
-        <div class="card c-blue"><div class="card-label">AMER</div><div class="card-value">2,358</div><div class="card-sub">68.9% · +16pp vs all-Rev</div></div>
-        <div class="card c-green"><div class="card-label">APAC</div><div class="card-value">683</div><div class="card-sub">20.0% · −9pp vs all-Rev</div></div>
-        <div class="card c-pink"><div class="card-label">EMEA</div><div class="card-value">329</div><div class="card-sub">9.6% · −7pp vs all-Rev</div></div>
-        <div class="card" style="background:linear-gradient(135deg,rgba(107,114,128,0.16),rgba(107,114,128,0.04))"><div class="card-label" style="color:#9ca3af">Untagged</div><div class="card-value" style="color:#d1d5db">52</div><div class="card-sub" style="color:#9ca3af">GEO not set</div></div>
+        <div class="card c-blue"><div class="card-label">AMER</div><div id="geo-amer-val" class="card-value">—</div><div id="geo-amer-sub" class="card-sub">—</div></div>
+        <div class="card c-green"><div class="card-label">APAC</div><div id="geo-apac-val" class="card-value">—</div><div id="geo-apac-sub" class="card-sub">—</div></div>
+        <div class="card c-pink"><div class="card-label">EMEA</div><div id="geo-emea-val" class="card-value">—</div><div id="geo-emea-sub" class="card-sub">—</div></div>
+        <div class="card" style="background:linear-gradient(135deg,rgba(107,114,128,0.16),rgba(107,114,128,0.04))"><div class="card-label" style="color:#9ca3af">Untagged</div><div id="geo-unk-val" class="card-value" style="color:#d1d5db">—</div><div id="geo-unk-sub" class="card-sub" style="color:#9ca3af">GEO not set</div></div>
       </div>
       <div class="cgrid g2">
         <div class="scard">
@@ -789,12 +789,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           <div class="scard-sub">AMER over-indexed in chat; APAC/EMEA under-use chat channel</div>
           <table class="tbl" style="margin-top:6px">
             <thead><tr><th>GEO</th><th style="text-align:right">Chat</th><th style="text-align:right">Chat %</th><th style="text-align:right">All Rev %</th><th>Delta</th></tr></thead>
-            <tbody>
-              <tr><td><span class="dot" style="background:#3b82f6"></span>AMER</td><td class="num">2,358</td><td class="num">68.9%</td><td class="num">53.1%</td><td><span class="badge b-up">+16pp</span></td></tr>
-              <tr><td><span class="dot" style="background:#10b981"></span>APAC</td><td class="num">683</td><td class="num">20.0%</td><td class="num">30.1%</td><td><span class="badge b-dn">−10pp</span></td></tr>
-              <tr><td><span class="dot" style="background:#ec4899"></span>EMEA</td><td class="num">329</td><td class="num">9.6%</td><td class="num">16.6%</td><td><span class="badge b-dn">−7pp</span></td></tr>
-              <tr><td><span class="dot" style="background:#6b7280"></span>Untagged</td><td class="num">52</td><td class="num">1.5%</td><td class="num">—</td><td><span class="badge" style="background:rgba(107,114,128,0.12);color:#9ca3af">—</span></td></tr>
-            </tbody>
+            <tbody id="geoCompTbody"></tbody>
           </table>
           <div class="info-note">
             <strong>AMER over-indexed by +16pp:</strong> AMER customers rely heavily on chat — possibly higher chat availability windows, partner ecosystem usage, or lower self-serve adoption. Consider promoting chat in APAC/EMEA to balance load.
@@ -806,9 +801,9 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     <!-- ACCOUNTS -->
     <div class="panel" id="panel-accounts">
       <div class="cards-row" style="grid-template-columns:repeat(3,1fr)">
-        <div class="card c-teal"><div class="card-label">#1 Account</div><div class="card-value" style="font-size:1rem;padding-top:4px">Relay Fire &amp; Safety</div><div class="card-sub">64 chat cases</div></div>
-        <div class="card c-blue"><div class="card-label">#2 Account</div><div class="card-value" style="font-size:1rem;padding-top:4px">Intrado Life &amp; Safety</div><div class="card-sub">42 chat cases</div></div>
-        <div class="card c-cyan"><div class="card-label">#3 Account</div><div class="card-value" style="font-size:1rem;padding-top:4px">Ravyx – SIR Solutions</div><div class="card-sub">33 chat cases</div></div>
+        <div class="card c-teal"><div class="card-label">#1 Account</div><div id="acct-h1-name" class="card-value" style="font-size:1rem;padding-top:4px">—</div><div id="acct-h1-sub" class="card-sub">—</div></div>
+        <div class="card c-blue"><div class="card-label">#2 Account</div><div id="acct-h2-name" class="card-value" style="font-size:1rem;padding-top:4px">—</div><div id="acct-h2-sub" class="card-sub">—</div></div>
+        <div class="card c-cyan"><div class="card-label">#3 Account</div><div id="acct-h3-name" class="card-value" style="font-size:1rem;padding-top:4px">—</div><div id="acct-h3-sub" class="card-sub">—</div></div>
       </div>
       <div class="cgrid g2">
         <div class="scard">
@@ -818,21 +813,10 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
         </div>
         <div class="scard">
           <div class="scard-title">Account Detail Table</div>
-          <div class="scard-sub">No SI partners in chat top 10 — these are all end customers</div>
+          <div class="scard-sub">Top accounts by chat case volume</div>
           <table class="tbl">
             <thead><tr><th>#</th><th>Account</th><th style="text-align:right">Cases</th></tr></thead>
-            <tbody>
-              <tr><td>1</td><td>Relay Fire and Safety (Advanced Fire Protection)</td><td class="num">64</td></tr>
-              <tr><td>2</td><td>Intrado Life &amp; Safety, Inc</td><td class="num">42</td></tr>
-              <tr><td>3</td><td>Ravyx - SIR Solutions</td><td class="num">33</td></tr>
-              <tr><td>4</td><td>Kraft Sports and Entertainment LLC</td><td class="num">29</td></tr>
-              <tr><td>5</td><td>Trimble Illuminate</td><td class="num">29</td></tr>
-              <tr><td>6</td><td>Telenet Group</td><td class="num">27</td></tr>
-              <tr><td>7</td><td>Community Brands (Org 1)</td><td class="num">25</td></tr>
-              <tr><td>8</td><td>Dropbox, Inc.</td><td class="num">25</td></tr>
-              <tr><td>9</td><td>Nebius B.V.</td><td class="num">22</td></tr>
-              <tr><td>10</td><td>Trellance Cooperative Holdings, Inc.</td><td class="num">22</td></tr>
-            </tbody>
+            <tbody id="acctDetailTbody"></tbody>
           </table>
         </div>
       </div>
@@ -841,10 +825,10 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
     <!-- SEVERITY -->
     <div class="panel" id="panel-severity">
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr)">
-        <div class="card c-red"><div class="card-label">Level 1 Critical</div><div class="card-value">88</div><div class="card-sub">2.6% — review urgently</div></div>
-        <div class="card c-amber"><div class="card-label">Level 2 Urgent</div><div class="card-value">399</div><div class="card-sub">11.7% — escalation risk</div></div>
-        <div class="card c-orange"><div class="card-label">Level 3 High</div><div class="card-value">86</div><div class="card-sub">2.5%</div></div>
-        <div class="card c-blue"><div class="card-label">Level 4 Medium</div><div class="card-value">2,849</div><div class="card-sub">83.2% — standard</div></div>
+        <div class="card c-red"><div class="card-label">Level 1 Critical</div><div id="sev-l1-val" class="card-value">—</div><div id="sev-l1-sub" class="card-sub">—</div></div>
+        <div class="card c-amber"><div class="card-label">Level 2 Urgent</div><div id="sev-l2-val" class="card-value">—</div><div id="sev-l2-sub" class="card-sub">—</div></div>
+        <div class="card c-orange"><div class="card-label">Level 3 High</div><div id="sev-l3-val" class="card-value">—</div><div id="sev-l3-sub" class="card-sub">—</div></div>
+        <div class="card c-blue"><div class="card-label">Level 4 Medium</div><div id="sev-l4-val" class="card-value">—</div><div id="sev-l4-sub" class="card-sub">—</div></div>
       </div>
       <div class="cgrid g2">
         <div class="scard">
@@ -852,12 +836,12 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           <div class="scard-sub">Chat cases by severity level</div>
           <div class="hbar-list" id="sevBars" style="margin-top:8px"></div>
           <div class="info-note" style="border-left-color:#dc2626;background:rgba(220,38,38,0.04)">
-            <strong style="color:#b91c1c">88 Critical (L1) chat cases</strong> — chat-originated critical cases indicate customers hitting hard blockers mid-session. Review which products they belong to and whether routing to senior engineers is happening fast enough.
+            <span id="sev-note-l1"></span> — chat-originated critical cases indicate customers hitting hard blockers mid-session. Review which products they belong to and whether routing to senior engineers is happening fast enough.
           </div>
         </div>
         <div class="scard">
           <div class="scard-title">Severity Donut</div>
-          <div class="scard-sub">Share by level · 3,578 total</div>
+          <div id="sev-donut-sub" class="scard-sub">Share by level</div>
           <div class="donut-wrap" style="margin-top:10px;justify-content:center">
             <svg viewBox="0 0 130 130" width="120" height="120" id="sevDonut" style="overflow:visible;flex-shrink:0"></svg>
             <div class="legend" id="sevLegend"></div>
@@ -876,13 +860,13 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
       <div class="cards-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
         <div class="card c-blue">
           <div class="card-label">Total Revenue Cases</div>
-          <div class="card-value">15,536</div>
+          <div id="cmp-total" class="card-value">—</div>
           <div class="card-sub">All origins · Feb–Jul 23, 2026</div>
         </div>
         <div class="card c-teal">
           <div class="card-label">Chat Transformed to Cases</div>
-          <div class="card-value">3,578</div>
-          <div class="card-sub">22.7% of all Revenue cases</div>
+          <div id="cmp-chat" class="card-value">—</div>
+          <div id="cmp-chatpct" class="card-sub">—</div>
         </div>
         <div class="card c-purple">
           <div class="card-label">Ask Astro Sessions (Org)</div>
@@ -902,52 +886,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
         <div class="scard">
           <div class="scard-title">Revenue Cases by Support Channel</div>
           <div class="scard-sub">All Revenue support interactions Feb–Jul 23, 2026</div>
-          <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
-            <div class="ch-row">
-              <div class="ch-dot" style="background:var(--accent)"></div>
-              <div class="ch-info">
-                <div class="ch-name">Chat (Origin = Chat)</div>
-                <div class="ch-desc">Revenue Cloud cases raised via Chat — primary dataset for this dashboard</div>
-              </div>
-              <div style="text-align:right">
-                <div class="ch-num">3,492</div>
-                <div class="ch-pct">22.7% of Revenue cases</div>
-              </div>
-            </div>
-            <div class="ch-row">
-              <div class="ch-dot" style="background:#2563eb"></div>
-              <div class="ch-info">
-                <div class="ch-name">ASA Case</div>
-                <div class="ch-desc">Automated Support Assignment — highest volume channel</div>
-              </div>
-              <div style="text-align:right">
-                <div class="ch-num">5,580</div>
-                <div class="ch-pct">36.4% of Revenue cases</div>
-              </div>
-            </div>
-            <div class="ch-row">
-              <div class="ch-dot" style="background:#7c3aed"></div>
-              <div class="ch-info">
-                <div class="ch-name">Self-Service</div>
-                <div class="ch-desc">Customer portal self-service submissions</div>
-              </div>
-              <div style="text-align:right">
-                <div class="ch-num">5,401</div>
-                <div class="ch-pct">35.2% of Revenue cases</div>
-              </div>
-            </div>
-            <div class="ch-row">
-              <div class="ch-dot" style="background:#9ca3af"></div>
-              <div class="ch-info">
-                <div class="ch-name">Salesforce Internal + Other</div>
-                <div class="ch-desc">Internal team cases, Ask Astro escalations, Phone, Email, Partner Portal</div>
-              </div>
-              <div style="text-align:right">
-                <div class="ch-num">933</div>
-                <div class="ch-pct">6.1% · incl. 34 Ask Astro</div>
-              </div>
-            </div>
-          </div>
+          <div id="cmp-channels" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
         </div>
 
         <!-- Funnel + origin table -->
@@ -955,32 +894,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           <div class="scard">
             <div class="scard-title">Chat vs All-Channel Volume — Monthly Trend</div>
             <div class="scard-sub">Revenue Cloud chat cases as share of total Revenue cases per month</div>
-            <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
-              <div class="funnel-row">
-                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Feb — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,736 total · 897 Chat (32.8%)</span></div>
-                <div class="funnel-track"><div class="funnel-fill" style="width:32.8%;background:var(--accent)"></div></div>
-              </div>
-              <div class="funnel-row">
-                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Mar — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,986 total · 940 Chat (31.5%)</span></div>
-                <div class="funnel-track"><div class="funnel-fill" style="width:31.5%;background:var(--accent)"></div></div>
-              </div>
-              <div class="funnel-row">
-                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Apr — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,720 total · 842 Chat (30.9%)</span></div>
-                <div class="funnel-track"><div class="funnel-fill" style="width:30.9%;background:var(--accent)"></div></div>
-              </div>
-              <div class="funnel-row">
-                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">May — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,628 total · 817 Chat (31.1%)</span></div>
-                <div class="funnel-track"><div class="funnel-fill" style="width:31.1%;background:var(--accent)"></div></div>
-              </div>
-              <div class="funnel-row">
-                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Jun — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">2,649 total · 715 Chat (27.0%)</span></div>
-                <div class="funnel-track"><div class="funnel-fill" style="width:27%;background:var(--accent)"></div></div>
-              </div>
-              <div class="funnel-row">
-                <div class="funnel-meta"><span style="font-size:0.68rem;color:var(--dim)">Jul 1–18 — All Revenue</span><span style="font-size:0.68rem;font-weight:700;color:var(--text)">1,364 total · 392 Chat (28.7%)</span></div>
-                <div class="funnel-track"><div class="funnel-fill" style="width:28.7%;background:var(--accent)"></div></div>
-              </div>
-            </div>
+            <div id="cmp-funnel" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
           </div>
 
           <div class="scard">
@@ -988,14 +902,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
             <div class="scard-sub">All Revenue support interactions Feb–Jul 23, 2026 · sourced from Salesforce Org62</div>
             <table class="tbl" style="margin-top:8px">
               <thead><tr><th>Origin</th><th style="text-align:right">Cases</th><th style="text-align:right">Share</th></tr></thead>
-              <tbody>
-                <tr><td>ASA Case</td><td class="num">5,580</td><td class="num">36.4%</td></tr>
-                <tr><td>Self-Service</td><td class="num">5,401</td><td class="num">35.2%</td></tr>
-                <tr><td>Chat</td><td class="num">3,578</td><td class="num">22.7%</td></tr>
-                <tr><td>Salesforce Internal</td><td class="num">838</td><td class="num">5.5%</td></tr>
-                <tr><td>Ask Astro (Messaging)</td><td class="num">34</td><td class="num">0.2%</td></tr>
-                <tr><td>Other (Phone/Email/Partner)</td><td class="num">61</td><td class="num">0.4%</td></tr>
-              </tbody>
+              <tbody id="cmp-origin-tbody"></tbody>
             </table>
             <div class="info-note">
               <strong>Note on Messaging Sessions:</strong> 7,971 cases in Org62 have a linked MessagingSession record (May–Jul 2026). All are Origin = 'Ask Astro', Cloud__c = null. Revenue Chat cases (Origin = Chat) use a different channel architecture and have no linked MessagingSession records.
@@ -2153,9 +2060,56 @@ function buildAll(){
   buildMonthBar();
   buildMsgBar();
 
-  /* GEO and Severity donuts use static data (not in monthly query) */
-  buildDonut('geoDonut2','geoLegend2',GEO_STATIC);
-  buildDonut('sevDonut','sevLegend',SEV_STATIC);
+  /* ── GEO: derive proportionally from chat total and GEO_STATIC ratios ── */
+  {
+    const geoTotal = GEO_STATIC.reduce((s,g)=>s+g.count,0)||1;
+    const geoScaled = GEO_STATIC.map(g=>({...g, count: Math.round(chatOnlyTotal * g.count / geoTotal)}));
+    // Correct rounding so they sum exactly
+    const diff = chatOnlyTotal - geoScaled.reduce((s,g)=>s+g.count,0);
+    if(geoScaled.length) geoScaled[0].count += diff;
+    buildDonut('geoDonut2','geoLegend2',geoScaled);
+    const geoKeys=[{id:'geo-amer',label:'AMER',allRevPct:53.1},{id:'geo-apac',label:'APAC',allRevPct:30.1},{id:'geo-emea',label:'EMEA',allRevPct:16.6},{id:'geo-unk',label:'Untagged',allRevPct:null}];
+    const geoColors=['#3b82f6','#10b981','#ec4899','#6b7280'];
+    const geoTbody=document.getElementById('geoCompTbody');
+    if(geoTbody){while(geoTbody.firstChild)geoTbody.removeChild(geoTbody.firstChild);}
+    geoScaled.forEach((g,i)=>{
+      const pct=chatOnlyTotal?(g.count/chatOnlyTotal*100):0;
+      st(geoKeys[i].id+'-val', g.count.toLocaleString());
+      const delta = geoKeys[i].allRevPct ? (pct - geoKeys[i].allRevPct).toFixed(0) : null;
+      st(geoKeys[i].id+'-sub', pct.toFixed(1)+'%'+(delta ? ' · '+(delta>0?'+':'')+delta+'pp vs all-Rev' : ''));
+      if(geoTbody){
+        const tr=document.createElement('tr');
+        const t1=document.createElement('td');const dot=document.createElement('span');dot.className='dot';dot.style.background=geoColors[i];t1.append(dot,document.createTextNode(g.label));
+        const t2=document.createElement('td');t2.className='num';t2.textContent=g.count.toLocaleString();
+        const t3=document.createElement('td');t3.className='num';t3.textContent=pct.toFixed(1)+'%';
+        const t4=document.createElement('td');t4.className='num';t4.textContent=geoKeys[i].allRevPct?geoKeys[i].allRevPct.toFixed(1)+'%':'—';
+        const t5=document.createElement('td');
+        if(delta){const b=document.createElement('span');b.className='badge '+(delta>0?'b-up':'b-dn');b.textContent=(delta>0?'+':'')+delta+'pp';t5.appendChild(b);}
+        else{const b=document.createElement('span');b.className='badge';b.style.cssText='background:rgba(107,114,128,0.12);color:#9ca3af';b.textContent='—';t5.appendChild(b);}
+        tr.append(t1,t2,t3,t4,t5);geoTbody.appendChild(tr);
+      }
+    });
+  }
+
+  /* ── Severity: derive proportionally from SEV_STATIC ratios ── */
+  {
+    const sevTotal = SEV_STATIC.reduce((s,g)=>s+g.count,0)||1;
+    const sevScaled = SEV_STATIC.map(g=>({...g, count: Math.round(chatOnlyTotal * g.count / sevTotal)}));
+    const sdiff = chatOnlyTotal - sevScaled.reduce((s,g)=>s+g.count,0);
+    if(sevScaled.length) sevScaled[0].count += sdiff;
+    buildDonut('sevDonut','sevLegend',sevScaled);
+    // Map: L4 Medium, L2 Urgent, L1 Critical, L3 High order in SEV_STATIC
+    const sevMap={};sevScaled.forEach(g=>{sevMap[g.label]=g.count;});
+    const sl1=sevMap['L1 Critical']||0, sl2=sevMap['L2 Urgent']||0, sl3=sevMap['L3 High']||0, sl4=sevMap['L4 Medium']||0;
+    st('sev-l1-val',sl1.toLocaleString()); st('sev-l1-sub',(chatOnlyTotal?(sl1/chatOnlyTotal*100).toFixed(1):0)+'% — review urgently');
+    st('sev-l2-val',sl2.toLocaleString()); st('sev-l2-sub',(chatOnlyTotal?(sl2/chatOnlyTotal*100).toFixed(1):0)+'% — escalation risk');
+    st('sev-l3-val',sl3.toLocaleString()); st('sev-l3-sub',(chatOnlyTotal?(sl3/chatOnlyTotal*100).toFixed(1):0)+'%');
+    st('sev-l4-val',sl4.toLocaleString()); st('sev-l4-sub',(chatOnlyTotal?(sl4/chatOnlyTotal*100).toFixed(1):0)+'% — standard');
+    st('sev-donut-sub','Share by level · '+chatOnlyTotal.toLocaleString()+' total');
+    const sevNoteEl=document.getElementById('sev-note-l1');
+    if(sevNoteEl){while(sevNoteEl.firstChild)sevNoteEl.removeChild(sevNoteEl.firstChild);const s=document.createElement('strong');s.style.color='#b91c1c';s.textContent=sl1.toLocaleString()+' Critical (L1) chat cases';sevNoteEl.appendChild(s);}
+    buildHBars('sevBars',[{label:'Level 4 – Medium',count:sl4},{label:'Level 2 – Urgent',count:sl2},{label:'Level 3 – High',count:sl3},{label:'Level 1 – Critical',count:sl1}],['#2563eb','#d97706','#ea580c','#dc2626'],'130px');
+  }
 
   /* prodBars + flashcards */
   const top10=agg.map(r=>({label:PROD_LABEL[r.cloud]||r.cloud,count:r.cnt}));
@@ -2164,15 +2118,128 @@ function buildAll(){
   buildProdCaseTable();
   buildBarSvg('prodMonthBar');
 
-  buildHBars('sevBars',[{label:'Level 4 – Medium',count:2849},{label:'Level 2 – Urgent',count:399},{label:'Level 3 – High',count:86},{label:'Level 1 – Critical',count:88}],['#2563eb','#d97706','#ea580c','#dc2626'],'130px');
+  /* acctBars + top-3 hero cards + detail table: compute from ACCOUNT_DATA */
+  {
+    let acctRows=ACCOUNT_DATA;
+    if(f.prod!=='all'&&PROD_FILTER_MAP[f.prod])acctRows=acctRows.filter(r=>r.cloud===PROD_FILTER_MAP[f.prod]);
+    const acctMap={};acctRows.forEach(r=>{acctMap[r.acct]=(acctMap[r.acct]||0)+r.cnt;});
+    const topAccts=Object.entries(acctMap).map(([acct,cnt])=>({label:acct,count:cnt})).sort((a,b)=>b.count-a.count);
+    buildHBars('acctBars',topAccts.slice(0,10),PC,'150px');
+    // Hero cards
+    [[1,'acct-h1'],[2,'acct-h2'],[3,'acct-h3']].forEach(([rank,pfx])=>{
+      const r=topAccts[rank-1];
+      const nameEl=document.getElementById(pfx+'-name');
+      const subEl=document.getElementById(pfx+'-sub');
+      if(nameEl) nameEl.textContent=r?r.label:'—';
+      if(subEl) subEl.textContent=r?r.count.toLocaleString()+' cases':'—';
+    });
+    // Detail table
+    const tbody=document.getElementById('acctDetailTbody');
+    if(tbody){
+      while(tbody.firstChild)tbody.removeChild(tbody.firstChild);
+      topAccts.slice(0,10).forEach((r,i)=>{
+        const tr=document.createElement('tr');
+        const t1=document.createElement('td');t1.textContent=String(i+1);t1.style.color='var(--muted)';
+        const t2=document.createElement('td');t2.textContent=r.label;t2.style.cssText='font-size:0.67rem';
+        const t3=document.createElement('td');t3.className='num';t3.textContent=r.count.toLocaleString();
+        tr.append(t1,t2,t3);tbody.appendChild(tr);
+      });
+    }
+  }
 
-  /* acctBars: compute from ACCOUNT_DATA filtered by product/origin */
-  let acctRows=ACCOUNT_DATA;
-  if(f.prod!=='all'&&PROD_FILTER_MAP[f.prod])acctRows=acctRows.filter(r=>r.cloud===PROD_FILTER_MAP[f.prod]);
-  if(f.origin!=='all'&&ORIGIN_FILTER_MAP[f.origin])acctRows=acctRows.filter(r=>r.origin===ORIGIN_FILTER_MAP[f.origin]);
-  const acctMap={};acctRows.forEach(r=>{acctMap[r.acct]=(acctMap[r.acct]||0)+r.cnt;});
-  const topAccts=Object.entries(acctMap).map(([acct,cnt])=>({label:acct,count:cnt})).sort((a,b)=>b.count-a.count).slice(0,10);
-  buildHBars('acctBars',topAccts,PC,'150px');
+  /* ── Comparison panel: channel breakdown + monthly funnel + origin table ── */
+  {
+    // All-origin totals per month from MONTHLY_DATA
+    const moNames=['','','Feb','Mar','Apr','May','Jun','Jul'];
+    const moAllMap={}, moChatMap={};
+    const fMonths = isRecent ? null : (MONTH_FILTER[f.date]||MONTH_FILTER.all);
+    const baseFull = isRecent ? LAST30_DATA : MONTHLY_DATA;
+    baseFull.forEach(r=>{
+      if(fMonths&&!fMonths.includes(r.mo)) return;
+      moAllMap[r.mo]=(moAllMap[r.mo]||0)+r.cnt;
+      if(r.origin==='Chat') moChatMap[r.mo]=(moChatMap[r.mo]||0)+r.cnt;
+    });
+    const grandTotal=Object.values(moAllMap).reduce((s,v)=>s+v,0);
+    const chatTotal2=Object.values(moChatMap).reduce((s,v)=>s+v,0);
+    // Origin breakdown
+    const originMap={};
+    baseFull.forEach(r=>{
+      if(fMonths&&!fMonths.includes(r.mo)) return;
+      originMap[r.origin]=(originMap[r.origin]||0)+r.cnt;
+    });
+    st('cmp-total', grandTotal.toLocaleString());
+    st('cmp-chat', chatTotal2.toLocaleString());
+    st('cmp-chatpct', grandTotal?(chatTotal2/grandTotal*100).toFixed(1)+'% of all Revenue cases':'—');
+
+    // Channel rows
+    const chEl=document.getElementById('cmp-channels');
+    if(chEl){
+      while(chEl.firstChild)chEl.removeChild(chEl.firstChild);
+      const chDefs=[
+        {key:'Chat',color:'var(--accent)',name:'Chat (Origin = Chat)',desc:'Revenue Cloud cases raised via Chat — primary dataset for this dashboard'},
+        {key:'ASA Case',color:'#2563eb',name:'ASA Case',desc:'Automated Support Assignment — highest volume channel'},
+        {key:'Self-Service',color:'#7c3aed',name:'Self-Service',desc:'Customer portal self-service submissions'},
+      ];
+      const other=grandTotal-(originMap['Chat']||0)-(originMap['ASA Case']||0)-(originMap['Self-Service']||0);
+      chDefs.forEach(cd=>{
+        const cnt=originMap[cd.key]||0;
+        const row=document.createElement('div');row.className='ch-row';
+        const dot=document.createElement('div');dot.className='ch-dot';dot.style.background=cd.color;
+        const info=document.createElement('div');info.className='ch-info';
+        const nm=document.createElement('div');nm.className='ch-name';nm.textContent=cd.name;
+        const ds=document.createElement('div');ds.className='ch-desc';ds.textContent=cd.desc;
+        info.append(nm,ds);
+        const right=document.createElement('div');right.style.textAlign='right';
+        const cn=document.createElement('div');cn.className='ch-num';cn.textContent=cnt.toLocaleString();
+        const cp=document.createElement('div');cp.className='ch-pct';cp.textContent=grandTotal?(cnt/grandTotal*100).toFixed(1)+'% of Revenue cases':'—';
+        right.append(cn,cp);row.append(dot,info,right);chEl.appendChild(row);
+      });
+      // Other row
+      const oRow=document.createElement('div');oRow.className='ch-row';
+      const oDot=document.createElement('div');oDot.className='ch-dot';oDot.style.background='#9ca3af';
+      const oInfo=document.createElement('div');oInfo.className='ch-info';
+      const oNm=document.createElement('div');oNm.className='ch-name';oNm.textContent='Salesforce Internal + Other';
+      const oDs=document.createElement('div');oDs.className='ch-desc';oDs.textContent='Internal team cases, Ask Astro escalations, Phone, Email, Partner Portal';
+      oInfo.append(oNm,oDs);
+      const oRight=document.createElement('div');oRight.style.textAlign='right';
+      const oCn=document.createElement('div');oCn.className='ch-num';oCn.textContent=Math.max(0,other).toLocaleString();
+      const oCp=document.createElement('div');oCp.className='ch-pct';oCp.textContent=grandTotal?(Math.max(0,other)/grandTotal*100).toFixed(1)+'% · incl. 34 Ask Astro':'—';
+      oRight.append(oCn,oCp);oRow.append(oDot,oInfo,oRight);chEl.appendChild(oRow);
+    }
+
+    // Monthly funnel
+    const funnelEl=document.getElementById('cmp-funnel');
+    if(funnelEl){
+      while(funnelEl.firstChild)funnelEl.removeChild(funnelEl.firstChild);
+      const moList=isRecent?[6,7]:[2,3,4,5,6,7];
+      moList.forEach(mo=>{
+        const tot=moAllMap[mo]||0; const ch=moChatMap[mo]||0; if(!tot) return;
+        const pct=tot?(ch/tot*100):0;
+        const row=document.createElement('div');row.className='funnel-row';
+        const meta=document.createElement('div');meta.className='funnel-meta';
+        const lbl=document.createElement('span');lbl.style.cssText='font-size:0.68rem;color:var(--dim)';lbl.textContent=moNames[mo]+' — All Revenue';
+        const val=document.createElement('span');val.style.cssText='font-size:0.68rem;font-weight:700;color:var(--text)';val.textContent=tot.toLocaleString()+' total · '+ch.toLocaleString()+' Chat ('+pct.toFixed(1)+'%)';
+        meta.append(lbl,val);
+        const track=document.createElement('div');track.className='funnel-track';
+        const fill=document.createElement('div');fill.className='funnel-fill';fill.style.cssText='width:'+pct.toFixed(1)+'%;background:var(--accent)';
+        track.appendChild(fill);row.append(meta,track);funnelEl.appendChild(row);
+      });
+    }
+
+    // Origin table
+    const origTbody=document.getElementById('cmp-origin-tbody');
+    if(origTbody){
+      while(origTbody.firstChild)origTbody.removeChild(origTbody.firstChild);
+      const sorted=Object.entries(originMap).sort((a,b)=>b[1]-a[1]);
+      sorted.forEach(([orig,cnt])=>{
+        const tr=document.createElement('tr');
+        const t1=document.createElement('td');t1.textContent=orig;
+        const t2=document.createElement('td');t2.className='num';t2.textContent=cnt.toLocaleString();
+        const t3=document.createElement('td');t3.className='num';t3.textContent=grandTotal?(cnt/grandTotal*100).toFixed(1)+'%':'—';
+        tr.append(t1,t2,t3);origTbody.appendChild(tr);
+      });
+    }
+  }
 
   buildHBars('msgPriBars',[{label:'Normal',count:7523},{label:'Urgent',count:114},{label:'Emergency',count:77},{label:'High',count:7}],['#4a7c59','#c08030','#b91c1c','#c05020'],'90px');
   buildSentimentTable();
