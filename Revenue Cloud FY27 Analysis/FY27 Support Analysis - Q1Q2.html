@@ -1331,6 +1331,17 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
           </div>
         </div>
       </div>
+
+      <!-- Guide Engagement Scope -->
+      <div style="margin-top:16px">
+        <div class="section-strip" style="margin-bottom:12px">
+          <span class="ss-dot"></span>
+          <span class="ss-title">Guide Engagement Scope</span>
+          <span style="font-size:0.65rem;color:var(--muted);margin-left:8px">Products whose most recent chat case closed in &lt; 2 days — fast-resolution accounts</span>
+          <span class="scard-badge" style="margin-left:auto" id="ges-count-badge">13 products</span>
+        </div>
+        <div id="ges-cards" class="prod-fc-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))"></div>
+      </div>
     </div>
 
     <div class="panel" id="panel-insights">
@@ -1991,6 +2002,72 @@ function buildHighlyFrustrated(){
   });
 }
 
+function buildGuideEngagement(){
+  const el=document.getElementById('ges-cards');if(!el)return;
+  while(el.firstChild)el.removeChild(el.firstChild);
+
+  /* Products where days starts with '<' — closed within same session or same day */
+  const fast=Object.entries(PROD_CASE_DETAILS).filter(([,d])=>d.days&&d.days.startsWith('<'));
+
+  /* Update badge count */
+  const badge=document.getElementById('ges-count-badge');
+  if(badge)badge.textContent=fast.length+' products';
+
+  /* Aggregate chat case counts for these products from filterData */
+  const rows=filterData();
+  const agg=aggByProd(rows);
+  const total=agg.reduce((s,r)=>s+r.cnt,0)||1;
+  const countMap={};agg.forEach(r=>{countMap[r.cloud]=r.cnt;});
+
+  /* Also pull top chat account per product from ACCOUNT_DATA */
+  const chatAcct={};
+  ACCOUNT_DATA.filter(r=>r.origin==='Chat').forEach(r=>{
+    if(!chatAcct[r.cloud]||r.cnt>chatAcct[r.cloud].cnt)chatAcct[r.cloud]={acct:r.acct,cnt:r.cnt};
+  });
+
+  /* Sort by chat volume desc */
+  fast.sort((a,b)=>(countMap[b[0]]||0)-(countMap[a[0]]||0));
+
+  fast.forEach(([cloud,d],i)=>{
+    const chatCnt=countMap[cloud]||0;
+    const pct=total?((chatCnt/total)*100).toFixed(1):'—';
+    const topAcct=chatAcct[cloud];
+
+    const fc=document.createElement('div');
+    fc.className='prod-fc';
+    fc.style.cssText='border-color:rgba(22,163,74,0.2);';
+
+    const rank=document.createElement('div');rank.className='prod-fc-rank';rank.textContent='#'+(i+1);
+
+    const name=document.createElement('div');name.className='prod-fc-name';
+    name.textContent=PROD_LABEL[cloud]||cloud;
+
+    const cnt=document.createElement('div');cnt.className='prod-fc-count';
+    cnt.style.color='var(--accent)';cnt.textContent=chatCnt.toLocaleString();
+
+    const pctEl=document.createElement('div');pctEl.className='prod-fc-pct';
+    pctEl.textContent=pct+'% of chat';
+
+    const dayRow=document.createElement('div');
+    dayRow.style.cssText='margin-top:5px;padding-top:5px;border-top:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;gap:4px';
+    const dayBadge=document.createElement('span');
+    dayBadge.textContent='⏱ '+d.days;
+    dayBadge.style.cssText='font-size:0.58rem;font-weight:700;color:#15803d;background:rgba(22,163,74,0.1);padding:1px 5px;border-radius:3px';
+    dayRow.appendChild(dayBadge);
+
+    fc.append(rank,name,cnt,pctEl,dayRow);
+
+    if(topAcct){
+      const acctRow=document.createElement('div');
+      acctRow.style.cssText='margin-top:4px;font-size:0.58rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+      acctRow.textContent='\u{1F3E2} '+(topAcct.acct.length>22?topAcct.acct.slice(0,22)+'…':topAcct.acct);
+      fc.appendChild(acctRow);
+    }
+
+    el.appendChild(fc);
+  });
+}
+
 function buildRecurringAccounts(){
   const tbody=document.getElementById('recurTbody');if(!tbody)return;
   while(tbody.firstChild)tbody.removeChild(tbody.firstChild);
@@ -2123,6 +2200,7 @@ function buildAll(){
   buildSentimentTable();
   buildHighlyFrustrated();
   buildRecurringAccounts();
+  buildGuideEngagement();
 }
 buildAll();
 
