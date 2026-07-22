@@ -1395,7 +1395,7 @@ function getFilters(){
     scope: scopeEl?scopeEl.value:'messaging',
     prod: document.getElementById('fProduct').value,
     date: document.getElementById('fDateRange').value,
-    origin: document.getElementById('fOrigin').value
+    origin: (document.getElementById('fOrigin')||{value:'all'}).value
   };
 }
 
@@ -1863,14 +1863,14 @@ function applyFilters(){
   if(f.scope !== 'all') parts.push({all:'All Cases',chat:'Chat Transformed to Cases',messaging:'Chats Raised'}[f.scope]||f.scope);
   if(f.prod !== 'all'){const sel=document.getElementById('fProduct');parts.push(sel.options[sel.selectedIndex].text);}
   if(f.date !== 'all'){const sel=document.getElementById('fDateRange');parts.push(sel.options[sel.selectedIndex].text);}
-  if(f.origin !== 'all'){const sel=document.getElementById('fOrigin');parts.push(sel.options[sel.selectedIndex].text);}
+  // fOrigin removed from DOM — skip origin label
   const el = document.getElementById('filterStatus');
   if(el) el.textContent = parts.length ? 'Filters: '+parts.join(' · ') : '';
   buildAll();
 }
 
 function resetFilters(){
-  ['fProduct','fDateRange','fOrigin'].forEach(id=>{
+  ['fProduct','fDateRange'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='all';
   });
   const sc=document.getElementById('fScope');if(sc)sc.value='messaging';
