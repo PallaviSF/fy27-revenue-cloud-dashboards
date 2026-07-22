@@ -608,17 +608,6 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
         <option value="recent">Last 30 Days</option>
       </select>
     </div>
-    <div class="filter-group">
-      <label>Origin</label>
-      <select id="fOrigin" class="filter-select" onchange="applyFilters()">
-        <option value="all">All Origins</option>
-        <option value="chat">Chat</option>
-        <option value="asa">ASA Case</option>
-        <option value="self">Self-Service</option>
-        <option value="internal">Salesforce Internal</option>
-        <option value="astro">Ask Astro</option>
-      </select>
-    </div>
     <button class="filter-reset" onclick="resetFilters()">Reset</button>
     <span id="filterStatus"></span>
   </div>
