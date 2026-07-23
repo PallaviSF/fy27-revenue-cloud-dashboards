@@ -554,6 +554,7 @@ body{background:var(--bg);color:var(--text);display:flex;overflow:hidden;}
 </nav>
 
 <div class="main">
+  <div id="dbgErr" style="display:none;background:#b91c1c;color:#fff;padding:8px 16px;font-size:0.72rem;font-family:monospace;word-break:break-all;position:sticky;top:0;z-index:9999"></div>
   <div class="hero">
     <div class="hero-title">Revenue Cloud Chat Analysis</div>
     <span class="hero-sep">·</span>
@@ -1992,6 +1993,13 @@ function buildRecurringAccounts(){
 }
 
 function buildAll(){
+  try { _buildAll(); } catch(e) {
+    const dbg=document.getElementById('dbgErr');
+    if(dbg){dbg.textContent='BUILD ERROR: '+e.message+' @ '+e.stack.split('\n')[1];dbg.style.display='block';}
+    console.error('buildAll crash:',e);
+  }
+}
+function _buildAll(){
   const rows = filterData();
   const agg = aggByProd(rows);
   const total = rows.reduce((s,r)=>s+r.cnt,0);
